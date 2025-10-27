@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>juanpalomotuloguisasyolocomo</title>
+</head>
+
+<body>
+    <form action="https://www.w3schools.com/action_page.php" method="post">
+        <fieldset>
+            <!--Título del formulario-->
+            <legend>Información de contacto</legend>
+            <!--Recoge el nombre-->
+            <label for="nombre">Nombre de la receta:</label>
+            <input type="text" id="nombre" name="nombre" value="" placeholder="Escribe el nombre de la receta"><br>
+            <!--Recoge el email-->
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="correo"><br>
+            <!--Recoge el momento del día-->
+            <label for="momento"> Momento del día: </label> <br>
+            <label for="desayuno">Desayuno</label>
+            <input type="checkbox" id="desayuno" name="momento" value="desayuno">
+            <br>
+            <label for="almuerzo"> Almuerzo:</label>
+            <input type="checkbox" id="almuerzo" name="momento" value="almuerzo">
+            <br>
+            <label for="merienda"> Merienda:</label>
+            <input type="checkbox" id="merienda" name="momento" value="merienda">
+            <br>
+            <label for="cena"> Cena:</label>
+            <input type="checkbox" id="cena" name="momento" value="cena">
+            <br>
+            <label for="postre"> Postre:</label>
+            <input type="checkbox" id="postre" name="momento" value="postre">
+            <br>
+            <!--Recoge la lista de ingredientes-->
+            <p>Ingredientes: </p>
+            <select multiple name="ingredientes" id="ingredientes">
+                <option>Carne</option>
+                <option>Pescado</option>
+                <option>Verdura</option>
+                <option>Fruta</option>
+            </select>
+            <br>
+            <!--Recoge el tiempo de preparación-->
+            <p>Tiempo de preparación aproximado:</p>
+
+            <div>
+                <label>Horas:</label><br>
+                <input type="radio" id="h0" name="horas" value="0" checked>
+                <label for="h0">0</label>
+
+                <input type="radio" id="h1" name="horas" value="1">
+                <label for="h1">1</label>
+
+                <input type="radio" id="h2" name="horas" value="2">
+                <label for="h2">2</label>
+            </div>
+            <br>
+
+            <div>
+                <label>Minutos:</label><br>
+                <input type="radio" id="m0" name="minutos" value="0" checked>
+                <label for="m0">00</label>
+                <input type="radio" id="m15" name="minutos" value="15">
+                <label for="m15">15</label>
+
+                <input type="radio" id="m30" name="minutos" value="30">
+                <label for="m30">30</label>
+
+                <input type="radio" id="m45" name="minutos" value="45">
+                <label for="m45">45</label>
+            </div>
+            <br>
+            <button>Enviar</button>
+        </fieldset>
+    </form>
+</body>
+
+</html>
