@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
     <title>Localización - CodeFest</title>
-    <link rel="stylesheet" type="text/css" href="css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
 </head>
 
 <body>
@@ -15,19 +15,42 @@
     </header>
     <nav>
         <ul>
-            <li> <a href="index.html"> Inicio </a> </li>
-            <li><a href="web/cartel.html"> Cartel </a></li>
-            <li><a href="web/localizacion.html"> Localización </a></li>
-            <li><a href="web/entradas.html"> Entradas </a></li>
+            <li> <a href="../index.html"> Inicio </a> </li>
+            <li><a href="../web/cartel.html"> Cartel </a></li>
+            <li><a href="../web/localizacion.html"> Localización </a></li>
+            <li><a href="../web/entradas.html"> Entradas </a></li>
         </ul>
     </nav>
+    <br>
+    <ul>
+        <a href="#mapa">Ver mapa</a>
+        <a href="#video">Ver Aftermovie</a>
+    </ul>
     <main>
-        <section>
-            <h3>¡No te lo pierdas!</h3>
-            <p>Este festival está centrado en la música electrónica, pero con los sonidos generados ÚNICAMENTE mediante
-                código en lugar de utilizando sintetizadores (tanto digitales como analógicos)</p>
-            <img src="img/Imagen Público Codefest.png" width="600" height="500" alt="Público en el CodeFest">
-        </section>
+        <h2 id="mapa">Cómo llegar a CodeFest</h2>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11928.791745038909!2d-0.19252684338565815!3d41.62985282899338!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd5897b1f56e12d5%3A0x7081810548578010!2sD%C3%A9sert%20de%20Monegros!5e0!3m2!1ses!2ses!4v1762606421043!5m2!1ses!2ses"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <br>
+        <figure>
+
+            <h2 id="video">Revive la última edición</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/BsVoyDvsOOg?si=ywa2K80Ncy-eI4QZ"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                alt="Aftermovie de la última edición"></iframe>
+            <figcaption> Aftermovie del año pasado, el año 2024, una de las mejores ediciones de toda la historia</figcaption>
+        </figure>
+        <br>
+        <figure>
+            <h2>Música de la organización</h2>
+            <audio autoplay controls loop muted preload="valor"
+                src="../media/Vertx & Skorp - Midnight Work (Original Mix).mp3"></audio>
+            <figcaption>Les presentamos Midnight Work de Vertx & Skorp, música que sonó en gran parte de los sets del festival</figcaption>
+        </figure>
+
     </main>
     <footer>
         <p>© 2025 CodeFest. Todos los derechos reservados.</p>

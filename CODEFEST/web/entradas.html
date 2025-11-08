@@ -4,22 +4,59 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Entradas - CodeFest</title>
+    <title>CodeFest</title>
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
 </head>
 
 <body>
     <header>
-        
+        <h1>CodeFest 2025</h1>
+        <h2>"Donde la Música y el Código se encuentran"</h2>
     </header>
     <nav>
-       
+        <ul>
+            <li> <a href="../index.html"> Inicio </a> </li>
+            <li><a href="../web/cartel.html"> Cartel </a></li>
+            <li><a href="../web/localizacion.html"> Localización </a></li>
+            <li><a href="../web/entradas.html"> Entradas </a></li>
+        </ul>
     </nav>
     <main>
         <form action="https://www.w3schools.com/action_page.php" method="GET">
+            <h2>Compra tus entradas</h2>
             <fieldset>
-                <legend> Compra tus entradas</legend>
-                
+                <legend>Datos Personales:</legend>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="" placeholder="Nombre y apellidos">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="" placeholder="Tu correo electrónico" required>
             </fieldset>
+            <fieldset>
+                <legend>Tipo de entrada:</legend>
+                <input type="radio" id="abono_general" name="tipo_entrada"> Abono General (3 Días)
+                <br>
+                <input type="radio" id="abono_vip" name="tipo_entrada"> Abono VIP (3 Días)
+                <br>
+                <input type="radio" id="entrada_dia" name="tipo_entrada"> Entrada de día
+                <br>
+            </fieldset>
+            <fieldset>
+                <legend>Extras:</legend>
+                <input type="checkbox" id="camping" name="extras">Camping
+                <input type="checkbox" id="pack_merchandising" name="extras">Pack Merchandising
+                <input type="checkbox" id="acceso_talleres_tech" name="extras">Acceso a Talleres Tech
+            </fieldset>
+            <!--Queda pendiente de que le añada la funcionalidad de que se active nada más que cuando haya sido seleccionada el tipo de entrad Entrada de dia-->
+            <fieldset>
+                <legend>Día de asistencia:</legend>
+                <select>
+                    <option value="Viernes">Viernes</option>
+                    <option value="Sabado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
+            </fieldset>
+
+            <button type="submit">Comprar entrada</button>
         </form>
     </main>
     <footer>
