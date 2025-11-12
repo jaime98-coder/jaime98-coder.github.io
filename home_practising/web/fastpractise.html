@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <Title>Fast Practise para examen</Title>
+</head>
+
+<body>
+    <header>
+        <span id="subir"><i>Subida hasta aquí tras click en "SUBIR"</i></span>
+        <h1>Ejercicio de practica para examen HTML</h1>
+    </header>
+    <nav>
+        <h2>INICIO</h2>
+        <ul type="A">
+            <li> <a href="../web/musikita.html"> Musikita</a> </li>
+            <li> <a href="../web/listas.html"> Listas</a> </li>
+            <li> <a href="../web/tablas.html">Tablas</a> </li>
+        </ul>
+    </nav>
+    <main>
+        <h3>Formulario:</h3>
+        <form action="https://www.w3schools.com/action_page.php" method="POST" target="_blank">
+            <label for="nameuser">Nombre de usuario:</label>
+            <input type="text" id="nameuser" name="nombreusuario" placeholder="pon tu nombre" required>
+            <br>
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="correo" required placeholder="ejemplo@gmail.com">
+            <br>
+            <label for="sexo1">Hombre</label>
+            <input type="radio" id="sexo1" name="sexo" value="hombre" required> 
+            <label for="sexo2">Mujer</label>
+            <input type="radio" id="sexo2" name="sexo" value="mujer" required> 
+            <br>
+            <label for="condicionesprivacidad">Politica privacidad</label>
+            <input type="checkbox" id="condicionesprivacidad" name="condicionesprivacidad">
+            <label for="condicionesdatos">Politica de datos</label>
+            <input type="checkbox" id="condicionesdatos" name="condicionesdatos">
+            <br>
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" min="18"> <br>
+
+            <label for="alergias">Alergias:</label>
+            <input list="listaalergias" id="alergias" name="alergias">
+            <datalist id="listaalergias">
+                <option value="polen"></option>
+                <option value="gomina"></option>
+                <option value="cloro"></option>
+            </datalist>
+            <br><br>
+            <button type="submit">Enviar solicitud</button>
+        </form>
+
+        <br>
+        <br>
+        <h3>Tabla menú:</h3>
+        <table border="2" style="text-align: center;">
+            <thead>
+                <tr>
+                    <th colspan="6"> Menú de la semana</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Momento del día</td>
+                    <td>Lunes</td>
+                    <td>Martes</td>
+                    <td>Miércoles</td>
+                    <td>Jueves</td>
+                    <td>Viernes</td>
+                </tr>
+                <tr>
+                    <td>Desayuno</td>
+                    <td>Fresa</td>
+                    <td>Piña</td>
+                    <td>Manzana</td>
+                    <td>Platano</td>
+                    <td>Sandia</td>
+                </tr>
+                <tr>
+                    <td>Almuerzo</td>
+                    <td>Lentejas</td>
+                    <td>Garbanzos</td>
+                    <td>Carne</td>
+                    <td>Pescado</td>
+                    <td>Huevos</td>
+                </tr>
+                <tr>
+                    <td>Cena</td>
+                    <td>Merluza</td>
+                    <td>Salmon</td>
+                    <td>Potro</td>
+                    <td>Sopa</td>
+                    <td>Pure</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="6"><i>Evitar el picoteo</i></td>
+                </tr>
+            </tfoot>
+        </table>
+        <h3>Foto sobre mí</h3>
+        <img src="../img/Tomberi Universo P4R Colores Puros v2.png" width="20%">
+        <br>
+        <h3>Música sobre mi</h3>
+        <audio controls autoplay muted loop
+            src="../../CODEFEST/media/Vertx & Skorp - Midnight Work (Original Mix).mp3"></audio>
+        <br><br>
+        <a href="#subir">SUBIR</a>
+        <br><br>
+    </main>
+    <footer>
+        <p>Gracias por su visualización</p>
+    </footer>
+
+</body>
+
+</html>
