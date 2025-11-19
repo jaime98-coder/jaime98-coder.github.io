@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte Beta - Neon Racer</title>
+</head>
+
+
+<body>
+    <!--Encabezado-->
+    <header id="arriba">
+        <!--Título y eslogan-->
+        <h1><strong>NEON RACER</strong></h1>
+        <h2>"La velocidad es el futuro"</h2>
+        <img src="../img/unnamed.webp" width="200" alt="Logotipo Oficial">
+        <!--Barra navegador-->
+        <nav>
+            <ul>
+                <li><a href="#requisitos">Requisitos del juego</a></li>
+                <li><a href="#trailer">Trailer del juego</a></li>
+                <li><a href="#formulario">Formulario</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!--Zona principal-->
+    <main>
+        <!--Video-->
+        <video controls loop autoplay muted src="../../img/Perro comiendo.mp4" id="trailer" width="20%">trailer
+            supuestos coches</video>
+        <p><b>Versión Beta 0.9</b></p>
+        <h3 id="requisitos"><strong>Requisitos del sistema</strong></h3>
+        <!--Tabla especificaciones-->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th colspan="2">Especificaciones técnicas:</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Mínimos</td>
+                    <td>Recomendados</td>
+                </tr>
+                <tr>
+                    <td>4GM RAM</td>
+                    <td>16GM RAM</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        Sujeto a cambios
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <br><br>
+        <!--Formulario-->
+        <form action="https://www.w3schools.com/action_page.php" method="POST" target="_blank" id="formulario">
+            <fieldset>
+                <legend><strong>Datos del tester</strong></legend>
+                <label for="nickname">Nickname:</label>
+                <input type="text" id="nickname" name="nick" required>
+
+                <label for="svpassword">Contraseña del servidor:</label>
+                <input type="password" id="svpassword" name="svpassword" required>
+
+                <label for="testercode">Código de Tester:</label>
+                <input type="text" id="testercode" value="BETA-USER" readonly required>
+            </fieldset>
+
+            <fieldset>
+                <legend><strong>Datos del bug</strong></legend>
+                <h5>Plataforma</h5>
+                <label for="pc">PC</label>
+                <input type="radio" id="pc" name="plataforma" value="pc">
+                <label for="playstation">PlayStation</label>
+                <input type="radio" id="playstation" name="plataforma" value="playstation">
+                <label for="xbox">Xbox</label>
+                <input type="radio" id="xbox" name="plataforma" value="xbox">
+                <br><br>
+                <h5>Tarjeta gráfica</h5>
+
+                <select name="tarjetagrafica">
+                    <optgroup label="NVIDIA">
+
+                        <option id="rtx3060" value="rtx3060">RTX 3060</option>
+                        <option id="rtx4090" value="rtx4090">RTX 4090</option>
+                    </optgroup>
+                    <optgroup label="AMD">
+
+                        <option id="rx6600" value="rx6600">RX 6600</option>
+                    </optgroup>
+                </select>
+
+                <br>
+
+
+                <label for="fallos">Nivel de fallo</label>
+                <input list="listafallos" id="fallos" name="nivel-fallo">
+                <datalist id="listafallos">
+                    <option value="menu-principal">Menú Principal</option>
+                    <option value="pantalla-carga">Pantalla Carga</option>
+                    <option value="nivel1">Nivel 1</option>
+                    <option value="nivel2">Nivel 2</option>
+                    <option value="nivelfinal">Nivel Final</option>
+                </datalist>
+                <br>
+                <textarea id="errordescription" cols="55" rows="5" placeholder="Describe que pasó..." ></textarea>
+                <label for="confidencialidad">Acuerdo de confidencialidad</label>
+                <input type="checkbox" id="confidencialidad" name="acuerdo-confidencialidad" required>
+            </fieldset>
+            <button type="submit">Enviar</button>
+            <button type="reset">Borrar formulario</button>
+        </form>
+        <br><br>
+        <footer>
+            Todos los derechos de copyright reservados
+            <br><br>
+            <a href="#arriba">Click para subir arriba del todo</a>
+        </footer>
+    </main>
+
+</body>
+
+</html>

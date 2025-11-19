@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>La Pizzeria del código</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#pedir">Ir a pedir ahora</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <main>
+        <form action="pedidos.php" method="GET" target="_blank">
+            <select name="seleccionpizza">
+                <optgroup label="Carnivoras">
+                    <option value="jamon">Jamon</option>
+                    <option value="pepperoni">Pepperoni</option>
+                </optgroup>
+                <optgroup label="Vegetales">
+                    <option value="margarita">Margarita</option>
+                    <option value="4 quesos">4 quesos</option>
+                </optgroup>
+            </select>
+<br>
+            <label for="ingredientesañadidos">Extras</label>
+            <input list="extras" name="extras" id="ingredientesañadidos">
+            <datalist id="extras">
+                <option value="Extra queso"></option>
+                <option value="Champiñones"></option>
+                <option value="Piña"></option>
+            </datalist>
+            
+<br>
+            <textarea rows="4" cols="30" name="comentarios" placeholder="Añade tu comentario..."></textarea>
+            <br><br>
+            <button type="submit">Enviar formulario</button>
+        </form>
+        
+    </main>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <h1 id="pedir">LA PIZZERIA DEL CÓDIGO</h1>
+    <footer>
+        <p>Final de web</p>
+    </footer>
+</body>
+
+</html>
