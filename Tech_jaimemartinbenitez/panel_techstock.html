@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="description" content="Stock de almacen">
+    <meta name="keywords" content="HTML">
+    <meta name="author" content="Jaime Martín">
+
+    <title>TechStock - Gestión de Almacenes</title>
+    <link rel="icon" href="RecursosHTML/logo1.png" type="image/x-icon">
+
+</head>
+
+<body>
+    <header id="inicio">
+        <img src="RecursosHTML/241-800x400.jpg" alt="HTML5 Icon" width="1000" height="300">
+
+        <h1>Tech Stock - Gestión de Almacén </h1>
+        <h2>Jaime Martín Benítez</h2>
+        <nav>
+            <ul>
+                <!--Marcadores para facil acceso en esta misma página-->
+                <li><a href="#stock">Stock</a></li>
+                <li><a href="#pedidos">Pedidos</a></li>
+                <li><a href="#proveedor">Proveedores</a></li>
+                <li><a href="#altaproducto">Alta Producto</a></li>
+                <!--Enlace ficticio a la página perfil-->
+                <li><a href="web/perfil.html">Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!--Tabla de existencias-->
+        <h2>Resumen de existencias</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th rowspan="2">Categoria</th>
+                    <th rowspan="2">Producto</th>
+                    <th colspan="2">Disponibilidad en tiendas</th>
+                </tr>
+                <tr>
+                    <th>Sevilla</th>
+                    <th>Malaga</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="3">Periféricos</td>
+                    <td>Ratón</td>
+                    <td>73 unidades</td>
+                    <td>31 unidades</td>
+                </tr>
+                <tr>
+                    <td>Teclado</td>
+                    <td>43 unidades</td>
+                    <td>21 unidades</td>
+                </tr>
+                <tr>
+                    <td>Webcam</td>
+                    <td>164 unidades</td>
+                    <td>84 unidades</td>
+                </tr>
+
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="4"><b>Total: 416 </b></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <br> <br>
+
+        <!--Apartado de alta producto-->
+        <h2 id="altaproducto">Alta Producto</h2>
+        <form action="webdeenvio.php" method="GET" target="_blank">
+            <fieldset>
+                <legend><b>Da de alta un nuevo producto</b></legend>
+
+
+                <!--Color V3 correcto-->
+                <label for="color">Colores:</label>
+                <select name="color" id="color">
+                    <option id="negro" value="negro">Negro</option>
+                    <option id="blanco" value="blanco" >Blanco</option>
+                    <option id="azul" value="azul" selected>Azul</option>
+                    <option id="rojo" value="rojo">Rojo</option>
+
+                </select>
+                <br><br>
+
+                <!--Stock-->
+                <label for="stock">Stockaje</label>
+                <input type="number" min="1" max="100" placeholder="1-100" name="stock" id="stock">
+
+                <!--Proveedor principal con textarea
+                <label for="proveedor">Proveedor Principal:</label><br>
+                <textarea id="proveedor" name="proveedor" cols="50" rows="5"
+                    placeholder="Introduce el proveedor principal..."></textarea>
+                    -->
+              
+                <br><br>
+
+                <!--Selector tipo productos categorizados v2 -->
+                <label for="tipoproducto" id="pedidos">Tipo de producto por categorías</label><br>
+                <select name="tipoproducto" id="tipoproducto">
+                    <optgroup label="Harware">
+
+                        <option id="teclado" value="teclado">Teclado</option>
+                        <option id="raton" value="raton">Ratón</option>
+                        <option id="webcam" value="webcam">Webcam</option>
+                    </optgroup>
+                    <optgroup label="Software">
+
+                        <option id="sistemaoperativo" value="sistemaoperativo">Sistema Operativo </option>
+                        <option id="aplicacionofimatica" value="aplicacionofimatica">Aplicación Ofimática </option>
+                        <option id="antivirus" value="antivirus">Antivirus </option>
+                    </optgroup>
+                </select>
+                <br><br>
+
+                  <!--Proveedor principal con input text-->
+                <label for="proveedor">Proveedores</label>
+                <input type="text" id="proveedor" name="proveedor" placeholder="Introduce el proveedor principal...">
+
+                <!--Selector tipo productos categorizados tipo list
+                <label for="tipoproducto2">Tipo de producto</label>
+                <input list="producto2" id="tipoproducto2" name="tipoproducto2">
+                <datalist id="producto2">
+                        <option value="Teclado"></option>
+                        <option value="Ratón"></option>
+                        <option value="Webcam"></option>
+                </datalist> -->
+            </fieldset>
+            <button type="submit">Enviar</button>
+        </form>
+        <br><br>
+        <!--Video con pie de video-->
+        <figure>
+            <video controls loop autoplay muted src="RecursosHTML/gente.mp4" width="75%">Personas mirando a través de
+                unas gafas
+                realidad virtual</video>
+            <figcaption>Personas mirando con gafas</figcaption>
+        </figure>
+        <!--Audio con pie de video-->
+        <figure>
+            <audio controls autoplay muted src="RecursosHTML/piano.mp3">Pianito</audio>
+            <figcaption>Audio del piano en formato mp3</figcaption>
+        </figure>
+
+    </main>
+    <!--Pie de HTML-->
+    <footer>
+        <br><br>
+        <p><b>Jaime Martín Benítez</b></p>
+        <p><b><i>Aviso legal predeterminado</i></b></p>
+        <p><a href="#inicio">INICIO</a></p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+body{
+    background-color: #B5F4FF;
+}
+
+header{
+    background-color: #007bff;
+}
+header h1{
+    font-family: Helvetica, Arial, sans-serif;
+}
+header nav{
+    color:white;    
+}
+
+header a:hover{
+text-decoration:none;
+color:yellow    
+}
+#contenido{
+    padding: 5px; 
+}
+#contenido h2 {
+    font-size: 55px;
+}
+footer {
+    background-color: #333;
+    color:white;
+    text-align: center;
+    padding: 25px;
+}

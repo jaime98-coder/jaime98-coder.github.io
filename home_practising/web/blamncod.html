@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1><strong>Pruebecilla</strong></h1>   
+        <h2>Probando cosas antes de examen</h2>
+        <nav>
+            <ul >
+                <li><a href="#pagina2">PARTE 2 MISMA PAGINA</a></li>
+                <li><a href="#pagina3">PARTE 3 MISMA PAGINA</a></li>
+                <li><a href="#pagina4">PARTE 4 MISMA PAGINA</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form action="https://www.w3schools.com/action_page.php" method="POST" target="_blank">
+            <fieldset>
+                <legend>Datos personales</legend>
+                <label for="user">Usuario</label>
+                <input type="text" id="user" name="usuario" placeholder="Mete tu usuario" required>
+                <label for="pass">Contraseña</label>
+                <input type="password" id="pass" name="contraseña" placeholder="Mete tu contraseña" required>
+            </fieldset>
+            <fieldset>
+                <legend>Tipo comida favorita</legend>
+                <select name="comidafav">
+                    <optgroup label="¡Elige!">
+                    <option id=carne value="carne">Carne</option>
+                    <option id="pescado" value="pescado">Pescado</option>
+                    <option id="verduras" value="verduras">Verduras</option>
+                    </optgroup>
+                </select>
+            </fieldset>
+            <fieldset>
+                <legend>Gustos musicales</legend>
+                <label for="rock" >Rock</label>
+                <input list="datalist" id="rock">
+                <datalist id="datalist">
+                    <option value="Me gusta mucho"></option>
+                    <option value="Me gusta poco"></option>
+                    <option value="No me gusta"></option>
+                </datalist>
+                <label for="rock" >Rock</label>
+            </fieldset>
+
+        </form>
+    </main>
+</body>
+</html>
