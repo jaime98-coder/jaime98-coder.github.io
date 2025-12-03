@@ -5,6 +5,34 @@
     <meta charset="UTF-8">
     <title> P4R Music</title>
     <link rel="stylesheet" type="text/css" href="añadir aqui un CSS">
+    <link rel="icon" type="image/png" href="img/NEW LOGO P4R CARTOON CON DEGRADADO NEW.png">
+    <style>
+        body {
+            background-color: #F7EEE0;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .titulo-principal {
+            font-weight: bolder;
+            font-size: 50px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .lema {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 25px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .menu-principal {
+            padding: 10px;
+            margin: 10px;
+
+        }
+    </style>
 </head>
 
 <body>
@@ -12,27 +40,27 @@
     <!--Creación del header para el encabezado de la web-->
     <!--Creación del ID subir para desplazarme hasta arriba del todo-->
     <header id="subir">
-        <h1><strong>PRAY 4 RAVE MUSIC</strong></h1>
-        <h2><strong>Welcome to the P4R Universe</strong></h2>
+        <h1 class="titulo-principal"><strong>PRAY 4 RAVE MUSIC</strong></h1>
+        <h2 class="lema"><strong>Welcome to the P4R Universe</strong></h2>
         <img src="img/Monster Party Encabezado SC P4R editado frase centrada para movil.png" width="100%" height="100%"
             alt="Imagen encabezado de monstruos">
-            <hr>
-    
+        <hr>
 
-    <!--Creación del nav para menú de navegación-->
-    <nav>
 
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="web/releases.html">Releases</a></li>
-            <li><a href="web/eventos.html">Eventos</a></li>
-            <li><a href="quienes-somos.html">¿Quienes somos?</a></li>
-            <li><a href="demos.html">Envíanos tu demo</a></li>
-            <li><a href="iniciar-sesion.html">Iniciar sesión</a></li>
-        </ul>
-    </nav>
+        <!--Creación del nav para menú de navegación-->
+        <nav class="menu-principal">
+
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="web/releases.html">Releases</a></li>
+                <li><a href="web/eventos.html">Eventos</a></li>
+                <li><a href="quienes-somos.html">¿Quienes somos?</a></li>
+                <li><a href="demos.html">Envíanos tu demo</a></li>
+                <li><a href="iniciar-sesion.html">Iniciar sesión</a></li>
+            </ul>
+        </nav>
     </header>
-<hr>
+    <hr>
     <!--Creación de la zona main de mi html-->
     <main>
         <!--Tabla con su respectivo título-->
@@ -72,7 +100,7 @@
 
                 <!--input de tipo password-->
                 <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="contraseña" placeholder="Escribe tu contraseña" required> 
+                <input type="password" id="password" name="contraseña" placeholder="Escribe tu contraseña" required>
                 <br>
 
                 <!--input de tipo email-->
@@ -140,7 +168,7 @@
         <!--Datalist para recomendar con diferentes opciones-->
         <form action="https://www.w3schools.com/action_page.php" method="GET" target="_blank">
             <label for="favtrack">Selecciona tu release favorito del Universo P4R:</label><br>
-            <input list="releases" id="favtrack" name="favouritetrack"> 
+            <input list="releases" id="favtrack" name="favouritetrack">
             <datalist id="releases">
                 <option value="The Infinite">Louis Leon</option>
                 <option value="Shadowline">Vertx</option>
@@ -188,7 +216,7 @@
         <br>
         <!--Lista ordenada por letras mayúsculas e indicando cuando empezar-->
         <h3>Formas de contacto</h3>
-        <ol type="A" start="23">
+        <ol type="1" start="1">
             <li>Instagram</li>
             <li>Email</li>
             <li>Formulario Web</li>
