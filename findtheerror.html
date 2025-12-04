@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Examen Práctico - Viajes P4R</title>
+</head>
+
+<body>
+    <header>
+        <h1>Agencia de Viajes</h1>
+        <a href="#reserva">Ir a reservar</a>
+    </header>
+
+    <main>
+        <img src="playa.jpg" width="300" alt="Playa bonita">
+
+        <h3>Tarifas actuales</h3>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th colspan="2">Precios por temporada</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Alta</td>
+                    <td>Baja</td>
+                </tr>
+                <tr>
+                    <td>500€</td>
+                    <td>250€</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <h3 id="reserva">Formulario de Reserva</h3>
+
+        
+        <form action="procesar.php" method="GET">
+            <fieldset>
+                <legend>Datos cliente:</legend>
+            <label for="nombre_cliente">Nombre completo:</label>
+            <input type="text" id="nombre_cliente" name="nombre" required>
+            <br><br>
+
+            <P>Elige destino:</P>
+            <select name="destino">
+                <optgroup label="Europa">
+                    <option value="paris">París</option>
+                    <option value="roma">Roma</option>
+                </optgroup>
+                <optgroup label="Asia">
+                    <option value="tokyo">Tokyo</option>
+                    <option value="bali">Bali</option>
+                </optgroup>
+            </select>
+            <br><br>
+
+            <label for="aero">Aeropuerto de salida:</label>
+            <input list="aeropuertos" name="aeropuerto_salida" id="aero">
+
+            <datalist id="aeropuertos">
+                <option value="Madrid - Barajas">
+                <option value="Barcelona - El Prat">
+                <option value="Sevilla">
+            </datalist>
+            <br><br>
+
+            <label>Alergias o comentarios:</label>
+            <br>
+            <textarea name="comentarios" rows="5" cols="30"></textarea>
+            <br><br>
+
+            <button type="submit">Confirmar Reserva</button>
+            </fieldset>
+        </form>
+
+    </main>
+</body>
+
+</html>
