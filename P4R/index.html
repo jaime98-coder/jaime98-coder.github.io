@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title> P4R Music</title>
-    <link rel="stylesheet" type="text/css" href="añadir aqui un CSS">
+    <!-- pdte linkear externo, de momento todo en head
+    <link rel="stylesheet" type="text/css" href="añadir aqui un CSS"> -->
     <link rel="icon" type="image/png" href="img/NEW LOGO P4R CARTOON CON DEGRADADO NEW.png">
     <style>
         body {
-            background-color: #F7EEE0;
+            background-image: url('../P4R/img/fondo\ web\ p4r.png');
+            background-size: cover;
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
@@ -17,6 +19,7 @@
             font-size: 50px;
             padding: 10px;
             margin: 10px;
+            color: #634a81;
         }
 
         .lema {
@@ -25,12 +28,89 @@
             font-size: 25px;
             padding: 10px;
             margin: 10px;
+            color: #402e54;
         }
 
         .menu-principal {
+
             padding: 10px;
             margin: 10px;
+            
 
+
+        }
+
+        .menu-principal ul {
+
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            list-style: none;
+
+        }
+
+
+
+        .menu-principal a {
+            border-radius: 50px 50px 50px 50px;
+            font-weight: bold;
+            font-style: italic;
+            color: #b7d883;
+            text-decoration: none;
+            font-size: 34px;
+            border: 5px solid #402e54;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            margin: 10px;
+            margin-top: 10px;
+            display: inline-block;
+            background-color: #634a81;
+        }
+
+        .menu-principal a:hover {
+
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 38px;
+            font-weight: bolder;
+
+        }
+
+
+
+        .pie-pagina {
+
+            border-radius: 30px 30px 30px 30px;
+
+            margin: 10px;
+            padding: 10px;
+            border: 5px #634a81;
+            border-style: groove;
+            text-align: center;
+            background-color: white;
+        }
+
+        .derechos {
+            font-style: italic;
+            font-weight: bold;
+            border: 2px #402e54 groove;
+            border-radius: 30px 30px 30px 30px;
+
+        }
+
+        #enlace-codefest {
+            font-style: italic;
+            margin: 5px;
+        }
+
+        #enlace-codefest a {
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        #enlace-codefest a:hover {
+            color: darkred;
         }
     </style>
 </head>
@@ -232,11 +312,17 @@
         </textarea>
     </main>
     <footer>
-        <br>
-        <br>
-        <p><i>¡Siguenos en las redes sociales si quieres estar al tanto de todo nuestro contenido!</i></p>
-        <a href="../CODEFEST/index.html">Conoce un festival diferente</a>
-        <p>© P4R Music</p>
+        <nav class="pie-pagina">
+            <p><i>¡Siguenos en las redes sociales si quieres estar al tanto de todo nuestro contenido!</i></p>
+            <hr>
+            <nav id="enlace-codefest">
+                <a href="../CODEFEST/index.html">Conoce un festival diferente</a>
+            </nav>
+            <hr>
+            <nav class="derechos">
+                <p>© P4R Music. Todos los derechos reservados.</p>
+            </nav>
+        </nav>
     </footer>
 
 
