@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo Media Query</title>
+    
+    <style>
+        /* =========================================
+           1. ESTILOS BASE (Móvil / Pantallas pequeñas)
+           ========================================= */
+        /* Estos estilos se aplican SIEMPRE, a menos que algo más específico los sobrescriba después. */
+        
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .contenedor {
+            display: flex;
+            /* En móvil, queremos que los elementos estén uno encima del otro */
+            flex-direction: column; 
+            gap: 10px; /* Un pequeño espacio entre las cajas */
+        }
+
+        .caja {
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            border-radius: 8px;
+        }
+
+        .menu {
+            background-color: lightblue;
+            /* En móvil, no definimos ancho, por lo que ocupa todo el ancho disponible por defecto */
+        }
+
+        .contenido {
+            background-color: lightcoral;
+            min-height: 100px; /* Solo para que se vea más grande */
+        }
+
+        /* =========================================
+           2. MEDIA QUERY (Tablets y PC)
+           ========================================= */
+        /* La "magia" ocurre aquí.
+           Traducción: "Si el ancho de la ventana es MINIMO 768px (o sea, 768px o más)...
+           aplica los siguientes cambios". */
+
+        @media (min-width: 768px) {
+            
+            .contenedor {
+                /* Cambiamos la dirección: ahora se ponen uno al lado del otro */
+                flex-direction: row; 
+            }
+
+            .menu {
+                /* Ahora sí le damos un ancho específico */
+                width: 30%; 
+            }
+
+            .contenido {
+                /* El resto del ancho para el contenido */
+                width: 70%; 
+            }
+            
+            /* (Opcional) Cambio el color del fondo del body para que notes cuándo salta el cambio */
+            body {
+                background-color: #f0f0f0; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Prueba redimensionando tu navegador</h2>
+    <p>Si la ventana es estrecha (móvil), verás los bloques apilados. Si la estiras (escritorio), se pondrán lado a lado.</p>
+
+    <div class="contenedor">
+        <div class="caja menu">MENÚ (Navegación)</div>
+        <div class="caja contenido">CONTENIDO PRINCIPAL</div>
+    </div>
+
+</body>
+</html>
