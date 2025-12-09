@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #bloque1,
+        #bloque2,
+        #bloque3 {
+            background-image: url('../img/Final.jpg');
+            background-size: 50px 50px;
+            width: 200px;
+            height: 200px;
+
+        }
+
+        #bloque1 {
+            background-repeat: no-repeat;
+            border: 5px solid green;
+            background-position: center center;
+        }
+
+        #bloque2 {
+            background-repeat: repeat-x;
+            border: 5px solid blue;
+            background-position: bottom left;
+        }
+
+        #bloque3 {
+            background-repeat: repeat-y;
+            border: 5px solid yellow;
+            background-position: top right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedorpadre">
+        <div id="bloque1"></div>
+        <div id="bloque2"></div>
+        <div id="bloque3"></div>
+
+    </div>
+</body>
+
+</html>

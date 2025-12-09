@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receta de Tortilla</title>
+  <!-- <link rel="stylesheet" href="../css/estilo-receta.css"> -->
+  <style>
+    body {
+      background-color: lightgray;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+    .card-container {
+      background-color: #ffffff;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 10px 10px 10px 10px;
+      box-shadow: 4px 7px 6px rgba(125, 0, 0, 0.5);
+    }
+
+    #tituloreceta {
+      background-color: #634a81;
+      color: white;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+
+    }
+
+    .ingredientes {
+      margin: 3px;
+      padding: 15px;
+      border: 1px solid black;
+    }
+
+    .preparacion {
+      margin: 3px;
+      padding: 15px;
+      border: 1px solid black;
+    }
+
+    .recomendacion {
+      border: 1px dotted purple;
+      border-radius: 0px 0px 10px 10px;
+      background-color: lightblue;
+      text-align: center;
+    }
+
+    @media (min-width:850px) {
+      .card {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+      }
+
+      .ingredientes {
+        flex: 1;
+        background-color: #f9f9f9;
+
+      }
+
+      .preparacion {
+        flex: 2;
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="card-container">
+
+    <h1 id="tituloreceta">Receta de la tortilla francesa</h1>
+
+    <div class="card">
+      <div class="ingredientes">
+        <h2>Ingredientes:</h2>
+        <ul>
+          <li>Huevos</li>
+          <li>Aceite</li>
+          <li>Sal</li>
+        </ul>
+      </div>
+
+      <div class="preparacion">
+        <h2>Preparación:</h2>
+        <ol>
+          <li>Calentar el aceite en una sartén</li>
+          <li>Cascar el huevo y batirlo</li>
+          <li>Verter el huevo batido en la sartén</li>
+          <li>Esperar un par de minutos, voltear y volver a esperar.</li>
+        </ol>
+      </div>
+    </div>
+
+    <p class="recomendacion">Servir con mayonesa, tomate o jamón.</p>
+  </div>
+
+</body>
+
+</html>

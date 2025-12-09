@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso Examen</title>
+    <style>
+        /* --- ESTILOS DE TEXTO (ACTIVIDAD 1) --- */
+        #parrafo1 {
+            text-align: right;
+            font-style: italic;
+            /* Cursiva */
+        }
+
+        #parrafo2 {
+            text-align: left;
+            text-decoration: line-through;
+            /* Tachado */
+            text-transform: uppercase;
+            /* Convierte todo a mayúsculas */
+        }
+
+        #parrafo3 {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 120%;
+            /* Aumenta el tamaño un 20% sobre el base */
+        }
+
+        #parrafo4 {
+            font-weight: bold;
+            /* Negrita */
+            /* Sombra de texto: desplazamiento X, desp. Y, difuminado, color */
+            text-shadow: 8px 5px 3px green;
+        }
+
+        /* --- ESTILOS GENERALES DE LAS CAJAS CONTENEDORAS --- */
+        .grupobuscadores,
+        .gruporedes,
+        .gruponoticias {
+            width: 400px;
+            height: 200px;
+            border-radius: 10px 10px 10px 10px;
+            /* Bordes redondeados */
+            color: black;
+            border: 2px solid darkgoldenrod;
+            margin: 3px;
+            padding: 5px;
+        }
+
+        /* Colores de fondo específicos para cada caja */
+        .grupobuscadores {
+            background-color: lightgreen;
+        }
+
+        .gruporedes {
+            background-color: aqua;
+        }
+
+        .gruponoticias {
+            background-color: pink;
+        }
+
+        /* Contenedor principal de la actividad 2 (para poner las 3 cajas en fila) */
+        #actividad2 {
+            display: flex;
+        }
+
+        /* --- CONFIGURACIÓN DE BUSCADORES (HORIZONTAL) --- */
+        #buscadoresx3 {
+            display: flex;
+            /* width: 100% hace que llene todo el ancho de la caja verde */
+            width: 100%;
+            height: 50px;
+            padding: 0px;
+        }
+
+        #buscadoresx3,
+        #buscadoresx3 a {
+            color: white;
+        }
+
+        /* --- CONFIGURACIÓN DE REDES SOCIALES (VERTICAL / COLUMNA) --- */
+        #redesx3 {
+            display: flex;
+
+            /* CAMBIO CLAVE 1: Pone los elementos uno debajo del otro */
+            flex-direction: column;
+
+            /* CAMBIO CLAVE 2: Ancho reducido (33%) para que no llegue al final de la caja azul */
+            width: 33%;
+
+            /* Altura automática o mayor para que quepan los 3 botones apilados */
+            height: 150px;
+        }
+
+        #redesx3,
+        #redesx3 a {
+            color: white;
+        }
+
+        /* --- IGUALDAD DE TAMAÑO (FLEX: 1) --- */
+        /* Esto hace que las cajas de colores de Buscadores y Redes se repartan el espacio equitativamente */
+        #redesx3 div,
+        #buscadoresx3 div {
+            flex: 1;
+            /* Crecen para ocupar todo el espacio disponible */
+            margin: 2px;
+        }
+
+        /* --- CONFIGURACIÓN DE NOTICIAS --- */
+        #noticiasx3 {
+            display: flex;
+            /* Se alinean horizontalmente por defecto */
+            text-decoration: none;
+        }
+
+        #noticiasx3 a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #noticiasx3 a:hover {
+            font-weight: bold;
+            color: red;
+            /* Efecto al pasar el ratón */
+        }
+
+        /* --- COLORES DE FONDO DE LOS BOTONES --- */
+        #duckduckgo,
+        #facebook {
+            background-color: darkred;
+            margin: 2px;
+        }
+
+        #ecosia,
+        #twitter {
+            background-color: green;
+            margin: 2px;
+        }
+
+        #google,
+        #pinterest {
+            background-color: blue;
+        }
+
+        #elpais,
+        #eldiario,
+        #elmundo {
+            margin: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a href="#derechos">Derechos </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="actividad1">
+            <p id="parrafo1">Este es el parrafo número 1, en cursiva y alineado a la derecha</p>
+            <p id="parrafo2">Este es el parrafo número 2, en minusculas pero convertido a mayusculas y tachado</p>
+            <p id="parrafo3">Tercero con letra 20% mas grande y distinta fuente </p>
+            <p id="parrafo4">Por ultimo, un texto en negrita y con sombra verde</p>
+        </div>
+        <br>
+        <hr>
+        <br>
+
+        <div id="actividad2">
+
+            <div class="grupobuscadores">
+                <p>Buscadores</p>
+                <div id="buscadoresx3">
+                    <div id="duckduckgo"><a href="http://www.duckduckgo.com/">DuckDuckGo</a></div>
+                    <div id="ecosia"><a href="http://www.duckduckgo.com/">Ecosia</a></div>
+                    <div id="google"><a href="http://www.duckduckgo.com/">Google</a></div>
+                </div>
+            </div>
+
+            <div class="gruporedes">
+                <p>Redes Sociales</p>
+                <div id="redesx3">
+                    <div id="facebook"><a href="http://www.duckduckgo.com/">Facebook</a></div>
+                    <div id="twitter"><a href="http://www.duckduckgo.com/">Twitter</a></div>
+                    <div id="pinterest"><a href="http://www.duckduckgo.com/">Pinterest</a></div>
+                </div>
+            </div>
+
+            <div class="gruponoticias">
+                <p>Noticias</p>
+                <div id="noticiasx3">
+                    <div id="elpais"><a href="http://www.duckduckgo.com/">El País</a></div>
+                    <div id="eldiario"><a href="http://www.duckduckgo.com/">El Diario</a></div>
+                    <div id="elmundo"><a href="http://www.duckduckgo.com/">El Mundo</a></div>
+                </div>
+
+            </div>
+        </div>
+
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+        <br><br><br>
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+    </main>
+
+    <footer>
+        <nav id="derechos">
+            <p>Derechos Reservados.</p>
+        </nav>
+    </footer>
+</body>
+
+</html>
