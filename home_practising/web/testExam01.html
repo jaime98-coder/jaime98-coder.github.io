@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Examen CSS</title>
+    <style>
+        body {
+            background-color: lightgray;
+            font-family: Verdana, sans-serif;
+            margin: 0px;
+        }
+
+        #titulo-principal {
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 5px 3px 4px lightsalmon;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .tarjetas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 250px;
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            border-top: 5px solid darkred;
+            border-right: 2px solid blue;
+            border-bottom: 2px solid blue;
+            border-left: 2px solid blue;
+            border-radius: 15px 15px 15px 15px;
+            box-shadow: 3px 7px 10px blue;
+
+        }
+
+        .boton:hover {
+            background-color: lightgreen;
+            font-weight: bold;
+        }
+        .boton {
+            text-decoration: none;
+            border: 2px solid black;
+            border-radius: 5px 5px 5px;
+            padding: 3px;
+        }
+
+        @media (max-width: 600px) {
+            .tarjetas-container {
+                flex-direction: column;
+                align-items: center;
+                
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="#">Inicio</a>
+        <a href="#">Servicios</a>
+        <a href="#">Contacto</a>
+    </nav>
+
+    <div class="main-container">
+        <h1 id="titulo-principal">Nuestros Planes</h1>
+
+        <div class="tarjetas-container">
+            <div class="card">
+                <h2>Básico</h2>
+                <p class="precio">10€</p>
+                <p>Ideal para empezar.</p>
+                <a href="#" class="boton">Elegir</a>
+            </div>
+
+            <div class="card destacado">
+                <h2>Pro</h2>
+                <p class="precio">25€</p>
+                <p>Para usuarios avanzados.</p>
+                <a href="#" class="boton">Elegir</a>
+            </div>
+
+            <div class="card">
+                <h2>Premium</h2>
+                <p class="precio">50€</p>
+                <p>Todo incluido.</p>
+                <a href="#" class="boton">Elegir</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

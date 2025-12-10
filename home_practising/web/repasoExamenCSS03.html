@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cajaExterna {
+            border: 1px solid black;
+            display: grid;
+            width: 50%;
+            margin: 0 auto;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 2px;
+            padding: 2px;
+            background-color: aquamarine;
+
+        }
+
+        .cajaExterna div {
+            border: 1px solid black;
+            margin: 2px;
+            padding: 2px;
+            background-color: red;
+
+        }
+
+        .cajaLorem {
+            background-color: lightcoral;
+            border: 2px solid darkblue;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 10px;
+
+        }
+
+        .cajaFloating {
+            background-color: yellow;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .cajaFloating div {
+            border: 2px solid black;
+            background-color: limegreen;
+            width: 30%;
+            height: 100px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!--MODO TABLE-->
+    <table id="t1" border="1" width="50%" align="center" cellpadding="2px">
+        <tr>
+            <td>Tutoriales En Linea 1</td>
+            <td>Tutoriales En Linea 2</td>
+            <td>Tutoriales En Linea 3</td>
+        </tr>
+        <tr>
+            <td>Tutoriales En Linea 1</td>
+            <td>Tutoriales En Linea 2</td>
+            <td>Tutoriales En Linea 3</td>
+        </tr>
+    </table>
+    <br><br>
+    <!--MODO DIV CON BORDES PARA FORMAR LA MISMA TABLA-->
+    <div class="cajaExterna">
+        <div id="caja1a">Tutoriales En Linea 1</div>
+        <div id="caja2a">Tutoriales En Linea 2</div>
+        <div id="caja3a">Tutoriales En Linea 3</div>
+        <div id="caja1b">Tutoriales En Linea 1</div>
+        <div id="caja2b">Tutoriales En Linea 2</div>
+        <div id="caja3b">Tutoriales En Linea 3</div>
+
+    </div>
+    <br>
+    <br>
+
+
+    <div class="cajaLorem">
+        Lorem ipsum dolor sit amet consectetur adipiscing elit dignissim lobortis, commodo praesent cubilia aliquam dis
+        habitasse taciti vulputate molestie, ornare magna curabitur scelerisque enim elementum suscipit ac. Nostra
+        primis feugiat ad erat bibendum ullamcorper blandit enim luctus, risus suscipit purus facilisi pretium cubilia
+        phasellus molestie rutrum odio, dictum velit habitasse mauris euismod curae eros diam. Sed sollicitudin duis
+        rhoncus proin lectus neque, laoreet blandit curabitur cum praesent, tempus elementum eget aptent pellentesque.
+
+        Porttitor non blandit pellentesque urna lacinia imperdiet, duis potenti diam molestie bibendum faucibus tortor,
+        gravida magnis conubia ultricies tempor. Torquent feugiat curae luctus phasellus ornare malesuada molestie
+        inceptos lectus interdum, turpis ut euismod erat congue risus hac egestas aptent, leo augue sagittis mollis et
+        nullam aliquet consequat metus. Gravida venenatis ridiculus phasellus vivamus hendrerit natoque netus, nam
+        maecenas imperdiet ut tempor sociosqu sodales, et enim lobortis aliquet tortor mi.
+
+    </div>
+    <br><br><br>
+    <div class="cajaFloating">
+        <div>Columna 1</div>
+        <div>Columna 2</div>
+        <div>Columna 3</div>
+        <div>Columna 4</div>
+        <div>Columna 5</div>
+        <div>Columna 6</div>
+    </div>
+    <br><br><br>
+</body>
+
+</html>

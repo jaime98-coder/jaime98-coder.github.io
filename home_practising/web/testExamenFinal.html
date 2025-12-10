@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Equipo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgb(0, 0, 34);
+            margin: 0px;
+            color: white;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        #logo {
+            font-size: xx-large;
+            font-weight: bold;
+        }
+
+        .contenedor-encabezado {
+            display: flex;
+            background-color: lightsalmon;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .barra-navegacion a {
+            text-decoration: none;
+            color: white;
+            background-color:  blueviolet;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 2px;
+            
+        }
+
+        .barra-navegacion a:hover {
+            color: lightgreen;
+            background-color: rgb(122, 75, 56);
+        }
+
+        .contenedor-conoceequipo {
+            font-size: 50px;
+            text-align: center;
+            text-shadow: 8px 4px 10px lightsalmon;
+        }
+
+
+
+        .contenedor-perfiles {
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+
+
+        .perfiles {
+            background-color: rgb(0, 0, 94);
+            border: 2px solid lightsalmon;
+            border-top: 6px solid blueviolet;
+            box-shadow: 15px 10px 6px black;
+            border-radius: 10px;
+            width: auto;
+            padding: 10px;
+
+        }
+
+        .perfiles:hover {
+            transform: scale(1.1);
+            box-shadow: 20px 15px 2px black;
+        }
+
+        .perfiles img {
+            border-radius: 100px;
+
+            display: block;
+            margin: 0 auto;
+        }
+
+        .perfiles h3 {
+            text-align: center;
+        }
+
+        .perfiles p {
+            text-align: center;
+            color: blueviolet;
+            font-style: italic;
+        }
+
+        .boton-contacto {
+
+            background-color: blueviolet;
+            color: white;
+            padding: 5px 8px;
+            border: none;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .boton-contacto:hover {
+
+            background-color: white;
+            color: blueviolet;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor-perfiles {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+
+            }
+
+            .contenedor-encabezado {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="contenedor-encabezado">
+        <div id="logo">StartUp Tech</div>
+        <nav class="barra-navegacion">
+            <a href="#">Inicio</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Contacto</a>
+        </nav>
+    </header>
+
+    <h1 class="contenedor-conoceequipo">CONOCE AL EQUIPO</h1>
+
+    <div class="contenedor-perfiles">
+        <article id="perfil1" class="perfiles">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Ana">
+            <h3>Ana García</h3>
+            <p>CEO</p>
+            <button class="boton-contacto">Contactar</button>
+        </article>
+
+        <article id="perfil2" class="perfiles">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto de Carlos">
+            <h3>Carlos Ruiz</h3>
+            <p>CTO</p>
+            <button class="boton-contacto">Contactar</button>
+        </article>
+
+        <article id="perfil3" class="perfiles">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Foto de Laura">
+            <h3>Laura M.</h3>
+            <p>Lead Designer</p>
+            <button class="boton-contacto"> Contactar</button>
+        </article>
+    </div>
+
+</body>
+
+</html>

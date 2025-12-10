@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Catálogo Tech</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        body {
+            background-color: lightgrey;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0px;
+        }
+
+        .header {
+            background-color: darkslateblue;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: whitesmoke;
+            font-weight: bold;
+            border: 3px solid black;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: orange;
+        }
+
+
+        #titulo-seccion {
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        .contenedor-productos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .producto {
+            width: 300px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid darkslateblue;
+            border-bottom: 5px solid orange;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+
+        }
+
+        /* CLASE COMÚN: Ponemos aquí lo que se repite en todas */
+        .foto-producto {
+            height: 150px;
+            width: 100%;
+            border-radius: 5px;
+
+            /* PROPIEDADES PARA FONDO (En vez de object-fit) */
+            background-size: cover;
+            /* Rellena todo el cuadro */
+            background-position: center;
+            /* Centra la imagen */
+            background-repeat: no-repeat;
+        }
+
+        /* IDs: Aquí solo ponemos la URL específica de cada uno */
+        #img1 {
+
+            background-image: url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=60');
+        }
+
+        #img2 {
+            background-image: url('https://www.cheerz.com/es/blog/wp-content/uploads/2020/08/0oU8jwVQ.png');
+        }
+
+        #img3 {
+            background-image: url('https://storage.googleapis.com/catalog-pictures-carrefour-es/catalog/pictures/hd_510x_/8445045019488_1.jpg');
+        }
+
+        .producto:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-comprar {
+            background-color: #3498db;
+            color: white;
+
+        }
+
+        .btn-comprar:hover {
+            background-color: darkblue;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor-productos {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">TechStore</div>
+        <nav class="nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Contacto</a>
+        </nav>
+    </header>
+
+    <h1 id="titulo-seccion">Nuestros Productos</h1>
+
+    <div class="contenedor-productos">
+
+        <article class="producto">
+            <div id="img1" class="foto-producto"></div>
+            <h2>Laptop Pro</h2>
+            <p>Potencia y rendimiento para profesionales.</p>
+            <span class="precio">999€</span>
+            <button class="btn-comprar">Comprar Ahora</button>
+        </article>
+
+        <article class="producto">
+            <div id="img2" class="foto-producto"></div>
+            <h2>Smartphone X</h2>
+            <p>La mejor cámara del mercado en tu bolsillo.</p>
+            <span class="precio">750€</span>
+            <button class="btn-comprar">Comprar Ahora</button>
+        </article>
+
+        <article class="producto">
+            <div id="img3" class="foto-producto"></div>
+            <h2>Auriculares 360</h2>
+            <p>Sonido envolvente con cancelación de ruido.</p>
+            <span class="precio">199€</span>
+            <button class="btn-comprar">Comprar Ahora</button>
+        </article>
+
+    </div>
+
+</body>
+
+</html>
