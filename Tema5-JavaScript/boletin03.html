@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletin C (3)</title>
+</head>
+
+<body>
+
+    <script>
+        // ¿Eres mayor de edad?
+        let miEdad;
+        let mayoriaEdad;
+        miEdad = prompt("Introduce tu edad");
+        if (miEdad >= 18) {
+            mayoriaEdad = true;
+            console.log("Eres mayor de edad: " + mayoriaEdad);
+        } else {
+            mayoriaEdad = false;
+            console.log("Eres mayor de edad: " + mayoriaEdad);
+        }
+        // Verificador de invitados
+        let nombreInvitado;
+        nombreInvitado = prompt("Introduce el nombre del invitado");
+        if (nombreInvitado == "Admin") {
+            console.log("Acceso total");
+        }else {
+            console.log("Acceso limitado");
+        }
+
+        // Numeros impares
+        let num;
+        let esPar;
+        let esPositivo;
+        while (!esPositivo){
+            num = prompt("Introduce un número positivo");
+            if (num>0){
+                esPositivo=true;
+                for (let i=1;i<=num;i++){
+                    if (i%2!=0){
+                        console.log(i);
+                    }
+                }
+               
+            } else {
+                esPositivo=false;
+                alert("El número no es positivo, inténtalo de nuevo");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
