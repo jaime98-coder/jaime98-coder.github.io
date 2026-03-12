@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo Extra JSON</title>
+    <script src="https://code.jquery.com/jquery-4.0.0.js"
+        integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Por estética  se pone el form-->
+   <form action="">
+    <!-- No es necesario poner name en JQUERY, porque los datos se obtienen por id  -->
+     <input type="text" id="inputNombre" placeholder="Introduce un Nombre">
+    <input type="text" id="inputApellido" placeholder="Introduce un Apellido">
+    <input type="number" id="inputEdad" placeholder="Introduce una Edad">
+    <input type="text" id="inputCiudad" placeholder="Introduce una Ciudad">
+    <button type="button" id="botonEnviar" >Traspasar datos</button>
+    
+   </form>
+
+    <script>
+        let boton=document.addEventListener("click", function(){
+            let nombre = document.querySelector("#inputNombre").value;
+            let apellido = document.querySelector("#inputApellido").value;
+            let edad = document.querySelector("#inputEdad").value;
+            let ciudad = document.querySelector("#inputCiudad").value;
+
+            let obj = { nombre: nombre, apellido: apellido, edad: edad, ciudad: ciudad };
+            let json = JSON.stringify(obj);
+            console.log("JSON generado: " + json);
+            
+        })
+        $(document).ready(function () {
+            $("#botonEnviar").click(function (inputDatos) {
+                let nombre = $("#inputNombre").val();
+                let apellido = $("#inputApellido").val();
+                let edad = $("#inputEdad").val();
+                let ciudad = $("#inputCiudad").val();
+
+                let obj = { nombre: nombre, apellido: apellido, edad: edad, ciudad: ciudad };
+                let json = JSON.stringify(obj);
+                console.log("JSON generado: " + json);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

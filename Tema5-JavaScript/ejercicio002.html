@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 002</title>
+</head>
+
+<body>
+    <!-- 1. Programa que pida un número al usuario y muestre si es par o impar. -->
+    <div id="numero"></div>
+    <input type="number" id="inputNumero" placeHolder="Introduce un número para saber si es par o impar">
+    <button id="boton">Comprobar</button>
+    <br><br><br>
+    <!-- 2. Programa que tome la edad de una persona y diga si puede votar (ha cumplido los 18 años) o no. -->
+    <input type="number" id="inputEdad" placeholder="Introduce una edad para verificar si puede votar">
+    <button id="botonEdad"> Comprobar edad </button>
+
+    <!--3. Escribe un bucle que imprima los números del 1 al 10. -->
+    <input type="number" id="inputInicio" placeholder="Introduce un número de inicio">
+    <input type="number" id="inputFin" placeholder="Introduce un número de fin">
+    <button id="botonInicioFin"> Imprimir números </button>
+    <script>
+        // 1. Programa que pida un número al usuario y muestre si es par o impar.//
+        // Variables JS
+        let numero = document.querySelector("#numero");
+        let inputNumero = document.querySelector("#inputNumero");
+        let boton = document.querySelector("#boton");
+        let esPar;
+        // Evento click del botón
+        boton.addEventListener("click", function () {
+            let valor = Number(inputNumero.value);
+            if (valor % 2 === 0) {
+                esPar = true;
+                numero.textContent = "El número es par";
+            } else {
+                esPar = false;
+                numero.textContent = "El número es impar";
+            }
+        });
+
+
+        // 2. Programa que tome la edad de una persona y diga si puede votar (ha cumplido los 18 años) o no.//
+        let inputEdad = document.querySelector("#inputEdad");
+        let botonEdad = document.querySelector("#botonEdad");
+        botonEdad.addEventListener("click", function () {
+            let edad = Number(inputEdad.value);
+            if (edad >= 18) {
+                alert("Puedes votar");
+            } else {
+                alert("No puedes votar");
+            }
+        })
+        // 3.Escribe un bucle que imprima los números del 1 al 10.
+        console.log("Numeros del 1 al 10")
+        for (let i = 1; i <= 10; i++) {
+            console.log(i);
+        }
+        // 4.Escribe un bucle que imprima los números pares del 1 al 10.
+        console.log("Numeros pares del 1 al 10")
+        for (let i = 1; i <= 10; i++) {
+
+            if (i % 2 == 0) {
+                console.log(i);
+            }
+        }
+        // 5. Crea un programa que sume los números del 1 al 100 y muestre el resultado.
+        let suma = 0;
+        for (let i = 1; i <= 100; i++) {
+            suma += i;
+        }
+        console.log("La suma de los números del 1 al 100 es: " + suma);
+
+        // 3.2.Escribe un bucle que imprima desde un número de inicio hasta un número de fin, ambos introducidos por el usuario.//
+        let inputInicio = document.querySelector("#inputInicio");
+        let inputFin = document.querySelector("#inputFin");
+        
+        let botonInicioFin = document.querySelector("#botonInicioFin");
+        botonInicioFin.addEventListener(("click"), function () {
+            let inicio = Number(inputInicio.value);
+            let fin = Number(inputFin.value);
+            console.log("Numeros de inicio a fin")
+            for (let i = inicio; i <= fin; i++) {
+                console.log(i);
+            }
+        })
+        console.log("Numeros de inicio a fin")
+        for (let i = 1; i <= 10; i++) {
+            console.log(i);
+        }
+        // 4.2 Escribe un bucle que imprima los números pares del inicio al fin, ambos introducidos por el usuario.//
+        console.log("Numeros pares del inicio al fin")
+        for (let i = inicio; i <= fin; i++) {
+            if (i % 2 == 0) {
+                console.log(i);
+            }
+        }
+        // 5.2 Crea un programa que sume los números del inicio al fin y muestre el resultado.
+        let suma2 = 0;
+        for (let i = inicio; i <= fin; i++) {
+            suma2 += i;
+        }
+        console.log("La suma de los números del inicio al fin es: " + suma2);
+    </script>
+</body>
+
+</html>

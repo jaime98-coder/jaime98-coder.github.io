@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1>Ejemplo de JSON</h1>
+    <table id="tabla" border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Edad</th>
+                <th>Ciudad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <th id="campo1"></th>
+                <th id="campo2"></th>
+                <th id="campo3"></th>
+                <th id="campo4"></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Cuando el documento esté listo, se ejecutará la función
+        $(document).ready(function () {
+            console.log("Documento listo");
+
+            // Mensaje 
+
+            // Mensaje objeto
+            let obj = { nombre: "Alberto", apellidos: "García", edad: 26, ciudad: "Granada" };
+            // Se serializa el envio
+            json_serializado = serializar(obj);
+            console.log(json_serializado);
+
+            // Se deserializa el mensaje recibido
+            obj_recuperado = deserializar(json_serializado);
+            console.log(obj_recuperado);
+
+            // Funciones de serialización y deserialización
+            function serializar(obj) {
+                return JSON.stringify(obj)
+            }
+            function deserializar(objJson) {
+                return JSON.parse(objJson)
+            }
+
+            let texto = "Nombre:" + obj_recuperado.nombre;
+            texto += ", Apellidos:" + obj_recuperado.apellidos;
+            texto += ", Edad:" + obj_recuperado.edad;
+            texto += ", Ciudad:" + obj_recuperado.ciudad;
+            console.log("Recuperado: " + texto);
+            $("#deserializado").text("Recuperado: " + texto);
+
+            // Se muestra el mensaje en la tabla
+            $("#campo1").text(obj_recuperado.nombre);
+            $("#campo2").text(obj_recuperado.apellidos);
+            $("#campo3").text(obj_recuperado.edad);
+            $("#campo4").text(obj_recuperado.ciudad);
+        });
+    </script>
+
+</body>
+
+</html>
