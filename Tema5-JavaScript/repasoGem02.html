@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Examen DAM - Login</title>
+    </head>
+    <body>
+        <h1>Bienvenido <span id="nombreUsuario"></span></h1>
+
+        <label>Usuario:</label>
+        <input type="text" id="inputUsuario" placeholder="Escribe tu usuario" />
+        <br /><br />
+
+        <label>Contraseña:</label>
+        <input
+            type="password"
+            id="inputPassword"
+            placeholder="Escribe tu contraseña"
+        />
+        <br /><br />
+
+        <button id="botonLogin">Entrar</button>
+
+        <p id="mensajeError" style="color: red"></p>
+
+        <script>
+            // ¡TU TURNO!
+            // 1. Captura los dos inputs, el botón, el span y el p de error.
+            // 2. Añade el evento click al botón.
+            // 3. Comprueba si el usuario es "admin" Y (&&) la contraseña es "1234".
+            // 4. Si es correcto, pon "admin" en el textContent del span y borra el mensaje de error.
+            // 5. Si falla, escribe un mensaje en el textContent de mensajeError.
+            let inputUsuario = document.querySelector("#inputUsuario");
+            let inputContraseña = document.querySelector("#inputPassword");
+            let boton = document.querySelector("#botonLogin");
+            let mensajeError = document.querySelector("#mensajeError");
+            let usuario = document.querySelector("#nombreUsuario");
+
+            boton.addEventListener("click", function () {
+                if (
+                    inputUsuario.value == "admin" &&
+                    inputContraseña.value == "1234"
+                ) {
+                    usuario.textContent = "admin";
+                } else {
+                    mensajeError.textContent = " INICIO DE SESIÓN INCORRECTO";
+                }
+            });
+        </script>
+    </body>
+</html>

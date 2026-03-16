@@ -1,95 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <body>
+        <h1 id="titulo">Hello, World!</h1>
+        <button class="boton">Cambiar texto</button>
+        <script>
+            const titulo = document.getElementById("titulo");
+            // Modifico el texto directamente con textContent (forma textual)
+            titulo.textContent = "¡Adios, Mundo!";
+            // Con innerHTML puedo incluir etiquetas HTML (forma estructural)
+            titulo.innerHTML = "<h1>¡Adios</h1><h2>, Mundo!</h2>";
+            let cabeceras = "";
 
-<body>
-    <h1 id="titulo">Hello, World!</h1>
-    <button class="boton">Cambiar texto</button>
-    <script>
-        const titulo = document.getElementById("titulo");
-        // Modifico el texto directamente con textContent (forma textual)
-        titulo.textContent = "¡Adios, Mundo!";
-        // Con innerHTML puedo incluir etiquetas HTML (forma estructural)
-        titulo.innerHTML = "<h1>¡Adios</h1><h2>, Mundo!</h2>";
-        let cabeceras = "";
+            for (let i = 1; i <= 1; i++) {
+                cabeceras =
+                    cabeceras +
+                    "<h" +
+                    (i + 1) +
+                    ">¡Adios, Mundo!</h" +
+                    (i + 1) +
+                    ">";
+            }
+            titulo.innerHTML = cabeceras;
+            const boton = document.querySelector(".boton");
+            boton.style.backgroundColor = "red";
+            boton.style.color = "white";
+            // Agregar un evento al botón par que cuando clicke, salte una alerta
+            document
+                .querySelector(".boton")
+                .addEventListener("click", function () {
+                    alert("¡Botón presionado!");
+                });
 
-        for (let i = 1; i <= 1; i++) {
-            cabeceras = cabeceras + '<h' + (i + 1) + '>¡Adios, Mundo!</h' + (i + 1) + '>';
-        } titulo.innerHTML = cabeceras;
-        const boton = document.querySelector(".boton");
-        boton.style.backgroundColor = "red";
-        boton.style.color = "white";
-        // Agregar un evento al botón par que cuando clicke, salte una alerta
-        document.querySelector(".boton").addEventListener("click", function () {
-            alert("¡Botón presionado!");
+            // Crear botones azul rojo verde amarillo
+            // Según el botón que pulses, el texto se cambia a ese color
 
-        });
-
-        // Crear botones azul rojo verde amarillo
-        // Según el botón que pulses, el texto se cambia a ese color
-
-        // Creacion de boton azul
-        const botonAzul = document.createElement("button");
-        // Asignarle una clase (IMPORTANTE), un texto y estilos
-        botonAzul.className = "botonAzul";
-        botonAzul.textContent = "Click para cambiar a azul";
-        botonAzul.style.backgroundColor = "blue";
-        botonAzul.style.color = "white";
-        document.body.appendChild(botonAzul);
-        // Agregar evento al boton azul para que cambie el color del texto a azul
-        document.querySelector(".botonAzul").addEventListener("click", function () {
-            titulo.style.color = "blue";
-        });
-
-        // Creacion de boton verde
-        const botonVerde = document.createElement("button");
-        // Asignarle una clase (IMPORTANTE), un texto y estilos
-        botonVerde.className = "botonVerde";
-        botonVerde.textContent = "Click para cambiar a verde";
-        botonVerde.style.backgroundColor = "green";
-        botonVerde.style.color = "white";
-        document.body.appendChild(botonVerde);
-        // Agregar evento al boton verde para que cambie el color del texto a verde
-        document.querySelector(".botonVerde").addEventListener("click", function () {
-            titulo.style.color = "green";
-        });
-        // Creacion de boton amarillo
-        const botonAmarillo = document.createElement("button");
-        // Asignarle una clase (IMPORTANTE), un texto y estilos
-        botonAmarillo.className = "botonAmarillo";
-        botonAmarillo.textContent = "Click para cambiar a amarillo";
-        botonAmarillo.style.backgroundColor = "yellow";
-        botonAmarillo.style.color = "black";
-        document.body.appendChild(botonAmarillo);
-        // Agregar evento al boton amarillo para que cambie el color del texto a amarillo
-        document.querySelector(".botonAmarillo").addEventListener("click", function () {
-            titulo.style.color = "yellow";
-        });
-
-        crearBoton("rosa", "pink", "black");
-
-
-        function crearBoton(textoBoton, colorFondo, colorTexto) {
-            // Creacion de boton
-            let boton = document.createElement("button");
+            // Creacion de boton azul
+            const botonAzul = document.createElement("button");
             // Asignarle una clase (IMPORTANTE), un texto y estilos
-            boton.className = "boton" + textoBoton;
-            boton.textContent = "Click para cambiar a " + textoBoton;
-            boton.style.backgroundColor = colorFondo;
-            boton.style.color = colorTexto;
-            document.body.appendChild(boton);
-            // Agregar evento al boton para que cambie el color del texto al color del boton
-            boton.addEventListener("click", function () {
-                titulo.style.color = colorFondo;
-            });
-        }
+            botonAzul.className = "botonAzul";
+            botonAzul.textContent = "Click para cambiar a azul";
+            botonAzul.style.backgroundColor = "blue";
+            botonAzul.style.color = "white";
+            document.body.appendChild(botonAzul);
+            // Agregar evento al boton azul para que cambie el color del texto a azul
+            document
+                .querySelector(".botonAzul")
+                .addEventListener("click", function () {
+                    titulo.style.color = "blue";
+                });
 
-    </script>
-</body>
+            // Creacion de boton verde
+            const botonVerde = document.createElement("button");
+            // Asignarle una clase (IMPORTANTE), un texto y estilos
+            botonVerde.className = "botonVerde";
+            botonVerde.textContent = "Click para cambiar a verde";
+            botonVerde.style.backgroundColor = "green";
+            botonVerde.style.color = "white";
+            document.body.appendChild(botonVerde);
+            // Agregar evento al boton verde para que cambie el color del texto a verde
+            document
+                .querySelector(".botonVerde")
+                .addEventListener("click", function () {
+                    titulo.style.color = "green";
+                });
 
+            // Creacion de boton amarillo
+            const botonAmarillo = document.createElement("button");
+            // Asignarle una clase (IMPORTANTE), un texto y estilos
+            botonAmarillo.className = "botonAmarillo";
+            botonAmarillo.textContent = "Click para cambiar a amarillo";
+            botonAmarillo.style.backgroundColor = "yellow";
+            botonAmarillo.style.color = "black";
+            document.body.appendChild(botonAmarillo);
+            // Agregar evento al boton amarillo para que cambie el color del texto a amarillo
+            document
+                .querySelector(".botonAmarillo")
+                .addEventListener("click", function () {
+                    titulo.style.color = "yellow";
+                });
+
+            crearBoton("rosa", "pink", "black");
+
+            function crearBoton(textoBoton, colorFondo, colorTexto) {
+                // Creacion de boton
+                let boton = document.createElement("button");
+                // Asignarle una clase (IMPORTANTE), un texto y estilos
+                boton.className = "boton" + textoBoton;
+                boton.textContent = "Click para cambiar a " + textoBoton;
+                boton.style.backgroundColor = colorFondo;
+                boton.style.color = colorTexto;
+                document.body.appendChild(boton);
+                // Agregar evento al boton para que cambie el color del texto al color del boton
+                boton.addEventListener("click", function () {
+                    titulo.style.color = colorFondo;
+                });
+            }
+        </script>
+    </body>
 </html>

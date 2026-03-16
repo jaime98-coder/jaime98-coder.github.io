@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Examen DAM - Tabla Dinámica</title>
+        <style>
+            /* Un poco de CSS para que se vean los bordes de la tabla */
+            table,
+            th,
+            td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 8px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Registro de Notas</h1>
+
+        <label>Nombre:</label>
+        <input type="text" id="inputNombre" placeholder="Ej: Ana" />
+
+        <label>Nota:</label>
+        <input type="number" id="inputNota" placeholder="Ej: 8" />
+
+        <button id="botonAnadir">Añadir a la tabla</button>
+
+        <br /><br />
+
+        <table id="tablaAlumnos">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla"></tbody>
+        </table>
+
+        <script>
+            // ¡TU TURNO!
+            // 1. Captura los dos inputs, el botón y el tbody (#cuerpoTabla).
+            let inputNombre = document.querySelector("#inputNombre");
+            let inputNota = document.querySelector("#inputNota");
+            let boton = document.querySelector("#botonAnadir");
+            let bodyTabla = document.querySelector("#cuerpoTabla");
+
+            boton.addEventListener("click", function () {
+                let nuevaFila = document.createElement("tr");
+                let celdaNombre = document.createElement("td");
+                let celdaNota = document.createElement("td");
+                celdaNombre.textContent = inputNombre.value;
+                celdaNota.textContent = inputNota.value;
+                nuevaFila.appendChild(celdaNombre);
+                nuevaFila.appendChild(celdaNota);
+                bodyTabla.appendChild(nuevaFila);
+                inputNombre.value = "";
+                inputNota.value = "";
+            });
+
+            // 2. Crea el evento 'click' para el botón.
+
+            // --- DENTRO DEL EVENTO ---
+            // 3. Fabrica una nueva fila: createElement("tr")
+            // 4. Fabrica dos celdas: createElement("td") para el nombre y otro createElement("td") para la nota.
+
+            // 5. Decora: Ponle a la primera celda el .textContent del inputNombre.value
+            // 6. Decora: Ponle a la segunda celda el .textContent del inputNota.value
+
+            // 7. Coloca: Mete las dos celdas (td) dentro de la fila (tr) usando appendChild.
+            // 8. Coloca: Mete la fila (tr) dentro del cuerpoTabla usando appendChild.
+
+            // 9. (Opcional pero pro) Vacía los dos inputs para el siguiente alumno.
+        </script>
+    </body>
+</html>

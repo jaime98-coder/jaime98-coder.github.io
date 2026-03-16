@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Examen DAM - Crear Elementos</title>
+    </head>
+    <body>
+        <h1 id="tituloPrincipal">Soy un texto que cambia de color</h1>
+
+        <script>
+            // 0. Capturamos el H1 porque luego le vamos a cambiar el color
+            let titulo = document.querySelector("#tituloPrincipal");
+
+            // --- FABRICANDO EL BOTÓN ROJO ---
+
+            // Paso 1: Fabricar
+            let botonRojo = document.createElement("button");
+
+            // Paso 2: Decorar
+            botonRojo.textContent = "Color Rojo";
+            botonRojo.style.backgroundColor = "red";
+            botonRojo.style.color = "white"; // Letra blanca para que se lea bien
+
+            // Paso 3: Colocar (lo metemos dentro del body)
+            document.body.appendChild(botonRojo);
+
+            // Paso 4: Darle vida (Evento click)
+            botonRojo.addEventListener("click", function () {
+                titulo.style.color = "red";
+            });
+
+            // ------------------------------------------------
+            // ¡TU TURNO!
+            // Copia y pega la estructura del botón rojo, pero hazlo
+            // para crear el botonVerde, botonAzul y botonAmarillo.
+            // Crear
+            let botonVerde = document.createElement("button");
+            // Decorar
+            botonVerde.textContent = "Color Verde";
+            botonVerde.style.backgroundColor = "green";
+            botonVerde.style.color = "white";
+            // Colocar (lo metemos dentro del body)
+            document.body.appendChild(botonVerde);
+
+            // Darle vida (evento click)
+            botonVerde.addEventListener("click", function () {
+                titulo.style.color = "green";
+            });
+
+            let botonAzul = document.createElement("button");
+            botonAzul.textContent = "Color azul";
+            botonAzul.style.backgroundColor = "blue";
+            botonAzul.style.color = "white";
+            document.body.appendChild(botonAzul);
+            botonAzul.addEventListener("click", function () {
+                titulo.style.color = "blue";
+            });
+
+            let botonAmarillo = document.createElement("button");
+            botonAmarillo.textContent = "Color Amarillo";
+            botonAmarillo.style.backgroundColor = "yellow";
+            botonAmarillo.style.color = "black";
+            document.body.appendChild(botonAmarillo);
+            botonAmarillo.addEventListener("click", function () {
+                titulo.style.color = "yellow";
+            });
+
+            function fabricarBoton(nombreColor, colorFondo, colorTexto) {
+                let nuevoBoton = document.createElement("button");
+                nuevoBoton.textContent = "Color " + nombreColor;
+                nuevoBoton.style.backgroundColor = colorFondo;
+                nuevoBoton.style.color = colorTexto;
+
+                document.body.appendChild(nuevoBoton);
+                nuevoBoton.addEventListener("click", function () {
+                    titulo.style.color = colorFondo;
+                });
+            }
+            fabricarBoton("Morado", "purple", "black");
+            fabricarBoton("Navy Blue", "navy", "white");
+            fabricarBoton("Naranja", "orange", "black");
+
+            // ------------------------------------------------
+        </script>
+    </body>
+</html>

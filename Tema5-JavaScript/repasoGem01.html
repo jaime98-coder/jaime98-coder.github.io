@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Examen DAM</title>
+    </head>
+    <body>
+        <h1>Validador de Notas</h1>
+        <input
+            type="number"
+            id="notaAlumno"
+            placeholder="Introduce la nota (0-10)"
+        />
+        <button id="botonEvaluar">Evaluar</button>
+
+        <p id="mensajeResultado">Aquí aparecerá el resultado</p>
+
+        <script>
+            let notaAlumno = document.querySelector("#notaAlumno");
+            let mensajeResultado = document.querySelector("#mensajeResultado");
+            let boton = document.querySelector("#botonEvaluar");
+
+            boton.addEventListener("click", function () {
+                if (
+                    Number(notaAlumno.value) >= 5 &&
+                    Number(notaAlumno.value) <= 10
+                ) {
+                    mensajeResultado.textContent = "¡APROBADO!";
+                    mensajeResultado.style.color = "green";
+                } else if (
+                    Number(notaAlumno.value) >= 0 &&
+                    Number(notaAlumno.value) < 5
+                ) {
+                    mensajeResultado.textContent = "¡SUSPENSO!";
+                    mensajeResultado.style.color = "red";
+                } else {
+                    mensajeResultado.textContent =
+                        "ERROR. Nota fuera de rango (0-10)";
+                }
+            });
+        </script>
+    </body>
+</html>

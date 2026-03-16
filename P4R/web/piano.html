@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Piano Web</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+
+            .piano-container {
+                display: flex;
+                position: relative;
+                background-color: #24272e;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .key {
+                cursor: pointer;
+                transition: transform 0.1s;
+                box-sizing: border-box;
+            }
+
+            .white {
+                width: 60px;
+                height: 250px;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 0 0 5px 5px;
+                margin-right: 2px;
+                margin-left: 2px;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                padding-bottom: 10px;
+            }
+
+            .black {
+                width: 40px;
+                height: 150px;
+                background-color: black;
+                margin-left: -20px;
+                margin-right: -20px;
+                z-index: 1;
+                border-radius: 0 0 5px 5px;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                padding-bottom: 10px;
+                color: #aaa;
+            }
+
+            /* Efecto visual al pulsar */
+            .key:active,
+            .key.active {
+                transform: scale(0.95);
+            }
+
+            .white.active {
+                background-color: #ddd;
+            }
+
+            .black.active {
+                background-color: #333;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="piano-container">
+            <!-- Teclas Blancas -->
+            <div class="key white" data-note="C" data-key="a"><span>A (Do)</span></div>
+            <div class="key white" data-note="D" data-key="s"><span>S (Re)</span></div>
+            <div class="key white" data-note="E" data-key="d"><span>D (Mi)</span></div>
+            <div class="key white" data-note="F" data-key="f"><span>F (Fa)</span></div>
+            <div class="key white" data-note="G" data-key="g"><span>G (Sol)</span></div>
+            <div class="key white" data-note="A" data-key="h"><span>H (La)</span></div>
+            <div class="key white" data-note="B" data-key="j"><span>J (Si)</span></div>
+
+            <!-- Teclas Negras (Se superponen) -->
+            <div class="key black" data-note="Db" data-key="w"><span>W (Do#)</span></div>
+            <div class="key black" data-note="Eb" data-key="e"><span>E (Re#)</span></div>
+            <!-- Salto de Mi a Fa -->
+            <div class="key black" data-note="Gb" data-key="t"><span>T (Fa#)</span></div>
+            <div class="key black" data-note="Ab" data-key="y"><span>Y (Sol#)</span></div>
+            <div class="key black" data-note="Bb" data-key="u"><span>U (La#)</span></div>
+        </div>
+
+        <script src="script.js" defer></script>
+        
+    </body>
+
+    </html>
+
+</body>
+
+</html>

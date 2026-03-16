@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Examen DAM - Lista de Tareas</title>
+    </head>
+    <body>
+        <h1>Mis Tareas</h1>
+
+        <input
+            type="text"
+            id="inputTarea"
+            placeholder="Escribe una tarea nueva"
+        />
+        <button id="botonAnadir">Añadir Tarea</button>
+
+        <ul id="listaTareas"></ul>
+
+        <script>
+            // 1. Captura el input, el botón 'Añadir' y la lista <ul>.
+            let inputUser = document.querySelector("#inputTarea");
+            let botonAnadir = document.querySelector("#botonAnadir");
+            let listaTareas = document.querySelector("#listaTareas");
+            // 2. Añade un evento 'click' al botón 'Añadir'.
+            botonAnadir.addEventListener("click", function () {
+                let tarea = document.createElement("li");
+                tarea.textContent = inputUser.value;
+                listaTareas.appendChild(tarea);
+                let botonBorrar = document.createElement("button");
+                botonBorrar.textContent = "X";
+                botonBorrar.style.backgroundColor = "red";
+                tarea.appendChild(botonBorrar);
+                botonBorrar.addEventListener("click", function () {
+                    tarea.remove();
+                });
+                inputUser.value = "";
+            });
+            // --- DENTRO DEL EVENTO ---
+            // 3. Comprueba que el input no esté vacío (opcional pero muy recomendado).
+
+            // 4. Crea el nuevo <li> (liTarea).
+            // 5. Ponle como texto lo que haya escrito el usuario en el input.
+
+            // 6. Crea un botón (botonBorrar).
+            // 7. Ponle como texto "X" y dale algún estilo (ej. color rojo).
+
+            // 8. Mete el botonBorrar DENTRO del liTarea (usando appendChild).
+            // 9. Mete el liTarea DENTRO de la lista <ul> (usando appendChild).
+
+            // 10. ¡La magia del borrado! Añade un evento 'click' al botonBorrar.
+            //     Dentro de ese evento, usa liTarea.remove(); para eliminar el li entero.
+
+            // 11. Vacía el input para que esté listo para la siguiente tarea (input.value = "").
+        </script>
+    </body>
+</html>

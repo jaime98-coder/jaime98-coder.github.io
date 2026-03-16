@@ -1,30 +1,30 @@
-body{
-    background-color: #B5F4FF;
+body {
+  background-color: #b5f4ff;
 }
 
-header{
-    background-color: #007bff;
+header {
+  background-color: #007bff;
 }
-header h1{
-    font-family: Helvetica, Arial, sans-serif;
+header h1 {
+  font-family: Helvetica, Arial, sans-serif;
 }
-header nav{
-    color:white;    
+header nav {
+  color: white;
 }
 
-header a:hover{
-text-decoration:none;
-color:yellow    
+header a:hover {
+  text-decoration: none;
+  color: yellow;
 }
-#contenido{
-    padding: 5px; 
+#contenido {
+  padding: 5px;
 }
 #contenido h2 {
-    font-size: 55px;
+  font-size: 55px;
 }
 footer {
-    background-color: #333;
-    color:white;
-    text-align: center;
-    padding: 25px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 25px;
 }
