@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="number" id="inputNumero">
+    <button id="botonComprobar">Comprobar</button>
+    <div id="resultado">Resultado: </div>
+    <br><br>
+    <div id="puntosUsuario">Puntos usuario: 0</div>
+    <div id="carteraPuntos">Cartera de puntos: 10</div>
+
+    <script>
+        let numeroMaquina;
+        let numeroUsuario = document.querySelector("#inputNumero");
+        let puntosUsuario = document.querySelector("#puntosUsuario");
+        puntosUsuario = 0;
+        let carteraPuntos = 10;
+        // Por fallo se resta 1 punto de cartera
+        // Por acierto se añaden los puntos acumulados de la cartera
+        // Si cartera llega a 0, pierde y se muestra boton de reiniciar
+        // Info mostrada en pantalla
+        let inputNumero = document.querySelector("#inputNumero");
+        let botonComprobar = document.querySelector("#botonComprobar");
+        let resultado = document.querySelector("#resultado");
+        numeroMaquina = Math.random() * 101;
+        console.log(numeroMaquina);
+
+            botonComprobar.addEventListener("click", function () {
+                if (Number(numeroUsuario.value) < numeroMaquina) {
+                    resultado.textContent = ("ERROR. El número introducido es MENOR que el número de la máquina");
+                    resultado.style.color = "red";
+
+                    carteraPuntos--;
+                } else if (Number(numeroUsuario.value) > Number(numeroMaquina.value)) {
+                    resultado.textContent = ("ERROR. El número introducido es MAYOR");
+                    resultado.style.color = "red";
+                    carteraPuntos--;
+                } else {
+                    resultado.textContent = ("¡HAS ACERTADO!")
+                    resultado.style.color = "green";
+                    puntosUsuario += carteraPuntos;
+                }
+            })
+        
+    </script>
+</body>
+
+</html>
