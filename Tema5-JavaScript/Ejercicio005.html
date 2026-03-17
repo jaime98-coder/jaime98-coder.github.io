@@ -1,54 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <body>
+        <input type="number" id="inputNumero" />
+        <button id="botonComprobar">Comprobar</button>
+        <div id="resultado">Resultado:</div>
+        <br /><br />
+        <div id="puntosUsuario">Puntos usuario: 0</div>
+        <div id="carteraPuntos">Cartera de puntos: 10</div>
 
-<body>
-    <input type="number" id="inputNumero">
-    <button id="botonComprobar">Comprobar</button>
-    <div id="resultado">Resultado: </div>
-    <br><br>
-    <div id="puntosUsuario">Puntos usuario: 0</div>
-    <div id="carteraPuntos">Cartera de puntos: 10</div>
+        <script>
+            let numeroMaquina = Math.floor(Math.random() * 101);
+            console.log("Chivato: " + numeroMaquina);
+            let numeroUsuario = document.querySelector("#inputNumero");
+            let divPuntos = document.querySelector("#puntosUsuario");
+            let divCartera = document.querySelector("#carteraPuntos");
+            let puntos = 0;
+            let carteraPuntos = 10;
 
-    <script>
-        let numeroMaquina;
-        let numeroUsuario = document.querySelector("#inputNumero");
-        let puntosUsuario = document.querySelector("#puntosUsuario");
-        puntosUsuario = 0;
-        let carteraPuntos = 10;
-        // Por fallo se resta 1 punto de cartera
-        // Por acierto se añaden los puntos acumulados de la cartera
-        // Si cartera llega a 0, pierde y se muestra boton de reiniciar
-        // Info mostrada en pantalla
-        let inputNumero = document.querySelector("#inputNumero");
-        let botonComprobar = document.querySelector("#botonComprobar");
-        let resultado = document.querySelector("#resultado");
-        numeroMaquina = Math.random() * 101;
-        console.log(numeroMaquina);
+            // Por fallo se resta 1 punto de cartera
+            // Por acierto se añaden los puntos acumulados de la cartera
+            // Si cartera llega a 0, pierde y se muestra boton de reiniciar
+            // Info mostrada en pantalla
+            let inputNumero = document.querySelector("#inputNumero");
+            let botonComprobar = document.querySelector("#botonComprobar");
+            let resultado = document.querySelector("#resultado");
 
             botonComprobar.addEventListener("click", function () {
+                if (carteraPuntos === 0) {
+                    resultado.textContent =
+                        "Has perdido, te quedaste sin puntos. Recarga la página para jugar de nuevo";
+                    return;
+                }
                 if (Number(numeroUsuario.value) < numeroMaquina) {
-                    resultado.textContent = ("ERROR. El número introducido es MENOR que el número de la máquina");
+                    resultado.textContent =
+                        "ERROR. El número introducido es MENOR que el número de la máquina";
                     resultado.style.color = "red";
 
                     carteraPuntos--;
-                } else if (Number(numeroUsuario.value) > Number(numeroMaquina.value)) {
-                    resultado.textContent = ("ERROR. El número introducido es MAYOR");
+                } else if (Number(numeroUsuario.value) > numeroMaquina) {
+                    resultado.textContent =
+                        "ERROR. El número introducido es MAYOR";
                     resultado.style.color = "red";
                     carteraPuntos--;
                 } else {
-                    resultado.textContent = ("¡HAS ACERTADO!")
+                    resultado.textContent = "¡HAS ACERTADO!";
                     resultado.style.color = "green";
-                    puntosUsuario += carteraPuntos;
+                    puntos += carteraPuntos;
                 }
-            })
-        
-    </script>
-</body>
+                divPuntos.textContent = "Puntos usuario: " + puntos;
+                divCartera.textContent = "Cartera de puntos: " + carteraPuntos;
 
+                // Comprobación final por si pierde en este último intento
+                if (
+                    carteraPuntos === 0 &&
+                    Number(numeroUsuario.value) !== numeroMaquina
+                ) {
+                    resultado.textContent =
+                        "¡GAME OVER! Te has quedado sin puntos";
+                    resultado.style.color = "red";
+                    botonComprobar.disabled = true;
+
+                    // AQUÍ ES DONDE PEGAMOS LOS 4 PASOS:
+                    let botonReiniciar = document.createElement("button");
+                    botonReiniciar.textContent = "Volver a jugar";
+                    document.body.appendChild(botonReiniciar);
+                    botonReiniciar.addEventListener("click", function () {
+                        // 1. Reiniciamos variables matemáticas
+                        carteraPuntos = 10;
+                        puntos = 0;
+                        numeroMaquina = Math.floor(Math.random() * 101);
+                        console.log("Nuevo chivato: " + numeroMaquina);
+
+                        // 2. Limpiamos la pantalla
+                        resultado.textContent = "Resultado: ";
+                        resultado.style.color = "black";
+                        divPuntos.textContent = "Puntos usuario: " + puntos;
+                        divCartera.textContent =
+                            "Cartera de puntos: " + carteraPuntos;
+                        numeroUsuario.value = ""; // Vaciamos la caja de texto
+
+                        // 3. Hacemos desaparecer este botón
+                        botonReiniciar.remove();
+                    });
+                }
+            });
+        </script>
+    </body>
 </html>
