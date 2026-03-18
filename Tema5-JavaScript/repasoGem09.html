@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Reto Final: VIPs</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                background: #2c3e50;
+                color: white;
+            }
+            .caja {
+                background: #34495e;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 400px;
+                margin: auto;
+            }
+            input,
+            button {
+                padding: 10px;
+                margin: 5px 0;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            button {
+                background: #e74c3c;
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            .invitado {
+                background: #ecf0f1;
+                color: #333;
+                margin-top: 10px;
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .vip-destacado {
+                border: 3px solid #f1c40f;
+                background: #fffde7;
+            } /* Clase para el toggle */
+            .botones-pequenos button {
+                width: auto;
+                padding: 5px 10px;
+                margin-left: 5px;
+                font-size: 0.8rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="caja">
+            <h2>Lista de Invitados</h2>
+            <input
+                type="text"
+                id="nombre-input"
+                placeholder="Nombre del invitado..."
+            />
+            <input
+                type="text"
+                id="zona-input"
+                placeholder="Zona (ej. Pista, Palco)..."
+            />
+            <button id="btn-anadir">Añadir a la Lista</button>
+
+            <div id="lista-invitados"></div>
+        </div>
+
+        <script>
+            let inputNombre = document.querySelector("#nombre-input");
+            let inputZona = document.querySelector("#zona-input");
+            let boton = document.querySelector("#btn-anadir");
+            let divListaInvitados = document.querySelector("#lista-invitados");
+            let registroVIP = [];
+
+            boton.addEventListener("click", function () {
+                let valorNombre = inputNombre.value;
+                let valorZona = inputZona.value;
+                if (valorNombre === "" || valorZona === "") {
+                    return;
+                } else {
+                    let invitado = {
+                        nombre: valorNombre,
+                        zona: valorZona,
+                    };
+
+                    registroVIP.push(invitado);
+                    crearInvitado(valorNombre, valorZona);
+                    inputNombre.value = "";
+                    inputZona.value = "";
+                }
+                console.log(registroVIP);
+            });
+            // Metodo
+            function crearInvitado(nombre, zona) {
+                let divInvitado = document.createElement("div");
+                divInvitado.classList.add("invitado"); // Faltaba la clase CSS
+
+                let spanInfoCompleta = document.createElement("span");
+                spanInfoCompleta.textContent = nombre + " - " + zona;
+                // Borré el document.body.appendChild porque iba directamente al div
+                divInvitado.appendChild(spanInfoCompleta);
+
+                // --- BOTÓN SUBIR ---
+                let botonSubir = document.createElement("button");
+                botonSubir.textContent = "Subir";
+                divInvitado.appendChild(botonSubir);
+
+                botonSubir.addEventListener("click", function () {
+                    let elementoArriba = divInvitado.previousElementSibling;
+                    if (elementoArriba) {
+                        // La fórmula completa del insertBefore
+                        divListaInvitados.insertBefore(
+                            divInvitado,
+                            elementoArriba,
+                        );
+                    }
+                });
+
+                // --- BOTÓN ELIMINAR (Sacado fuera del evento de subir) ---
+                let botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                divInvitado.appendChild(botonEliminar);
+
+                botonEliminar.addEventListener("click", function () {
+                    divInvitado.remove(); // Faltaban los paréntesis
+                });
+
+                // --- ENSAMBLAJE FINAL ---
+                // Esto tiene que ir suelto al final de la función para que la caja salga a la pantalla
+                divListaInvitados.appendChild(divInvitado);
+            }
+        </script>
+    </body>
+</html>
