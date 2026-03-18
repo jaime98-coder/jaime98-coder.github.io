@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Reto DOM: Lista de Tareas</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+            .completed {
+                text-decoration: line-through;
+                color: gray;
+            }
+            .task-item {
+                margin: 10px 0;
+                padding: 5px;
+                border: 1px solid #ccc;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Gestor de Tareas</h1>
+
+        <div>
+            <input
+                type="text"
+                id="task-input"
+                class="input-field"
+                placeholder="Escribe una nueva tarea..."
+            />
+            <button id="add-task-btn" class="btn-primary">Añadir Tarea</button>
+        </div>
+
+        <ul id="task-list" class="container-list"></ul>
+
+        <script>
+            let boton = document.querySelector("#add-task-btn");
+            let texto = document.querySelector("#task-input");
+            let lista = document.querySelector(".container-list");
+            let almacenTareas = [];
+            boton.addEventListener("click", function () {
+                if (almacenTareas.length == 5) {
+                    alert("fin del programa, ha llegado a 10 tareas");
+                    return;
+                }
+
+                if (texto.value === "") {
+                    return;
+                } else {
+                    //
+                    let textoLeido = texto.value;
+                    let tareaNueva = document.createElement("li");
+                    tareaNueva.classList.add("task-item");
+                    //
+                    let textoTarea = document.createElement("span");
+                    textoTarea.textContent = textoLeido;
+                    tareaNueva.appendChild(textoTarea);
+                    //
+                    let botonEliminar = document.createElement("button");
+                    botonEliminar.textContent = "Eliminar";
+                    tareaNueva.appendChild(botonEliminar);
+
+                    botonEliminar.addEventListener("click", function () {
+                        tareaNueva.remove();
+                    });
+
+                    lista.appendChild(tareaNueva);
+                    textoTarea.addEventListener("click", function () {
+                        textoTarea.classList.toggle("completed");
+                    });
+                    texto.value = "";
+
+                    almacenTareas.push(textoTarea);
+                }
+            });
+        </script>
+    </body>
+</html>

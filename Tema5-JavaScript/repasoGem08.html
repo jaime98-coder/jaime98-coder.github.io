@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Reto: Creador de Perfiles</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                padding: 20px;
+                background: #e0e7ff;
+            }
+            .panel {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 400px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .panel input {
+                margin-bottom: 10px;
+                width: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            button {
+                padding: 10px 15px;
+                background: #4f46e5;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                width: 100%;
+            }
+            button:hover {
+                background: #4338ca;
+            }
+
+            #contenedor-tarjetas {
+                display: flex;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            /* Esta es la clase que le tendrás que poner al div que crees con JS */
+            .tarjeta {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+                width: 180px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-top: 5px solid #4f46e5;
+            }
+            .tarjeta h3 {
+                margin: 0 0 10px 0;
+                color: #1e1b4b;
+                font-size: 1.2rem;
+            }
+            .tarjeta p {
+                margin: 0;
+                color: #6b7280;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="panel">
+            <h2>Nuevo Empleado</h2>
+            <input
+                type="text"
+                id="input-nombre"
+                placeholder="Nombre completo..."
+            />
+            <input
+                type="text"
+                id="input-profesion"
+                placeholder="Profesión (ej. Programador)..."
+            />
+            <button id="btn-crear">Generar Tarjeta</button>
+        </div>
+
+        <div id="contenedor-tarjetas"></div>
+
+        <script>
+            // Declaración y selecciones de los id del html para conectarlos
+            let inputNombre = document.querySelector("#input-nombre");
+            let inputProfesion = document.querySelector("#input-profesion");
+            let botonCrear = document.querySelector("#btn-crear");
+            let contenedorTarjetas = document.querySelector(
+                "#contenedor-tarjetas",
+            );
+            // Declaracion e inicializacion en vacio al Array
+            let registroEmpleados = [];
+            // Creacion de evento
+            botonCrear.addEventListener("click", function () {
+                let textoNombre = inputNombre.value;
+                let textoProfesion = inputProfesion.value;
+                if (textoNombre === "" || textoProfesion === "") {
+                    alert("Hay al menos un input vacío");
+                    return;
+                } else {
+                    // Creación de objeto empleado
+                    let nuevoEmpleado = {
+                        nombre: textoNombre,
+                        profesion: textoProfesion,
+                    };
+                    // Introduzco el nuevoEMpleado en el registroEmpleado (array)
+                    registroEmpleados.push(nuevoEmpleado);
+                    contenedorTarjetas.innerHTML = "";
+                    for (let i = 0; i < registroEmpleados.length; i++) {
+                        construirTarjeta(
+                            registroEmpleados[i].nombre,
+                            registroEmpleados[i].profesion,
+                        );
+                    }
+                }
+                // Establezco a "" el value para que se vacie la casilla
+                inputNombre.value = "";
+                inputProfesion.value = "";
+                // Imprimo en consola para comprobar que el array almacena la info
+                console.log(registroEmpleados);
+            });
+            // Creacion de funcion para construir tarjetas
+            function construirTarjeta(nombre, profesion) {
+                let tarjetaEmpleado = document.createElement("div");
+                tarjetaEmpleado.classList.add("tarjeta");
+                let hNombre = document.createElement("h3");
+                tarjetaEmpleado.appendChild(hNombre);
+                hNombre.textContent = nombre;
+                let pProfesion = document.createElement("p");
+                tarjetaEmpleado.appendChild(pProfesion);
+                pProfesion.textContent = profesion;
+                contenedorTarjetas.appendChild(tarjetaEmpleado);
+            }
+        </script>
+    </body>
+</html>

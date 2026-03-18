@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            let inputAnadir = document.createElement("input");
+            document.body.appendChild(inputAnadir);
+            let boton = document.createElement("button");
+            document.body.appendChild(boton);
+            boton.textContent = "Añadir";
+            let lista = document.createElement("ul");
+            document.body.appendChild(lista);
+            let almacenTareas = [];
+            boton.addEventListener("click", function () {
+                let tarea = document.createElement("li");
+                tarea.textContent = inputAnadir.value + " ";
+
+                let botonX = document.createElement("button");
+                tarea.appendChild(botonX);
+                botonX.textContent = "X";
+                botonX.style.color = "red";
+
+                let botonSubir = document.createElement("button");
+                tarea.appendChild(botonSubir);
+                botonSubir.textContent = "Subir";
+
+                let botonBajar = document.createElement("button");
+                tarea.appendChild(botonBajar);
+                botonBajar.textContent = "Bajar";
+
+                lista.appendChild(tarea);
+                almacenTareas.push(tarea);
+                inputAnadir.value = "";
+
+                botonX.addEventListener("click", function () {
+                    tarea.remove();
+                });
+
+                botonSubir.addEventListener("click", function () {
+                    if (tarea.previousElementSibling) {
+                        lista.insertBefore(tarea, tarea.previousElementSibling);
+                    }
+                });
+
+                botonBajar.addEventListener("click", function () {
+                    if (tarea.nextElementSibling) {
+                        lista.insertBefore(tarea.nextElementSibling, tarea);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

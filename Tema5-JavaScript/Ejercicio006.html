@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Calculadora de Edades y Media</title>
+    </head>
+    <body>
+        <script>
+            // ==========================================================
+            // 1. CREACIÓN DEL DOM (Diseño de la página desde JavaScript)
+            // ==========================================================
+
+            // Creamos la etiqueta <form> que contendrá los inputs
+            let formulario = document.createElement("form");
+            formulario.textContent = "Formulario";
+
+            // TRUCO: Cuando hay un botón dentro de un <form>, por defecto recarga la página al pulsarlo.
+            // Usamos event.preventDefault() para bloquear esa recarga y que nuestro JS pueda funcionar.
+            formulario.addEventListener("submit", function (event) {
+                event.preventDefault();
+            });
+            // Pegamos el formulario en el <body> del HTML para que se vea
+            document.body.appendChild(formulario);
+
+            // Creamos el input para el NOMBRE
+            let nombre = document.createElement("input");
+            nombre.placeholder = "Introduce tu nombre";
+            formulario.appendChild(nombre); // Lo metemos DENTRO del formulario
+
+            // Creamos el input para el APELLIDO
+            let apellido = document.createElement("input");
+            apellido.placeholder = "Introduce tu apellido";
+            formulario.appendChild(apellido);
+
+            // Creamos el input para el AÑO DE NACIMIENTO
+            let anioNacimiento = document.createElement("input");
+            anioNacimiento.type = "number"; // Obligamos a que el teclado sea numérico
+            anioNacimiento.placeholder = "Año de nacimiento";
+            formulario.appendChild(anioNacimiento);
+
+            // Creamos el BOTÓN de enviar
+            let boton = document.createElement("button");
+            boton.textContent = "Enviar";
+            formulario.appendChild(boton);
+
+            // Creamos un <div> (caja) vacía donde luego escribiremos los mensajes de acierto/error
+            let textoResultado = document.createElement("div");
+            document.body.appendChild(textoResultado); // Este va fuera del form, debajo de todo
+
+            // Creamos otro <div> para mostrar la media matemática al final
+            let textoMedia = document.createElement("div");
+            document.body.appendChild(textoMedia);
+
+            // ==========================================================
+            // 2. VARIABLES DE LÓGICA
+            // ==========================================================
+
+            // Sacamos el año actual del reloj del ordenador (ej. 2024)
+            const anioActual = new Date().getFullYear();
+            let edad; // Preparamos la variable donde guardaremos el cálculo
+
+            // Creamos un Array vacío. Aquí iremos metiendo las edades cada vez que pulsemos Enviar.
+            // Va FUERA del evento del botón para que no se vacíe con cada clic.
+            let arrayEdades = [];
+
+            // ==========================================================
+            // 3. EVENTO DEL BOTÓN (El "corazón" del programa)
+            // ==========================================================
+
+            boton.addEventListener("click", function () {
+                // Calculamos la edad: Año actual menos el número que ha escrito el usuario
+                edad = anioActual - Number(anioNacimiento.value);
+
+                // --- VALIDACIÓN DE ERRORES ---
+                // Si la edad es absurda (negativa o mayor de 120), mostramos error y paramos.
+                if (edad < 0 || edad > 120) {
+                    textoResultado.textContent =
+                        "ERROR: La edad debe estar entre 0 y 120 años.";
+                    textoResultado.style.color = "red";
+                    return; // Este return CORTA la función aquí. No calculará la media ni guardará el dato.
+                }
+
+                // --- COMPROBACIÓN MAYORÍA DE EDAD ---
+                // Mostramos la edad y si es mayor de 18 y menor de la edad de jubilación (65)
+                if (edad >= 18 && edad < 65) {
+                    textoResultado.textContent =
+                        "Edad: " + edad + " años. Es mayor de 18 años";
+                    textoResultado.style.color = "green";
+                } else {
+                    textoResultado.textContent =
+                        "Edad: " + edad + " años. Es menor de edad o jubilado.";
+                    textoResultado.style.color = "red";
+                }
+
+                // --- LÓGICA DE LA MEDIA (ARRAYS) ---
+                // 1. Guardamos la edad válida recién calculada en nuestro array
+                arrayEdades.push(edad);
+
+                // 2. Preparamos una variable para sumar todas las edades que hay en el array
+                let sumaEdades = 0;
+
+                // 3. Recorremos el array desde la posición 0 hasta el final (length)
+                for (let i = 0; i < arrayEdades.length; i++) {
+                    sumaEdades += arrayEdades[i]; // Acumulamos cada valor en sumaEdades
+                }
+
+                // 4. Calculamos la media: Suma total dividida entre la cantidad de números que hay
+                let mediaEdades;
+                mediaEdades = sumaEdades / arrayEdades.length;
+
+                // 5. Mostramos la media por pantalla (Usamos Math.round para que no salgan decimales infinitos)
+                textoMedia.textContent =
+                    "Media de edades registradas: " + Math.round(mediaEdades);
+
+                // --- LIMPIEZA ---
+                // Vaciamos las cajas de texto para que el siguiente usuario no tenga que borrar a mano
+                nombre.value = "";
+                apellido.value = "";
+                anioNacimiento.value = "";
+            });
+
+            // ==========================================================
+            // 4. EVENTOS 'FOCUSIN' (Limpieza de la pantalla al hacer clic)
+            // ==========================================================
+
+            // Creamos una función genérica que borre todos los textos de la pantalla
+            function borrarTextos() {
+                textoMedia.textContent = "";
+                textoResultado.textContent = "";
+            }
+
+            // Le decimos a CADA input que, si el usuario hace clic dentro de él (focusin),
+            // ejecute la función borrarTextos para limpiar la pantalla.
+            nombre.addEventListener("focusin", borrarTextos);
+            apellido.addEventListener("focusin", borrarTextos);
+            anioNacimiento.addEventListener("focusin", borrarTextos);
+        </script>
+    </body>
+</html>
