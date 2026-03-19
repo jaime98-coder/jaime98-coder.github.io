@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Movimientos Bancarios - Jaime</title>
+
+    <style>
+        body {
+            background-color: rgb(230, 245, 240);
+        }
+    </style>
+</head>
+
+<body>
+    <!--Inputs-->
+    <input type="text" id="inputConcepto" placeholder="Introduce un Nombre" />
+    <input type="number" id="inputCantidad" placeholder="Cantidad" />
+
+    <!--Radio para ingreso o gasto-->
+    <label for="ingreso">Ingreso</label>
+    <input type="radio" id="ingreso" name="tipoMovimiento" value="ingreso">
+    <label for="gasto">Gasto</label>
+    <input type="radio" id="gasto" name="tipoMovimiento" value="gasto">
+
+    <!--Boton añadir-->
+    <br>
+    <button id="botonAnadir">Añadir</button>
+    <br /><br />
+
+    <!--Tabla-->
+    <table border="3" id="tablaCompleta">
+        <thead>
+            <tr id="movimiento">
+                <td id="tdConcepto">Concepto</td>
+                <td id="tdIngreso">Ingreso</td>
+                <td id="tdGasto">Gasto</td>
+                <td id="tdSuma">Suma</td>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+
+        </tbody>
+
+
+
+    </table>
+
+
+
+    <script>
+        // Creación de Array para almacenar movimientos
+        let almacenMovimientos = [];
+
+        let inputConcepto = document.querySelector("#inputConcepto");
+        let inputCantidad = document.querySelector("#inputCantidad");
+        let seleccionRadio1 = document.querySelector("#ingreso")
+        let seleccionRadio2 = document.querySelector("#gasto")
+        let botonAnadir = document.querySelector("#botonAnadir");
+        // bodyTabla para enlazar 
+        let bodyTabla = document.querySelector("#cuerpoTabla");
+        let celdaSaldoAcumulado = document.querySelector("#tdSuma");
+
+        
+
+        // Boton para que cuando clicke realice la función
+        botonAnadir.addEventListener("click", function () {
+            let valorConcepto = inputConcepto.value;
+            let valorCantidad = inputCantidad.value;
+            let tabla = document.querySelector("#tablaCompleta")
+            // Comprobación para si el valor concepto o cantidad está vacío, salga una alerta indicando que se encuentra vacio uno de los campos
+            if (valorConcepto === "" || valorCantidad === "") {
+                alert("Error, uno de los dos campos se encuentra vacío")
+                // Return para que se corte aqui
+                return;
+            } else {
+                let nuevoMovimiento = document.createElement("tr");
+                let celdaConcepto = document.createElement("td");
+                let celdaCantidad = document.createElement("td");
+                let celdaSaldoAcumulado = document.createElement("td");
+
+                // Lo mismo que sacar el value directamente
+                celdaConcepto.textContent = valorConcepto;
+                celdaCantidad.textContent = valorCantidad;
+
+
+                // Lógica para si se selecciona radio 1 se ponga en la casilla correspondiente al ingreso
+                // Sino, se habra seleccionado radio 2, se ponga en la casilla correspondiente al gasto
+                // Creo que este
+                // if (seleccionRadio1.checked) {
+                // if (seleccionRadio1.value==ingreso){
+                    // Se tiene que meter en la td de ingreso
+                //} else if (seleccionRadio2.value==gasto){
+                    // Se tiene que meter en la td de gasto
+                // }
+     
+                // Para poner de padre a nuevo movimiento y de hijo a celda concepto y celda cantidad
+                nuevoMovimiento.appendChild(celdaConcepto);
+                nuevoMovimiento.appendChild(celdaCantidad);
+
+                // Para que el hijo nuevoMovimiento tenga de padre a bodyTabla
+                bodyTabla.appendChild(nuevoMovimiento);
+
+                // Lo comento para REVISAR QUE SE QUITE EL VALUE 
+                inputConcepto.value = "";
+                inputCantidad.value = "";
+
+                // Creación del boton eliminar
+                let botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                botonEliminar.style.color="red";
+                nuevoMovimiento.appendChild(botonEliminar);
+                // Boton eliminar con escuchador de click
+                botonEliminar.addEventListener("click", function () {
+                    nuevoMovimiento.remove();
+                });
+
+                // celdaSaldoAcumulado.textContent=valorCantidad;
+                // Convierto el valor de la celda saldo acumulado a numero para poder compararlo como número 
+                if (Number(celdaSaldoAcumulado.value) > 0) {
+                    // Se pone por defecto en black pero lo aclaro
+                    celdaSaldoAcumulado.style.color = "black";
+                    celdaSaldoAcumulado.style.fontWeight="bold";
+                } else if (Number(celdaSaldoAcumulado.value) < 0) {
+                    celdaSaldoAcumulado.style.fontWeight="bold";
+                    celdaSaldoAcumulado.style.color = "red";
+                }
+
+                // Introducción de la fila completa del movimiento al almacenMovimientos (array)
+                almacenMovimientos.push(nuevoMovimiento);
+
+
+            }
+
+        });
+        // Impresion del array almacenMovimientos
+        console.log(almacenMovimientos);
+
+    </script>
+</body>
+
+</html>

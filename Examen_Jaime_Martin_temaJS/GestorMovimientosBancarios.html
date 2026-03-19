@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Movimientos Bancarios - Jaime</title>
+</head>
+
+<body>
+    <input type="text" id="inputConcepto" placeholder="Introduce un Nombre" />
+    <input type="number" id="inputCantidad" placeholder="Cantidad" />
+
+    <!--Radio para ingreso o gasto-->
+    <label for="ingreso">Ingreso</label>
+    <input type="radio" id="ingreso" name="tipoMovimiento" value="ingreso">
+    <label for="gasto">Gasto</label>
+    <input type="radio" id="gasto" name="tipoMovimiento" value="gasto">
+    <!--Boton añadir-->
+    <br>
+    <button id="botonAnadir">Añadir</button>
+    <br /><br />
+    <table border="1" id="tablaCompleta">
+        <tr id="movimiento">
+            <td id="tdConcepto">Concepto</td>
+            <td id="tdIngreso">Ingreso</td>
+            <td id="tdGasto">Gasto</td>
+            <td id="tdSuma">Suma</td>
+        </tr>
+        
+
+    </table>
+
+
+    <script>
+        // Creación de almacen de movimientos (quizas lo paso abajo)
+        let almacenMovimientos = [];
+        // Javascript
+        let inputConcepto = document.querySelector("#inputConcepto");
+        let inputCantidad = document.querySelector("#inputCantidad");
+        let seleccionRadio1 = document.querySelector("#ingreso")
+        let seleccionRadio2 = document.querySelector("#gasto")
+        let botonAnadir = document.querySelector("#botonAnadir");
+        let saldoAcumulado = document.querySelector("#tdSuma");
+
+        // PDTE ENLAZAR el boton con la tabla para que se cree columna
+        // NO VA ESTO: 
+        // tablaCompleta.appendChild("botonAnadir")
+        // Boton para que cuando clicke 
+        botonAnadir.addEventListener("click", function () {
+            let valorConcepto = inputConcepto.value;
+            let valorCantidad = inputCantidad.value;
+            let tabla = document.querySelector("#tablaCompleta")
+            // Comprobación para si el valor concepto o cantidad está vacío, salga una alerta indicando que se encuentra vacio uno de los campos
+            if (valorConcepto === "" || valorCantidad === "") {
+                alert("Error, uno de los dos campos se encuentra vacío")
+                return;
+            } else {
+                //let insercion = document.createElement("tr");
+                // botonAnadir.appendChild
+                //insercion.textContent=
+                //
+                let textoConcepto = valorConcepto.value;
+                let insercionMovimiento = document.createElement("tr");
+                let insercionConcreta = document.createElement("td");
+                insercionConcreta.textContent = textoConcepto;
+                insercionMovimiento.appendChild("insercionConcreta");
+                //
+                //
+                let botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                insercionMovimiento.appendChild(botonEliminar);
+                botonEliminar.addEventListener("click", function () {
+                    insercionMovimiento.remove();
+                });
+
+                tablaCompleta.appendChild(insercionMovimiento);
+                // Para borrar el VALOR del campo, mera estética
+                //texto.value = "";
+
+                // Introducción de la fila completa del movimiento
+                //   almacenMovimientos.push(insercionMovimiento);
+
+
+            }
+            // Impresion del  array almacenMovimientos
+            // console.log(almacenMovimientos);
+        });
+
+    </script>
+</body>
+
+</html>

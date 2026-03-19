@@ -1,0 +1,12 @@
+ boton.addEventListener("click", function () {
+                let nuevaFila = document.createElement("tr");
+                let celdaNombre = document.createElement("td");
+                let celdaNota = document.createElement("td");
+                celdaNombre.textContent = inputNombre.value;
+                celdaNota.textContent = inputNota.value;
+                nuevaFila.appendChild(celdaNombre);
+                nuevaFila.appendChild(celdaNota);
+                bodyTabla.appendChild(nuevaFila);
+                inputNombre.value = "";
+                inputNota.value = "";
+            });
