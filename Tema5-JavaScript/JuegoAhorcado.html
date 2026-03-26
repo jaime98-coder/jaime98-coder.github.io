@@ -20,17 +20,27 @@
                 palabraOculta = palabraOculta + "_" + " ";
             }
             let inputTexto = document.querySelector("#inputTexto");
-           let btnComprobar = document.querySelector("#btnComprobar");
-           btnComprobar.addEventListener("click", function(){
-             inputTexto.value = "";
-           })
+            let btnComprobar = document.querySelector("#btnComprobar");
+            btnComprobar.addEventListener("click", function () {
+                inputTexto.value = "";
+            })
 
         } while (palabraOculta != palabraSeleccionada);
 
 
-        function comprobarLetra(){
-            
+        function comprobarLetra() {
+
         }
+
+        // Lista de palabras predefinidas para el juego.
+        // Elegir palabra azar de un listado.
+        // variable con la palabra oculta (con guiones bajos)
+        // inputTexto de un solo caracter y boton enviar letra.
+        // vaciar campo texto tras cada intento.
+        // comprobar si la letra existe en la palabra oculta, y sustituir el guion por la letra
+        // introducida si la letra aparece varias veces, deben revelearse en todas sus posiciones.
+        // Cuando todas las letras hayan sido reveladas, el juego debe de mostrar un mensaje de
+        // felicitación. y se reinicia la pagina para jugar de nuevo.  
     </script>
 </body>
 

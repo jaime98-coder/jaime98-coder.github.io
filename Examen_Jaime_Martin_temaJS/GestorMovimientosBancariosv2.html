@@ -50,94 +50,134 @@
 
 
     <script>
-        // 1. EL ESTADO: Nuestro array almacenará DATOS (objetos), no elementos HTML.
-        let almacenMovimientos = [];
+       // 1. EL ESTADO: Nuestro array almacenará DATOS (objetos), no elementos HTML.
+let almacenMovimientos = [];
 
-        // Capturamos los elementos principales del DOM
-        let inputConcepto = document.querySelector("#inputConcepto");
-        let inputCantidad = document.querySelector("#inputCantidad");
-        let botonAnadir = document.querySelector("#botonAnadir");
-        let bodyTabla = document.querySelector("#cuerpoTabla");
+// Capturamos los elementos principales del DOM
+let inputConcepto = document.querySelector("#inputConcepto");
+let inputCantidad = document.querySelector("#inputCantidad");
+let botonAnadir = document.querySelector("#botonAnadir");
+let bodyTabla = document.querySelector("#cuerpoTabla");
 
-        // Evento al hacer click en "Añadir"
-        botonAnadir.addEventListener("click", function () {
-            let valorConcepto = inputConcepto.value.trim();
-            // Convertimos la cantidad a número decimal
-            let valorCantidad = parseFloat(inputCantidad.value);
+// Evento al hacer click en "Añadir"
+botonAnadir.addEventListener("click", function () {
+    let valorConcepto = inputConcepto.value;
+    let textoCantidad = inputCantidad.value; // Lo cogemos como texto primero
+    
+    // Averiguamos qué radio button está seleccionado usando un selector CSS
+    let radioSeleccionado = document.querySelector('input[name="tipoMovimiento"]:checked');
 
-            // Averiguamos qué radio button está seleccionado usando un selector CSS
-            let radioSeleccionado = document.querySelector('input[name="tipoMovimiento"]:checked');
+    // VALIDACIÓN: Comprobamos si falta texto, falta cantidad, o no hay radio
+    if (valorConcepto === "" || textoCantidad === "" || radioSeleccionado === null) {
+        alert("Error: Por favor, rellena todos los campos y selecciona Ingreso o Gasto.");
+        return; // Cortamos la ejecución
+    }
 
-            // VALIDACIÓN: Comprobamos si falta texto, falta cantidad, o no se ha seleccionado el radio
-            if (valorConcepto === "" || isNaN(valorCantidad) || !radioSeleccionado) {
-                alert("Error: Por favor, rellena todos los campos y selecciona Ingreso o Gasto.");
-                return; // Cortamos la ejecución
+    // Si pasamos la validación, ya podemos convertir la cantidad a número
+    let valorCantidad = Number(textoCantidad);
+
+    // 2. CREAMOS EL OBJETO DE DATOS
+    let nuevoMovimiento = {
+        concepto: valorConcepto,
+        cantidad: valorCantidad,
+        tipo: radioSeleccionado.value // Será "ingreso" o "gasto"
+    };
+
+    // 3. AÑADIMOS EL DATO AL ARRAY
+    almacenMovimientos.push(nuevoMovimiento);
+
+    // Limpiamos los inputs para el siguiente movimiento
+    inputConcepto.value = "";
+    inputCantidad.value = "";
+    radioSeleccionado.checked = false;
+
+    // 4. ACTUALIZAMOS LA INTERFAZ VISUAL
+    renderizarTabla();
+});
+
+// Crea una fila <tr> completa para un movimiento dado
+function crearFilaMovimiento(movimiento, saldo, index) {
+    let tdConcepto = document.createElement("td");
+    tdConcepto.textContent = movimiento.concepto;
+
+    let tdIngreso = document.createElement("td");
+    if (movimiento.tipo === "ingreso") {
+        tdIngreso.textContent = movimiento.cantidad;
+    }
+
+    let tdGasto = document.createElement("td");
+    if (movimiento.tipo === "gasto") {
+        tdGasto.textContent = movimiento.cantidad;
+    }
+
+    let tdSuma = document.createElement("td");
+    tdSuma.textContent = saldo;
+    tdSuma.style.fontWeight = "bold";
+    
+    // Estilos del saldo
+    if (saldo < 0) {
+        tdSuma.style.color = "red";
+    } else {
+        tdSuma.style.color = "black";
+    }
+
+    let botonEliminar = document.createElement("button");
+    botonEliminar.textContent = "Eliminar";
+    botonEliminar.style.color = "red";
+    
+    // Lógica para eliminar SIN splice
+    botonEliminar.addEventListener("click", function () {
+        let nuevoArray = []; // Creamos un array temporal
+        
+        // Recorremos el almacén de movimientos
+        for (let i = 0; i < almacenMovimientos.length; i++) {
+            // Si la posición 'i' NO es la que queremos borrar, la guardamos
+            if (i !== index) {
+                nuevoArray.push(almacenMovimientos[i]);
             }
+        }
+        
+        // Reemplazamos el array viejo por el nuevo (que ya no tiene el borrado)
+        almacenMovimientos = nuevoArray;
+        
+        // Volvemos a dibujar la tabla
+        renderizarTabla();
+    });
 
-            // 2. CREAMOS EL OBJETO DE DATOS
-            let nuevoMovimiento = {
-                concepto: valorConcepto,
-                cantidad: valorCantidad,
-                tipo: radioSeleccionado.value // Será "ingreso" o "gasto"
-            };
+    let tdAcciones = document.createElement("td");
+    tdAcciones.appendChild(botonEliminar);
 
-            // 3. AÑADIMOS EL DATO AL ARRAY
-            almacenMovimientos.push(nuevoMovimiento);
+    let tr = document.createElement("tr");
+    tr.appendChild(tdConcepto);
+    tr.appendChild(tdIngreso);
+    tr.appendChild(tdGasto);
+    tr.appendChild(tdSuma);
+    tr.appendChild(tdAcciones);
+    
+    return tr;
+}
 
-            // Limpiamos los inputs para el siguiente movimiento
-            inputConcepto.value = "";
-            inputCantidad.value = "";
-            radioSeleccionado.checked = false;
+// Dibuja la tabla entera leyendo el array de datos
+function renderizarTabla() {
+    bodyTabla.innerHTML = "";
+    let saldoAcumulado = 0;
 
-            // 4. ACTUALIZAMOS LA INTERFAZ VISUAL
-            renderizarTabla();
-        });
+    // Usamos un bucle for clásico para recorrer los datos
+    for (let i = 0; i < almacenMovimientos.length; i++) {
+        let movimientoActual = almacenMovimientos[i];
 
-        // Crea una fila <tr> completa para un movimiento dado
-        function crearFilaMovimiento(movimiento, saldo, index) {
-            let tdConcepto = document.createElement("td");
-            tdConcepto.textContent = movimiento.concepto;
-
-            let tdIngreso = document.createElement("td");
-            if (movimiento.tipo === "ingreso") tdIngreso.textContent = movimiento.cantidad.toFixed(2);
-
-            let tdGasto = document.createElement("td");
-            if (movimiento.tipo === "gasto") tdGasto.textContent = movimiento.cantidad.toFixed(2);
-
-            let tdSuma = document.createElement("td");
-            tdSuma.textContent = saldo.toFixed(2);
-            tdSuma.style.fontWeight = "bold";
-            tdSuma.style.color = saldo < 0 ? "red" : "black";
-
-            let botonEliminar = document.createElement("button");
-            botonEliminar.textContent = "Eliminar";
-            botonEliminar.style.color = "red";
-            botonEliminar.addEventListener("click", function () {
-                almacenMovimientos.splice(index, 1);
-                renderizarTabla();
-            });
-            let tdAcciones = document.createElement("td");
-            tdAcciones.appendChild(botonEliminar);
-
-            let tr = document.createElement("tr");
-            tr.appendChild(tdConcepto);
-            tr.appendChild(tdIngreso);
-            tr.appendChild(tdGasto);
-            tr.appendChild(tdSuma);
-            tr.appendChild(tdAcciones);
-            return tr;
+        // Calculamos el saldo paso a paso
+        if (movimientoActual.tipo === "ingreso") {
+            saldoAcumulado = saldoAcumulado + movimientoActual.cantidad;
+        } else {
+            saldoAcumulado = saldoAcumulado - movimientoActual.cantidad;
         }
 
-        // Dibuja la tabla entera leyendo el array de datos
-        function renderizarTabla() {
-            bodyTabla.innerHTML = "";
-            let saldoAcumulado = 0;
-
-            almacenMovimientos.forEach(function (movimiento, index) {
-                saldoAcumulado += movimiento.tipo === "ingreso" ? movimiento.cantidad : -movimiento.cantidad;
-                bodyTabla.appendChild(crearFilaMovimiento(movimiento, saldoAcumulado, index));
-            });
-        }
+        // Llamamos a la función que crea el <tr> pasándole la posición 'i'
+        let filaHtml = crearFilaMovimiento(movimientoActual, saldoAcumulado, i);
+        bodyTabla.appendChild(filaHtml);
+    }
+}
     </script>
 </body>
 
