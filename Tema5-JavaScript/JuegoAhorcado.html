@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Juego del Ahorcado</title>
+</head>
+
+<body>
+    <input type="text" id="inputTexto" maxlength="1" placeholder="Introduce una letra" />
+    <button id="btnComprobar">Comprobar</button>
+    <script>
+        let listaPalabras = ["javascript", "programacion", "desarrollo", "ahorcado", "codigo"];
+        let indiceAleatorio = Math.floor(Math.random() * listaPalabras.length);
+        let palabraSeleccionada = listaPalabras[indiceAleatorio];
+        let palabraOculta = "";
+        do {
+            for (let i = 0; i < palabraSeleccionada.length; i++) {
+                palabraOculta = palabraOculta + "_" + " ";
+            }
+            let inputTexto = document.querySelector("#inputTexto");
+           let btnComprobar = document.querySelector("#btnComprobar");
+           btnComprobar.addEventListener("click", function(){
+             inputTexto.value = "";
+           })
+
+        } while (palabraOculta != palabraSeleccionada);
+
+
+        function comprobarLetra(){
+            
+        }
+    </script>
+</body>
+
+</html>
