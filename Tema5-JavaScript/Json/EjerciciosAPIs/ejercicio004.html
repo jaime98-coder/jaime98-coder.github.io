@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4: Pokédex Básica</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcfcf4;
+            /* Fondo crema muy claro, casi blanco pastel */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            /* Texto gris oscuro */
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #f53a3a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #ff7373;
+        }
+    </style>
+</head>
+
+<body>
+    <!--HTML-->
+    <input type="text" id="textoPokemon" placeholder="Introduce un nombre o ID">
+    <br>
+    <button id="botonBuscar">BUSCAR POKEMON</button>
+    <img id="imagenPokemon" src="">
+
+    <script>
+        // Dejamos las variables que usaremos mucho preparadas al principio
+        let inputUsuario = document.querySelector("#textoPokemon");
+        let botonBuscar = document.querySelector("#botonBuscar");
+        let imagenPokemon = document.querySelector("#imagenPokemon");
+
+        function mostrarInfoPokemon() {
+            let busqueda = inputUsuario.value.toLowerCase();
+            if (busqueda === "") {
+                return;
+            }
+            let urlAPI = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
+            fetch(urlAPI)
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    let nombrePokemon = datos.name.toUpperCase();
+                    console.log("Nombre: ", nombrePokemon);
+                    // AQUI ME QUEDE
+                });
+            // Nombre del Pokemon en mayuscula
+            let idPokemon;
+
+            // Imagen del Pokemon
+        }
+
+        function anteriorID() {
+
+        }
+
+        function siguienteID() {
+
+        }
+
+        botonBuscar.addEventListener("click", mostrarInfoPokemon);
+
+    </script>
+
+</body>
+
+</html>
