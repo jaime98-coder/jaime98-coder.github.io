@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1 : Perros</title>
+</head>
+
+<body>
+    <button id="botonAleatorio">Boton Aleatorio</button>
+    <select id="seleccion">Lista</select>
+    <img id="imagenPerro" src="" width="300" />
+
+    <script>
+        document.querySelector("#botonAleatorio").addEventListener("click", function () {
+            console.log("¡He pulsado el botón!");
+            fetch("https://dog.ceo/api/breeds/image/random")
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    console.log(datos);
+                    document.querySelector("#imagenPerro").src = datos.message;
+                });
+        });
+
+        fetch("https://dog.ceo/api/breeds/list/all")
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                let razas = datos.message;
+                let selector = document.querySelector("#seleccion");
+                selector.innerHTML = "<option value=''>Selecciona un perro </option>";
+
+                for (let raza in razas) {
+                    let subRazas = razas[raza];
+                    if (subRazas.length === 0) {
+                        selector.innerHTML = selector.innerHTML + `<option value="${raza}">${raza}</option>`;
+                    } else {
+                        for (let i = 0; i < subRazas.length; i++) {
+                            let subRaza = subRazas[i];
+                            selector.innerHTML = selector.innerHTML + `<option value="${raza}/${subRaza}"> ${subRaza} ${raza} </option>`;
+                        }
+                    }
+                   
+                }
+                
+            });
+        document.querySelector("#seleccion").addEventListener("change", function(evento){
+            let razaElegida = evento.target.value;
+            if (razaElegida===""){
+                return;
+            }
+         // Construimos la URL con la raza elegida
+        let url = `https://dog.ceo/api/breed/${razaElegida}/images/random`;
+         // Hacemos la petición a la API
+            fetch(url)
+                .then(respuesta=>respuesta.json())
+                .then(datos=>{
+                    // Cambiamos la imagen
+                    document.querySelector("#imagenPerro").src=datos.message;
+                });
+        });
+
+        
+
+    </script>
+</body>
+
+</html>
