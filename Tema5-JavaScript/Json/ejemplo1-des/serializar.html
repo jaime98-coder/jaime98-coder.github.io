@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<table border="1">
+    <thead>
+        <tr>
+
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody id="bodyTabla">
+</table>
+
+   <script>
+    function iniciar(){
+        // Objeto persona
+        let persona = {
+            nombre: "Jaime",
+            apellidos: "Martin",
+            edad: 28,
+            ciudad: "Sevilla",
+            profesion: "Desarrollador"
+        };
+
+        console.log("Objeto que se desea envíar: "+persona);
+        console.log("Se prepara el envío...");
+        let objJSON = serializar(persona);
+        console.log=("Se envía en Json");
+        console.log=("Esperando respuesta...");
+        let objJS = deserializar(objJSON);
+        console.log("Recibido: "+objJS)
+    }
+
+
+
+    function serializar(datoJS){
+        let serializado = JSON.stringify(datoJS);
+        console.log("Serializado: "+serializado);
+        return serializado;
+    }
+
+    function deserializar(datoJSON){
+        let desserializado = JSON.parse(datoJSON);
+        console.log("Desserializado: "+desserializado);
+        return desserializado;
+    }
+
+    function insertarCelda(fila, texto){
+        let celda = document.createElement("td");
+        celda.textContent=texto;
+        fila.appendChild(celda);
+
+    }
+
+    function insertarEnTabla(objJS){
+        let cuerpo = document.getElementById("bodyTabla");
+        let fila = document.createElement("tr");
+        cuerpo.appendChild(fila);
+        insertarCelda(fila, objJS.nombre);
+        insertarCelda(fila, objJS.apellidos);
+        insertarCelda(fila, objJS.edad);
+        insertarCelda(fila, objJS.ciudad);
+        insertarCelda(fila, objJS.profesion);
+
+    }
+
+    document.getElementById("btnIniciar").addEventListener("click", function(){
+        iniciar();
+    });
+    
+    
+
+
+   </script>
+</body>
+</html>
