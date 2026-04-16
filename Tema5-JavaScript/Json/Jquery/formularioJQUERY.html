@@ -14,6 +14,10 @@
             border-radius: 20px;
             box-shadow: 3px 3px 10px black;
         }
+        th{
+            padding: 10px;
+            width: 100px;
+        }
     </style>
 </head>
 
@@ -125,23 +129,26 @@
                 mediaEdades = mediaEdades + listaEdades[i] / listaEdades.length;
             }
 
-            let maximaEdad=0;
-            for (let i=0; i<listaEdades.length;i++){
-                if (listaEdades[i]>maximaEdad){
-                    maximaEdad=listaEdades[i];
+            let maximaEdad = 0;
+            for (let i = 0; i < listaEdades.length; i++) {
+                if (listaEdades[i] > maximaEdad) {
+                    maximaEdad = listaEdades[i];
                 }
             }
-            let minimaEdad=-1;
-            for (let i=0; i<listaEdades.length;i++){
-                if (listaEdades[i]<minimaEdad || minimaEdad === -1){
-                    minimaEdad=listaEdades[i];
+            let minimaEdad = -1;
+            for (let i = 0; i < listaEdades.length; i++) {
+                if (listaEdades[i] < minimaEdad || minimaEdad === -1) {
+                    minimaEdad = listaEdades[i];
                 }
             }
-                console.log(`Suma de edades: ${sumaEdades}`);
-                console.log(`Media de edades: ${mediaEdades}`);
-                console.log(`Edad máxima: ${maximaEdad}`);
-                console.log(`Edad mínima: ${minimaEdad}`);
+            let mensaje = `Suma de edades: ${sumaEdades}\nMedia de edades: ${mediaEdades}\nEdad máxima: ${maximaEdad}\nEdad mínima: ${minimaEdad}`;
+            
+            console.log(`Suma de edades: ${sumaEdades}`);
+            console.log(`Media de edades: ${mediaEdades}`);
+            console.log(`Edad máxima: ${maximaEdad}`);
+            console.log(`Edad mínima: ${minimaEdad}`);
         }
+
 
 
 
