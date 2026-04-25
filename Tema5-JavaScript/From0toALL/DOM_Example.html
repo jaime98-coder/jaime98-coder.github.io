@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRACTICANDO DOM</title>
+</head>
+<body>
+    <h1 id="titulo2"> Titulo numero 2 con HTML</h1>
+    <script>
+        let titulo1=document.createElement("h1")
+        titulo1.textContent="Titulo creado desde 0 con DOM"
+        document.body.appendChild(titulo1)
+        let titulo2=document.querySelector("#titulo2")
+        titulo2.textContent="Titulo 2 modificado"
+        titulo2.innerHTML="Titulo 2 con innerhtml <button>Botonsito bomba</button>"
+        
+    </script>
+</body>
+</html>

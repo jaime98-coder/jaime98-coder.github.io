@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="bienvenida">BIENVENIDO<span id="spanUsuario"></span></h1>
+    <input type="text" id="nombreUsuario">
+    <input type="password" id="passwordUsuario">
+    <button id="btnEnviar">Enviar</button>
+    <br> <br>
+    <script>
+        function simularLogin() {
+            let nombreUsuario = document.querySelector("#nombreUsuario").value
+            let passUsuario = document.querySelector("#passwordUsuario").value
+            let spanDOM = document.querySelector("#spanUsuario")
+            if (nombreUsuario == "Admin" && passUsuario == "1234") {
+                spanDOM.textContent = " " + nombreUsuario
+                alert("Acceso CORRECTO")
+            } else {
+                alert("Acceso INCORRECTO")
+                spanDOM.textContent = ""
+            }
+        }
+
+        let botonDOM = document.querySelector("#btnEnviar")
+        botonDOM.addEventListener("click", simularLogin)
+
+        let botonRojo = document.createElement("button")
+        botonRojo.textContent = "Boton rojo base"
+        botonRojo.style.backgroundColor = "red"
+        botonRojo.style.color = "white"
+        botonRojo.addEventListener("click", function () {
+            let tituloH1 = document.querySelector("#bienvenida");
+            tituloH1.style.color = "red"; // Aquí escribimos "red" a mano
+        });
+
+        document.body.appendChild(botonRojo);
+
+        function crearBoton(color) {
+            let botonCreado = document.createElement("button")
+            botonCreado.textContent = "Boton " + color
+            botonCreado.style.backgroundColor = color
+            botonCreado.style.color = "white"
+
+            botonCreado.addEventListener("click", function () {
+                let tituloH1 = document.querySelector("#bienvenida")
+
+                tituloH1.style.color = color
+            })
+            document.body.appendChild(botonCreado)
+
+
+        }
+        crearBoton("green")
+        crearBoton("blue")
+        crearBoton("yellow")
+
+    </script>
+</body>
+
+</html>

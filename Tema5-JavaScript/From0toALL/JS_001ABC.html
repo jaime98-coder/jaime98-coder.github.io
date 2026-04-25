@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS BOLETIN ABC</title>
+</head>
+
+<body>
+    <script>
+        let ciudad = "Sevilla"
+        const pais = "España"
+        console.log("Vivo en " + ciudad + " ," + pais)
+
+        let precio = 19.64
+        const IVA = 0.21
+        let precioFinal = precio + (precio * IVA)
+        console.log("Precio final redondeado: " + Math.round(precioFinal))
+
+        let edad = 28
+        let conversionAnosDias = edad * 365
+        console.log("Has vivido " + conversionAnosDias + " dias")
+
+
+        let nombreUsuario = prompt("Introduce tu nombre: ")
+        if (nombreUsuario != null) {
+            alert("Bienvenido al curso de JS, " + nombreUsuario)
+        } else {
+            alert("Nombre no especificado")
+        }
+
+        let num1 = prompt("Introduce un numero 1:")
+        let num2 = prompt("Introduce un numero 2:")
+        let resultadoSuma = parseInt(num1) + parseInt(num2)
+        alert("Resultado de la suma: " + resultadoSuma)
+
+        let miEdad = 27
+        let esMayorEdad = false
+        if (miEdad >= 18) {
+            esMayorEdad = true
+            alert("¿El usuario es mayor de edad? " + esMayorEdad)
+        } else {
+            alert("¿El usuario es mayor de edad? " + esMayorEdad)
+        }
+
+        let nombreInvitado = prompt("Introduce tu USER NAME")
+        if (nombreInvitado == "Admin") {
+            alert("Hola " + nombreInvitado + ". Acceso total")
+        } else {
+            alert("Usuario: " + nombreInvitado + ". Acceso limitado")
+        }
+        
+         let numeroSolicitado
+        do {
+            numeroSolicitado = parseInt(prompt("Introduce un número para mostrar los impares del 1 al numero introducido"))
+           if (numeroSolicitado<=0){
+            alert("Número inválido. Por favor, introduce un número mayor que 0.")
+           }
+        } while (numeroSolicitado<0)
+        let textoResultado="Numeros impares hasta el "+numeroSolicitado+": "
+        for (let i=1; i<=numeroSolicitado;i++){
+            if (i%2!==0){
+                textoResultado=textoResultado+i+", "
+            }
+        }
+        alert(textoResultado)
+
+    </script>
+</body>
+
+</html>
