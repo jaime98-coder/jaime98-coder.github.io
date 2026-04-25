@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios 3: Javascript </title>
+</head>
+
+<body>
+    <script>
+
+        saludar(prompt("Introduce un nombre"));
+
+        function saludar(nombre) {
+            alert("Hola " + nombre)
+        }
+
+        function calcularPromedio(num1, num2) {
+            return num1 / num2;
+        }
+        let promedioCalculado = calcularPromedio(10, 2)
+        console.log("Promedio de los números introducidos en la funcion: " + promedioCalculado)
+
+        function comprobarNumero(numero) {
+            if (numero > 0) {
+                console.log("El numero es MAYOR de 0")
+            } else if (numero < 0) {
+                console.log("El numero es MENOR de 0")
+            } else {
+                console.log("El numero es IGUAL a 0")
+            }
+        }
+
+        comprobarNumero(prompt("Introduce un numero cualquiera"))
+
+        function comprobarBisiesto(ano) {
+            // Un año es bisiesto si:
+            // 1. Es divisible por 400
+            // 2. Es divisible por 4 Y NO es divisible por 100
+            return (ano % 400 === 0) || (ano % 4 === 0 && ano % 100 !== 0);
+        }
+
+        
+    </script>
+</body>
+
+</html>

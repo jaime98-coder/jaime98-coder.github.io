@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios 2: Javascript</title>
+</head>
+
+<body>
+    <h1>Mira los resultados en la Consola (F12)</h1>
+    <script>
+        // ==========================================
+        // 1. Indicar si un número es par o impar
+        // ==========================================
+        console.log("--- EJERCICIO 1 ---");
+        let numero = 7;
+        // Usamos el operador módulo (%). Si el resto de dividir entre 2 es 0, es par.
+        if (numero % 2 === 0) {
+            console.log("El número " + numero + " es PAR.");
+        } else {
+            console.log("El número " + numero + " es IMPAR.");
+        }
+
+        // ==========================================
+        // 2. Edad para votar
+        // ==========================================
+        console.log("--- EJERCICIO 2 ---");
+        let edad = 20; // Puedes cambiar este valor para probar
+        if (edad >= 18) {
+            console.log("Tienes " + edad + " años. SÍ puedes votar.");
+        } else {
+            console.log("Tienes " + edad + " años. NO puedes votar.");
+        }
+
+        // ==========================================
+        // 3. Bucle del 1 al 10
+        // ==========================================
+        console.log("--- EJERCICIO 3: Bucle 1 a 10 ---");
+        for (let i = 1; i <= 10; i++) {
+            console.log(i);
+        }
+
+        // ==========================================
+        // 4. Bucle pares del 1 al 10
+        // ==========================================
+        console.log("--- EJERCICIO 4: Pares 1 a 10 ---");
+        for (let i = 1; i <= 10; i++) {
+            if (i % 2 === 0) {
+                console.log(i); // Solo lo imprime si cumple la condición de ser par
+            }
+        }
+
+        // ==========================================
+        // 5. Suma del 1 al 100
+        // ==========================================
+        console.log("--- EJERCICIO 5: Suma 1 al 100 ---");
+        let sumaTotal = 0; // Creamos una "hucha" vacía
+        for (let i = 1; i <= 100; i++) {
+            sumaTotal = sumaTotal + i; // Vamos metiendo cada número en la hucha
+        }
+        console.log("La suma de todos los números del 1 al 100 es: " + sumaTotal);
+
+
+        // ==========================================
+        // 6. Ejercicios 3, 4 y 5 pero dinámicos (pidiendo datos)
+        // ==========================================
+        console.log("--- EJERCICIO 6: Dinámico ---");
+
+        // Pedimos los datos al usuario y los convertimos a números enteros
+        let inicio = parseInt(prompt("EJERCICIO 6: Introduce el número de INICIO:"));
+        let fin = parseInt(prompt("EJERCICIO 6: Introduce el número de FIN:"));
+
+        // Validamos que el usuario no haya escrito letras (isNaN) 
+        // y que el inicio no sea mayor que el fin para evitar que el bucle se rompa
+        if (!isNaN(inicio) && !isNaN(fin) && inicio <= fin) {
+
+            // Recreamos el punto 3
+            console.log("-> Números desde " + inicio + " hasta " + fin + ":");
+            for (let i = inicio; i <= fin; i++) {
+                console.log(i);
+            }
+
+            // Recreamos el punto 4
+            console.log("-> Números PARES desde " + inicio + " hasta " + fin + ":");
+            for (let i = inicio; i <= fin; i++) {
+                if (i % 2 === 0) {
+                    console.log(i);
+                }
+            }
+
+            // Recreamos el punto 5
+            console.log("-> Suma total desde " + inicio + " hasta " + fin + ":");
+            let sumaDinamica = 0;
+            for (let i = inicio; i <= fin; i++) {
+                sumaDinamica = sumaDinamica + i;
+            }
+            console.log("El resultado de la suma es: " + sumaDinamica);
+
+        } else {
+            console.error("Error: Introduce números válidos y asegúrate de que el Inicio sea menor o igual al Fin.");
+        }
+    </script>
+</body>
+
+</html>

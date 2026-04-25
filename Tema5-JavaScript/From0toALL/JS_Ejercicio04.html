@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios 4: Javascript
+    </title>
+</head>
+
+<body>
+    <script>
+        arrayNumeros = [1, 2, 3, 4, 5]
+        console.log("Array original: " + arrayNumeros)
+        arrayNumeros.push(6)
+        console.log("Tras añadir al final con push():", arrayNumeros);
+        arrayNumeros.shift();
+        console.log("Tras eliminar el primero con shift():", arrayNumeros);
+
+        // 4. Imprime todos los números usando un bucle
+        console.log("--- Recorriendo el Array con un Bucle ---");
+
+        // El truco aquí es usar '.length' para que el bucle dé tantas vueltas como elementos tenga la lista
+        for (let i = 0; i < arrayNumeros.length; i++) {
+            // arrayNumeros[i] nos permite acceder al contenido de cada "cajón" de la lista
+            console.log("El valor en la posición " + i + " es: " + arrayNumeros[i]);
+        }
+
+        function numeroMayor(arrayNumerosCualesquiera) {
+            let numeroMayor = arrayNumerosCualesquiera[0]
+            for (let i = 0; i < arrayNumerosCualesquiera.length; i++) {
+                if (arrayNumerosCualesquiera[i] > numeroMayor) {
+                    numeroMayor = arrayNumerosCualesquiera[i]
+                }
+            }
+            return numeroMayor;
+        }
+
+        arrayNumerosParaMayor = [52, 13, 26, 25, 2, 8, 9, 304, 142]
+        console.log("El numero mayor del array insertado es: " + numeroMayor(arrayNumerosParaMayor))
+
+        let persona = {
+            nombre: "Jaime",
+            edad: "27",
+            ciudad: "Sevilla"
+        }
+        console.log(persona.nombre)
+        console.log(persona.edad)
+        console.log(persona.ciudad)
+        persona.ocupacion = "Programador"
+        console.log(persona)
+        delete persona.ciudad
+        console.log(persona)
+
+
+        class Persona {
+            constructor(nombre, edad, ciudad, ocupacion) {
+                this.nombre = nombre;
+                this.edad = edad;
+                this.ciudad = ciudad;
+                this.ocupacion = ocupacion;
+            }
+        }
+        let persona1 = new Persona("Manolito", 50, "Madrid", "Criminólogo")
+        let persona2 = new Persona("Saray", 43, "Jaen", "Dependienta")
+        let persona3 = new Persona("Faenna", 30, "Malaga", "Rapera")
+        let arrayPersonas = []
+        arrayPersonas.push(persona1, persona2, persona3)
+
+        console.log(arrayPersonas)
+        for (let i = 0; i < arrayPersonas.length; i++) {
+            console.log("Nombre de la persona nº " + (i + 1) + ": " + arrayPersonas[i].nombre)
+        }
+
+        function mostrarInfoObjeto(objetoPasado) {
+            let textoFinal = ""
+            for (let clave in objetoPasado) {
+                textoFinal = textoFinal + clave + ": " + objetoPasado[clave] + ", "
+            }
+            return textoFinal
+        }
+
+        // Probamos la función con persona3 (Faenna)
+        let resultadoString = mostrarInfoObjeto(persona3);
+        console.log("Datos extraídos: " + resultadoString);
+
+    </script>
+</body>
+
+</html>
