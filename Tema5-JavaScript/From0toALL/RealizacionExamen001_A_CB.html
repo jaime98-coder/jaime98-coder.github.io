@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gestor Bancario - Chuleta Arrays y Objetos</title>
+    </head>
+    <body>
+        <label for="concepto">Concepto</label>
+        <input type="text" id="concepto" />
+
+        <label for="cantidad">Cantidad</label>
+        <input type="number" id="cantidad" />
+
+        <label for="ingreso">Ingreso</label>
+        <input
+            type="radio"
+            id="ingreso"
+            name="tipoMovimiento"
+            value="ingreso"
+            checked
+        />
+
+        <label for="gasto">Gasto</label>
+        <input type="radio" id="gasto" name="tipoMovimiento" value="gasto" />
+
+        <button id="btnAnadir">Añadir movimiento</button>
+
+        <table border="2" width="300">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Ingreso</th>
+                    <th>Gasto</th>
+                    <th>Suma (Saldo)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla"></tbody>
+        </table>
+
+        <script>
+            /* ==================================================================
+               1. MEMORIA GLOBAL DEL PROGRAMA (El cerebro)
+               ================================================================== */
+
+            // [CONCEPTO: ARRAYS] La 'Libreta' donde guardamos todos los objetos que vayamos creando.
+            let listaMovimientos = [];
+
+            // [CONCEPTO: VARIABLES GLOBALES] La 'Hucha'. Va fuera de las funciones para que no se borre al hacer clic.
+            let saldoTotal = 0;
+
+            let btnAnadir = document.querySelector("#btnAnadir");
+            btnAnadir.addEventListener("click", procesarFormulario);
+
+            /* ==================================================================
+               2. EL MOLDE (CLASES)
+               ================================================================== */
+            // [CONCEPTO: CLASES] Creamos la estructura base que tendrán todos nuestros movimientos.
+            class NuevoMovimiento {
+                constructor(concepto, ingreso, gasto, suma) {
+                    this.concepto = concepto;
+                    this.ingreso = ingreso;
+                    this.gasto = gasto;
+                    this.suma = suma; // Guardamos el saldo histórico que había en ese momento
+                }
+            }
+
+            /* ==================================================================
+               3. RECOGER DATOS Y GUARDARLOS (Procesar Formulario)
+               ================================================================== */
+            function procesarFormulario() {
+                // [CONCEPTO: PARSEFLOAT] Convertimos el texto del input a número decimal puro para poder sumar/restar.
+                let concepto = document.querySelector("#concepto").value;
+                let cantidad = parseFloat(
+                    document.querySelector("#cantidad").value,
+                );
+
+                // [CONCEPTO: RADIO BUTTONS] Buscamos el input de la familia 'tipoMovimiento' que esté ':checked'
+                let tipo = document.querySelector(
+                    'input[name="tipoMovimiento"]:checked',
+                ).value;
+
+                // [CONCEPTO: VALIDACIÓN] Si está vacío o isNaN (No es un número), cortamos con 'return'
+                if (concepto === "" || isNaN(cantidad)) {
+                    alert("Uno de los campos está vacio");
+                    return;
+                }
+
+                // [CONCEPTO: LÓGICA DE RUTEO] Decidimos a qué variable va el dinero según el tipo marcado
+                let ing = "";
+                let gas = "";
+                if (tipo === "ingreso") {
+                    ing = cantidad;
+                    saldoTotal += cantidad; // Sumamos a la hucha global
+                } else {
+                    gas = cantidad;
+                    saldoTotal -= cantidad; // Restamos a la hucha global
+                }
+
+                // [CONCEPTO: INSTANCIAR] Fabricamos el objeto real usando el molde 'NuevoMovimiento'
+                let movimiento = new NuevoMovimiento(
+                    concepto,
+                    ing,
+                    gas,
+                    saldoTotal,
+                );
+
+                // [CONCEPTO: PUSH] Metemos el objeto recién creado al final del Array
+                listaMovimientos.push(movimiento);
+
+                // [CONCEPTO: DIBUJAR] Llamamos a la función que convierte el Array en filas HTML
+                pintarTabla();
+            }
+
+            /* ==================================================================
+               4. PINTAR LA PANTALLA (Renderizado dinámico)
+               ================================================================== */
+            function pintarTabla() {
+                let cuerpoTabla = document.querySelector("#cuerpoTabla");
+
+                // [CONCEPTO: BORRAR LA PIZARRA] Destruimos todo el HTML de la tabla antes de repintar
+                // Esto evita que las filas antiguas se dupliquen al recorrer el bucle.
+                cuerpoTabla.innerHTML = "";
+
+                // [CONCEPTO: RECORRER ARRAY] Bucle que da tantas vueltas como objetos haya en la lista
+                for (let i = 0; i < listaMovimientos.length; i++) {
+                    // Cogemos el objeto de esta vuelta para trabajar cómodamente con él
+                    let movimientoActual = listaMovimientos[i];
+
+                    // Creamos la fila base
+                    let fila = document.createElement("tr");
+
+                    // Rellenamos las celdas estándar
+                    let celdaConcepto = document.createElement("td");
+                    celdaConcepto.textContent = movimientoActual.concepto;
+                    fila.appendChild(celdaConcepto);
+
+                    let celdaIngreso = document.createElement("td");
+                    celdaIngreso.textContent = movimientoActual.ingreso;
+                    fila.appendChild(celdaIngreso);
+
+                    let celdaGasto = document.createElement("td");
+                    celdaGasto.textContent = movimientoActual.gasto;
+                    fila.appendChild(celdaGasto);
+
+                    // --- CELDA DEL SALDO CON ESTILOS CONDICIONALES ---
+                    let celdaSuma = document.createElement("td");
+                    celdaSuma.textContent = movimientoActual.suma;
+                    celdaSuma.style.fontWeight = "bold";
+
+                    // [CONCEPTO: ESTILOS BASADOS EN DATOS] Comparamos el DATO matemático, no la celda HTML
+                    if (movimientoActual.suma > 0) {
+                        celdaSuma.style.color = "black";
+                    } else {
+                        celdaSuma.style.color = "red";
+                    }
+                    fila.appendChild(celdaSuma);
+
+                    // --- CELDA DE ACCIONES (ELIMINAR) ---
+                    let celdaAcciones = document.createElement("td");
+                    let btnEliminar = document.createElement("button");
+                    btnEliminar.textContent = "Eliminar";
+
+                    btnEliminar.addEventListener("click", function () {
+                        // [CONCEPTO: SPLICE (TIJERAS)] Borramos 1 elemento en la posición exacta 'i' del array
+                        listaMovimientos.splice(i, 1);
+                        // [CONCEPTO: FLUJO COMPLEJO] Al borrar, las matemáticas se rompen. Llamamos al contable:
+                        recalcularTabla();
+                    });
+
+                    celdaAcciones.appendChild(btnEliminar);
+                    fila.appendChild(celdaAcciones);
+
+                    // Finalmente, pegamos la fila terminada a la tabla
+                    cuerpoTabla.appendChild(fila);
+                }
+            }
+
+            /* ==================================================================
+               5. RECALCULAR DATOS DESPUÉS DE BORRAR (El Contable)
+               ================================================================== */
+            function recalcularTabla() {
+                // 1. Vaciamos la hucha global a 0 para empezar a contar de nuevo
+                saldoTotal = 0;
+
+                // 2. Volvemos a recorrer el array (que ahora tiene un elemento menos porque hicimos splice)
+                for (let j = 0; j < listaMovimientos.length; j++) {
+                    let mov = listaMovimientos[j];
+
+                    // 3. Rehacemos las matemáticas fila a fila
+                    if (mov.ingreso !== "") {
+                        // [CONCEPTO: SEGURIDAD] Usamos parseFloat por si Javascript cree que es texto
+                        saldoTotal += parseFloat(mov.ingreso);
+                    } else {
+                        saldoTotal -= parseFloat(mov.gasto);
+                    }
+
+                    // 4. Actualizamos la propiedad 'suma' (histórico) de ese objeto con el nuevo cálculo
+                    mov.suma = saldoTotal;
+                }
+
+                // 5. ¡Magia! Como el array ya está corregido, mandamos repintar la tabla con los datos buenos
+                pintarTabla();
+            }
+        </script>
+    </body>
+</html>

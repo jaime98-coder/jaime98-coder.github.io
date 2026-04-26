@@ -14,7 +14,7 @@
             boton.textContent = "Añadir";
             let lista = document.createElement("ul");
             document.body.appendChild(lista);
-            let almacenTareas = [];
+
             boton.addEventListener("click", function () {
                 let tarea = document.createElement("li");
                 tarea.textContent = inputAnadir.value + " ";
@@ -33,7 +33,7 @@
                 botonBajar.textContent = "Bajar";
 
                 lista.appendChild(tarea);
-                almacenTareas.push(tarea);
+
                 inputAnadir.value = "";
 
                 botonX.addEventListener("click", function () {

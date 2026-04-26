@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ejercicio 7: Javascript - Chuleta DOM</title>
+    </head>
+    <body>
+        <h2>Lista de tareas</h2>
+        <input type="text" id="tarea" />
+        <button id="btnAnadir">Añadir tarea</button>
+
+        <script>
+            /* ==================================================================
+               1. VARIABLES GLOBALES Y PREPARACIÓN DEL TERRENO
+               ================================================================== */
+
+            // [CONCEPTO: SELECCIONAR] querySelector busca una etiqueta que ya existe en el HTML.
+            let btnAnadir = document.querySelector("#btnAnadir");
+
+            // [CONCEPTO: CREAR CONTENEDOR] createElement fabrica una etiqueta desde cero en la memoria.
+            let listaCompleta = document.createElement("ul");
+
+            // [CONCEPTO: EVENTOS] Escuchamos el 'click' del botón principal y lanzamos la función.
+            // OJO: Sin paréntesis en anadirTarea, para que no se ejecute sola al cargar la página.
+            btnAnadir.addEventListener("click", anadirTarea);
+
+            /* ==================================================================
+               2. LA FUNCIÓN PRINCIPAL (El motor que crea cada tarea)
+               ================================================================== */
+            function anadirTarea() {
+                // [CONCEPTO: LEER VALORES] Capturamos el input y sacamos lo que el usuario escribió (.value)
+                let inputTarea = document.querySelector("#tarea");
+                let tareaConcreta = document.createElement("li");
+                tareaConcreta.textContent = inputTarea.value + " ";
+
+                /* --- BOTÓN ELIMINAR --- */
+                let btnEliminar = document.createElement("button");
+                btnEliminar.textContent = " X ";
+
+                // [CONCEPTO: ESTILOS DINÁMICOS] Cambiar el CSS directamente desde JavaScript
+                btnEliminar.style.color = "red";
+                btnEliminar.style.fontWeight = "bold";
+
+                // [CONCEPTO: DESTRUIR ELEMENTOS] .remove() aniquila la etiqueta HTML y todo lo que tenga dentro
+                btnEliminar.addEventListener("click", function () {
+                    tareaConcreta.remove();
+                });
+
+                // [CONCEPTO: EMPAQUETAR] Metemos el botón dentro del <li> (tareaConcreta)
+                tareaConcreta.appendChild(btnEliminar);
+
+                /* --- BOTÓN SUBIR --- */
+                let btnSubir = document.createElement("button");
+                btnSubir.textContent = "Subir";
+                btnSubir.addEventListener("click", function () {
+                    // [CONCEPTO: NAVEGAR POR EL DOM (ARRIBA)] previousElementSibling mira al hermano de arriba
+                    if (tareaConcreta.previousElementSibling) {
+                        // [CONCEPTO: INSERTAR ANTES] insertBefore(A, B) -> Mete el elemento A justo antes del B.
+                        // Lógica: Metemos esta tarea justo antes de la tarea que tiene encima.
+                        listaCompleta.insertBefore(
+                            tareaConcreta,
+                            tareaConcreta.previousElementSibling,
+                        );
+                    }
+                });
+                tareaConcreta.appendChild(btnSubir);
+
+                /* --- BOTÓN BAJAR --- */
+                let btnBajar = document.createElement("button");
+                btnBajar.textContent = "Bajar";
+                btnBajar.addEventListener("click", function () {
+                    // [CONCEPTO: NAVEGAR POR EL DOM (ABAJO)] nextElementSibling mira al hermano de abajo
+                    if (tareaConcreta.nextElementSibling) {
+                        // TRUCO MAESTRO: Para bajar algo, cogemos al hermano de ABAJO y lo insertamos ANTES que nosotros.
+                        listaCompleta.insertBefore(
+                            tareaConcreta.nextElementSibling,
+                            tareaConcreta,
+                        );
+                    }
+                });
+                tareaConcreta.appendChild(btnBajar);
+
+                /* ==================================================================
+                   3. ENSAMBLAJE FINAL Y LIMPIEZA
+                   ================================================================== */
+                // Pegamos el <li> (ya con su texto y sus 3 botones) dentro del <ul>
+                listaCompleta.appendChild(tareaConcreta);
+
+                // [CONCEPTO: RESETEAR FORMULARIO] Vaciamos la caja de texto para la siguiente tarea
+                inputTarea.value = "";
+            }
+
+            // Finalmente, pegamos el <ul> entero al <body> de la página para que sea visible
+            document.body.appendChild(listaCompleta);
+        </script>
+    </body>
+</html>
