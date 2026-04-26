@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Plantilla Maestra Buscador API</title>
+        <style>
+            #contenedorPersonajes {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 20px;
+            }
+            .tarjeta {
+                border: 2px solid black;
+                padding: 10px;
+                width: 200px;
+                text-align: center;
+            }
+            .tarjeta img {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Buscador del Multiverso</h2>
+
+        <input type="text" id="inputNombre" placeholder="Ej: Rick, Summer..." />
+        <button id="btnBuscar">Buscar Personaje</button>
+        <p id="mensajeError" style="color: red"></p>
+
+        <div id="contenedorPersonajes"></div>
+
+        <script>
+            // ====================================================================
+            // BLOQUE 1: PREPARAR EL TERRENO (Capturar el HTML)
+            // Siempre es lo primero. Guardamos en variables los elementos que el
+            // usuario va a tocar o donde vamos a pintar cosas.
+            // ====================================================================
+            let inputNombre = document.querySelector("#inputNombre");
+            let btnBuscar = document.querySelector("#btnBuscar");
+            let contenedorPersonajes = document.querySelector(
+                "#contenedorPersonajes",
+            );
+
+            // ====================================================================
+            // BLOQUE 2: PONER LA "OREJA" (Event Listener)
+            // Le decimos al botón que cuando le hagan "click", ejecute la función.
+            // ====================================================================
+            btnBuscar.addEventListener("click", buscarPersonaje);
+
+            // ====================================================================
+            // BLOQUE 3: LA FUNCIÓN PRINCIPAL (Debe ser 'async' para usar 'await')
+            // ====================================================================
+            async function buscarPersonaje() {
+                // PASO 3.1: Leemos lo que el usuario ha escrito en la caja
+                let nombreBuscado = inputNombre.value;
+
+                // PASO 3.2: Sistema de seguridad. Si el usuario pulsa el botón
+                // pero no ha escrito nada, usamos 'return' para abortar y no hacer nada.
+                if (nombreBuscado === "") {
+                    return;
+                }
+
+                // PASO 3.3: Construimos la URL dinámica.
+                // Juntamos la URL fija del servidor con la palabra que ha escrito el usuario.
+                let urlDinamica =
+                    "https://rickandmortyapi.com/api/character/?name=" +
+                    nombreBuscado;
+
+                // ====================================================================
+                // BLOQUE 4: LA PETICIÓN (El viaje del camarero)
+                // ====================================================================
+
+                // Vamos a la URL que hemos construido y ESPERAMOS a que vuelva
+                let respuesta = await fetch(urlDinamica);
+
+                // Abrimos el paquete que nos trae y lo traducimos a un Objeto JS
+                let datos = await respuesta.json();
+
+                // (Opcional pero recomendado) Imprimimos en consola para ver la estructura
+                console.log("Resultados de la búsqueda: ", datos.results);
+
+                // ====================================================================
+                // BLOQUE 5: PINTAR EN LA PANTALLA
+                // ====================================================================
+
+                // PASO 5.1: ¡SUPER IMPORTANTE! Vaciamos el contenedor HTML.
+                // Si no hacemos esto, al buscar un segundo personaje, se pondrá debajo del anterior.
+                contenedorPersonajes.innerHTML = "";
+
+                // Guardamos el Array real (la lista de personajes) en una variable
+                let arrayPersonajes = datos.results;
+
+                // PASO 5.2: El Bucle. Recorremos el array de principio a fin.
+                for (let i = 0; i < arrayPersonajes.length; i++) {
+                    // Aislamos el personaje actual de esta vuelta del bucle (Ej: El Rick número 1)
+                    let personajeActual = arrayPersonajes[i];
+
+                    // PASO 5.3: El truco de las comillas invertidas (Template Literals ``).
+                    // += significa "súmale esto al HTML que ya haya".
+                    // Con ${} podemos inyectar las variables de Javascript directamente dentro del texto HTML.
+                    contenedorPersonajes.innerHTML += `
+                        <div class="tarjeta"> 
+                            <img src="${personajeActual.image}" alt="Foto de ${personajeActual.name}">
+                            <h3>${personajeActual.name}</h3> 
+                            <p>Estado: ${personajeActual.status}</p>
+                        </div>
+                    `;
+                }
+            }
+        </script>
+    </body>
+</html>

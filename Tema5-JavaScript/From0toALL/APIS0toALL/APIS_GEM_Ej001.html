@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h2>Máquina de Consejos</h2>
+        <button id="btnConsejo">Pedir consejo</button>
+        <h3 id="textoConsejo">Pulsa el botón para recibir sabiduría...</h3>
+
+        <script>
+            let btnConsejo = document.querySelector("#btnConsejo");
+            let textoConsejo = document.querySelector("#textoConsejo");
+
+            btnConsejo.addEventListener("click", cargarConsejo);
+
+            async function cargarConsejo() {
+                let respuesta = await fetch(
+                    "https://api.adviceslip.com/advice",
+                );
+                let datos = await respuesta.json();
+                console.log(datos);
+                textoConsejo.textContent = datos.slip.advice;
+            }
+        </script>
+    </body>
+</html>

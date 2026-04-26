@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ejercicio 1: Perros</title>
+    </head>
+    <body>
+        <h2>Buscador de perritos</h2>
+        <button id="btnAleatorio">Aleatorio</button>
+        <select id="selectorRazas">
+            <option value="">Cargando razas...</option>
+        </select>
+        <br /><br />
+        <img id="imagenPerro" src="" alt="Aquí saldrá el perro" width="400" />
+
+        <script>
+            let btnAleatorio = document.querySelector("#btnAleatorio");
+            let imagenPerro = document.querySelector("#imagenPerro");
+            btnAleatorio.addEventListener("click", pedirPerroAleatorio);
+
+            // Añadimos 'async' aquí
+            async function pedirPerroAleatorio() {
+                // 1. Pausamos el código hasta que el servidor responda
+                let respuesta = await fetch(
+                    "https://dog.ceo/api/breeds/image/random",
+                );
+
+                // 2. Pausamos el código hasta que se traduzca el JSON
+                let datos = await respuesta.json();
+
+                // 3. Usamos los datos directamente en la siguiente línea
+                console.log("Perro aleatorio:", datos);
+                imagenPerro.src = datos.message;
+            }
+
+            async function cargarRazas() {
+                // 1. Esperamos la respuesta
+                let respuesta = await fetch(
+                    "https://dog.ceo/api/breeds/list/all",
+                );
+
+                // 2. Esperamos la traducción
+                let datos = await respuesta.json();
+
+                // 3. A partir de aquí, el código fluye normal
+                let selector = document.querySelector("#selectorRazas");
+                selector.innerHTML =
+                    '<option value="">Selecciona una raza...</option>';
+
+                let objetoRazas = datos.message;
+
+                for (let raza in objetoRazas) {
+                    let subRazas = objetoRazas[raza];
+
+                    if (subRazas.length === 0) {
+                        let opcion = document.createElement("option");
+                        opcion.value = raza;
+                        opcion.textContent = raza;
+                        selector.appendChild(opcion);
+                    } else {
+                        for (let i = 0; i < subRazas.length; i++) {
+                            let opcion = document.createElement("option");
+                            opcion.value = raza + "/" + subRazas[i];
+                            opcion.textContent = raza + " " + subRazas[i];
+                            selector.appendChild(opcion);
+                        }
+                    }
+                }
+            }
+            cargarRazas();
+
+            let selectorHTML = document.querySelector("#selectorRazas");
+
+            selectorHTML.addEventListener("change", async function () {
+                let seleccionUsuario = selectorHTML.value;
+                if (seleccionUsuario === "") {
+                    return;
+                }
+                let urlEspecifica =
+                    "https://dog.ceo/api/breed/" +
+                    seleccionUsuario +
+                    "/images/random";
+                let respuesta = await fetch(urlEspecifica);
+                let datosPerro = await respuesta.json();
+
+                imagenPerro.src = datosPerro.message;
+            });
+        </script>
+    </body>
+</html>
