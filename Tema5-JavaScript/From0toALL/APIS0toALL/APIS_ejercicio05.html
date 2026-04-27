@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ejercicio 5: El Tiempo Local</title>
+    </head>
+    <body>
+        <input type="text" id="nombreCiudad" />
+        <button id="miBoton">Ejecutar</button>
+
+        <div id="contenedorCiudad"></div>
+
+        <script>
+            // ==========================================
+            // 1. CAPTURAR (Seleccionamos los elementos del HTML)
+            // ==========================================
+            const nombreCiudad = document.querySelector("#nombreCiudad");
+            const miBoton = document.querySelector("#miBoton");
+            const contenedorCiudad =
+                document.querySelector("#contenedorCiudad");
+
+            // ==========================================
+            // 2. ESCUCHAR (Conectamos el botón con la función)
+            // ==========================================
+            miBoton.addEventListener("click", funcionPrincipal);
+
+            // ==========================================
+            // 3. PENSAR (Lógica y/o API)
+            // Debe ser 'async' porque vamos a usar 'await' para esperar a las APIs
+            // ==========================================
+            async function funcionPrincipal() {
+                // Leemos lo que el usuario escribió en el input
+                let ciudad = nombreCiudad.value;
+
+                // Sistema de seguridad: Si está vacío, cortamos la función y no hacemos nada
+                if (ciudad === "") return;
+
+                // -------------------------------------------------------
+                // ZONA API 1: GEOCODIFICACIÓN (Pasar nombre a coordenadas)
+                // -------------------------------------------------------
+                let respuestaGeocodif = await fetch(
+                    "https://geocoding-api.open-meteo.com/v1/search?name=" +
+                        ciudad,
+                );
+                let datosGeocodif = await respuestaGeocodif.json();
+                console.log(datosGeocodif); // VITAL: Mirar qué nos devuelve para saber navegar por el objeto
+
+                // BARRERA DE SEGURIDAD: Si buscamos una ciudad inventada, la API no devuelve la caja 'results'.
+                // Si no existe (!datosGeocodif.results), cortamos la función para que no se cuelgue el programa.
+                if (!datosGeocodif.results) {
+                    return;
+                }
+
+                // Extraemos el primer resultado del array de ciudades que nos devuelve la API
+                const ciudadActual = datosGeocodif.results[0];
+
+                // Guardamos las coordenadas que necesitamos para la API del clima
+                const latitud = ciudadActual.latitude;
+                const longitud = ciudadActual.longitude;
+
+                // -------------------------------------------------------
+                // ZONA API 2: EL CLIMA (Usamos los datos de la API 1)
+                // -------------------------------------------------------
+                // Fíjate en el uso de las comillas invertidas (`) para poder inyectar ${latitud} y ${longitud} en la URL
+                let respuestaClima = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${latitud}&longitude=${longitud}&current_weather=true`,
+                );
+
+                const datosClima = await respuestaClima.json();
+                console.log(datosClima); // Imprimimos para ver dónde están los datos del clima
+
+                // Extraemos los datos exactos navegando por el objeto JSON
+                const temperatura = datosClima.current_weather.temperature;
+                const unidadTemperatura =
+                    datosClima.current_weather_units.temperature; // Cadena de unidad temperatura
+                const velocidadViento = datosClima.current_weather.windspeed;
+                const unidadVelocidadViento =
+                    datosClima.current_weather_units.windspeed; // Cadena de unidad viento
+
+                // Extraemos el dato del reto (1 es de día, 0 es de noche)
+                const esDia = datosClima.current_weather.is_day;
+
+                // ==========================================
+                // 4. PINTAR (Mostrar los resultados en el HTML)
+                // ==========================================
+
+                // OPCION 1: El método rápido usando template literals (innerHTML)
+                // contenedorCiudad.innerHTML = `Ciudad seleccionada: ${ciudad}. Temperatura: ${temperatura}${unidadTemperatura}. Velocidad del viento: ${velocidadViento}${unidadVelocidadViento}`;
+
+                // OPCION 2: El método profesional usando nodos del DOM (createElement)
+                // Limpiamos la pantalla antes de meter cosas nuevas para que no se acumulen las ciudades
+                contenedorCiudad.innerHTML = "";
+
+                // Creamos el H3 para el nombre de la ciudad
+                const ciudadElement = document.createElement("h3");
+                ciudadElement.textContent = ciudad;
+                contenedorCiudad.appendChild(ciudadElement); // Lo pegamos en el contenedor
+
+                // Creamos un P para la temperatura
+                const temperaturaElement = document.createElement("p");
+                // Sumamos el valor numérico con su unidad (ej: 25 + °C)
+                temperaturaElement.textContent =
+                    temperatura + unidadTemperatura;
+                contenedorCiudad.appendChild(temperaturaElement); // Lo pegamos debajo
+
+                // Creamos otro P para la velocidad del viento
+                const velocidadVientoElement = document.createElement("p");
+                velocidadVientoElement.textContent =
+                    velocidadViento + unidadVelocidadViento;
+                contenedorCiudad.appendChild(velocidadVientoElement); // Lo pegamos debajo
+
+                // ==========================================
+                // 5. EL RETO: Cambiar estilos del DOM según datos de la API
+                // ==========================================
+                // Si esDia es 0 (noche), fondo negro y letra blanca
+                if (esDia === 0) {
+                    document.body.style.backgroundColor = "black";
+                    document.body.style.color = "white";
+                } else {
+                    // Si esDia es distinto de 0 (día), fondo blanco y letra negra (vuelve a la normalidad)
+                    document.body.style.backgroundColor = "white";
+                    document.body.style.color = "black";
+                }
+            }
+        </script>
+    </body>
+</html>

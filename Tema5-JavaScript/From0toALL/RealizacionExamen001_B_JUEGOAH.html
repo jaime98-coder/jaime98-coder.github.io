@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>El Juego del Ahorcado</title>
+    </head>
+    <body>
+        <h2>El Juego del Ahorcado</h2>
+        <p id="palabraOculta"></p>
+
+        <input type="text" id="entradaLetra" maxlength="1" />
+        <button id="btnComprobar">Comprobar letra</button>
+
+        <script>
+            // ==========================================
+            // 1. CAPTURAR ELEMENTOS DEL DOM
+            // ==========================================
+            let palabraOculta = document.querySelector("#palabraOculta");
+            let inputLetra = document.querySelector("#entradaLetra");
+            let btnComprobar = document.querySelector("#btnComprobar");
+
+            // ==========================================
+            // 2. PREPARACIÓN DEL JUEGO
+            // ==========================================
+            let almacenPalabras = ["javascript", "programacion", "desarrollo"];
+
+            // Elegimos palabra al azar usando la longitud del array para que sea dinámico
+            let palabraEnJuego =
+                almacenPalabras[
+                    Math.floor(Math.random() * almacenPalabras.length)
+                ];
+
+            // Despiezamos la palabra en un array de letras (Ej: ["j", "a", "v"...])
+            let arrayLetrasOriginales = palabraEnJuego.split("");
+
+            // Creamos un array del mismo tamaño lleno de guiones bajos
+            let estadoActual = Array(palabraEnJuego.length).fill("_");
+
+            // Pintamos los guiones iniciales en pantalla, separados por un espacio
+            palabraOculta.textContent = estadoActual.join(" ");
+
+            // ==========================================
+            // 3. EVENTOS (Conectar botón con función)
+            // ==========================================
+            btnComprobar.addEventListener("click", comprobarLetra);
+
+            // ==========================================
+            // 4. LÓGICA DE ADIVINACIÓN
+            // ==========================================
+            function comprobarLetra() {
+                // Atrapamos la letra y la forzamos a minúscula por seguridad
+                let letra = inputLetra.value.toLowerCase();
+
+                // Vaciamos el input automáticamente para el próximo turno
+                inputLetra.value = "";
+
+                // Si el usuario le da al botón sin escribir nada, abortamos
+                if (letra === "") {
+                    return;
+                }
+
+                // Recorremos la palabra original letra por letra
+                for (let i = 0; i < arrayLetrasOriginales.length; i++) {
+                    // Si hay coincidencia entre la letra original y la del usuario...
+                    if (arrayLetrasOriginales[i] === letra) {
+                        // ...revelamos esa misma posición en nuestro array de guiones
+                        estadoActual[i] = letra;
+                    }
+                }
+
+                // Actualizamos el DOM con el estado actual (guiones y aciertos combinados)
+                palabraOculta.textContent = estadoActual.join(" ");
+
+                // Tras cada intento, comprobamos si ya ha ganado
+                comprobarVictoria();
+            }
+
+            // ==========================================
+            // 5. CONDICIÓN DE VICTORIA
+            // ==========================================
+            function comprobarVictoria() {
+                // Juntamos el array actual y vemos si es idéntico a la palabra secreta original
+                if (estadoActual.join("") === palabraEnJuego) {
+                    alert("¡Enhorabuena has acertado!");
+
+                    // location.reload() fuerza al navegador a refrescar la página, reiniciando el juego
+                    location.reload();
+                }
+            }
+        </script>
+    </body>
+</html>

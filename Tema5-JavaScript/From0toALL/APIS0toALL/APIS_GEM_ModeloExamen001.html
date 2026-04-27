@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Recursos Humanos - Chuleta Examen</title>
+        <style>
+            #contenedorEmpleados {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .empleado {
+                border: 1px solid #ccc;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                background: #f9f9f9;
+                width: 200px;
+            }
+            .empleado img {
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Sistema de Contratación</h2>
+        <button id="btnContratar">Contratar nuevo empleado</button>
+
+        <div id="contenedorEmpleados"></div>
+
+        <script>
+            // ====================================================================
+            // BLOQUE 1: CAPTURA DE ELEMENTOS Y EVENTOS
+            // Siempre atrapamos primero los elementos con los que vamos a interactuar.
+            // ====================================================================
+            const btnContratar = document.querySelector("#btnContratar");
+            const contenedorEmpleados = document.querySelector(
+                "#contenedorEmpleados",
+            );
+
+            // Le decimos al botón que escuche el "click" y dispare la función principal
+            btnContratar.addEventListener("click", contratarEmpleado);
+
+            // ====================================================================
+            // BLOQUE 2: FUNCIÓN PRINCIPAL ASÍNCRONA (Petición a la API)
+            // ====================================================================
+            async function contratarEmpleado() {
+                // 1. Hacemos la petición a la URL (el camarero va a cocina)
+                const respuestaRandomUser = await fetch(
+                    "https://randomuser.me/api/",
+                );
+
+                // 2. Traducimos el paquete que nos llega a un objeto JavaScript (.json)
+                const randomUser = await respuestaRandomUser.json();
+
+                // (Opcional) Imprimimos para ver la forma del objeto en consola
+                console.log(randomUser);
+
+                // 3. Extraemos al empleado.
+                // TRUCO EXAMEN: Si la API devuelve 'resultS', casi siempre es un Array. Sacamos el [0].
+                const empleadoCompleto = randomUser.results[0];
+
+                // 4. Formateamos los datos.
+                // Aquí usamos una genialidad para juntar {title: "Mr", first: "Juan", last: "Pérez"}
+                // en un solo texto separado por espacios.
+                const presentacion = Object.values(empleadoCompleto.name).join(
+                    " ",
+                );
+                console.log(presentacion);
+
+                // ====================================================================
+                // BLOQUE 3: CREACIÓN DE NODOS (La fábrica de HTML en memoria)
+                // En lugar de usar innerHTML +=, fabricamos las etiquetas una a una.
+                // ====================================================================
+
+                // PASO A: Crear la caja principal de la tarjeta
+                const contenedorEmpleadoActual = document.createElement("div");
+                // Le asignamos la clase CSS para que se apliquen los estilos
+                contenedorEmpleadoActual.classList.add("empleado");
+
+                // PASO B: Crear la imagen
+                const fotoEmpleado = document.createElement("img");
+                // Le metemos la URL de la foto que viene de la API
+                fotoEmpleado.src = empleadoCompleto.picture.large;
+                // Metemos la imagen DENTRO de nuestra caja principal
+                contenedorEmpleadoActual.appendChild(fotoEmpleado);
+
+                // PASO C: Crear el título para el nombre
+                const nombreEmpleado = document.createElement("h3");
+                // Le inyectamos el texto que hemos formateado antes
+                nombreEmpleado.textContent = presentacion;
+                // Metemos el título DENTRO de nuestra caja principal (debajo de la foto)
+                contenedorEmpleadoActual.appendChild(nombreEmpleado);
+
+                // ====================================================================
+                // BLOQUE 4: PINTAR EN PANTALLA
+                // ====================================================================
+                // PASO FINAL: Cogemos nuestra caja principal (que ya tiene la foto y el nombre dentro)
+                // y la pegamos en el contenedor real del HTML que ve el usuario.
+                // Usar appendChild hace que se coloque AL FINAL sin borrar a los anteriores.
+                contenedorEmpleados.appendChild(contenedorEmpleadoActual);
+            }
+        </script>
+    </body>
+</html>

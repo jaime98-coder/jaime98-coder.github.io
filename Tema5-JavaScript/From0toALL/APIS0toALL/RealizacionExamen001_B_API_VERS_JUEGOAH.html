@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Examen: Ahorcado + API</title>
+    </head>
+    <body>
+        <h2>El Juego del Ahorcado (Versión API)</h2>
+        <p id="palabraOculta">Cargando palabra desde el servidor...</p>
+
+        <input type="text" id="entradaLetra" maxlength="1" />
+        <button id="btnComprobar">Comprobar letra</button>
+
+        <script>
+            let palabraOculta = document.querySelector("#palabraOculta");
+            let inputLetra = document.querySelector("#entradaLetra");
+            let btnComprobar = document.querySelector("#btnComprobar");
+
+            // Creamos estas variables vacías fuera para que todo el programa pueda verlas
+            let palabraEnJuego = "";
+            let arrayLetrasOriginales = [];
+            let estadoActual = [];
+
+            // ==========================================
+            // 1. CONEXIÓN CON LA API (Tu examen)
+            // ==========================================
+            async function arrancarJuego() {
+                // TU MISIÓN AQUÍ:
+                // 1. Haz el fetch a "https://random-word-api.herokuapp.com/word?lang=es"
+                let respuesta = await fetch(
+                    "https://random-words-api.kushcreates.com/api",
+                );
+
+                // 2. Traduce la respuesta a .json()
+                let datos = await respuesta.json();
+
+                // 3. Imprime la respuesta en consola para ver cómo viene el dato
+                console.log(datos);
+                // 4. Guarda la palabra real en la variable 'palabraEnJuego' (¡Cuidado con el array!)
+                palabraEnJuego = datos[0].word;
+
+                // --- Cuando consigas atrapar la palabra, esta parte funcionará sola ---
+                arrayLetrasOriginales = palabraEnJuego.split("");
+                estadoActual = Array(palabraEnJuego.length).fill("_");
+                palabraOculta.textContent = estadoActual.join(" ");
+            }
+
+            // Llamamos a la función para que se ejecute nada más abrir la web
+            arrancarJuego();
+
+            // ==========================================
+            // 2. LÓGICA DEL JUEGO (Esto ya lo tienes dominado)
+            // ==========================================
+            btnComprobar.addEventListener("click", comprobarLetra);
+
+            function comprobarLetra() {
+                let letra = inputLetra.value.toLowerCase();
+                inputLetra.value = "";
+                if (letra === "") return;
+
+                // BUCLE FOR EACH
+                // arrayLetrasOriginales.forEach((letraActual, i) => {
+                //     if (letraActual === letra) {
+                //         estadoActual[i] = letra;
+                //     }
+                // });
+
+                for (let i = 0; i < arrayLetrasOriginales.length; i++) {
+                    if (arrayLetrasOriginales[i] === letra) {
+                        estadoActual[i] = letra;
+                    }
+                }
+                palabraOculta.textContent = estadoActual.join(" ");
+                comprobarVictoria();
+            }
+
+            function comprobarVictoria() {
+                if (estadoActual.join("") === palabraEnJuego) {
+                    alert("¡Enhorabuena has acertado!");
+                    location.reload();
+                }
+            }
+        </script>
+    </body>
+</html>
