@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Consulta de usuarios</h1>
+    <input type="text" id="inputNombre">;
+    <input type="text" id="inputApellidos">;
+    <input type="text" id="inputEdad">;
+    <input type="text" id="inputCiudad">;
+    <button id="btnConsulta">Pulse y observa la consulta</button>
+    <br>
+    <br>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>Nombre</td>
+                <td>Apellidos</td>
+                <td>Edad</td>
+                <td>Ciudad</td>
+            </tr>
+        </thead>
+        <tbody id="idTBody">
+            <tr>
+                <td id="celdaNombre"></td>
+                <td id="celdaApellidos"></td>
+                <td id="celdaEdad"></td>
+                <td id="celdaCiudad"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <script>
+        let persona = { nombre: "Alberto", apellidos: "García", edad: 26, ciudad: "Granada" };
+        json_serializado = serializar(persona);	// Se empaqueta en formato JSON para enviar
+        console.log(json_serializado);		// Se muestra lo que enviaría por red
+        // Paquete envíado y recibido	
+        obj_recuperado = deserializar(json_serializado);	// Se recupera y desempaqueta
+        console.log(obj_recuperado);		// Muestra del objeto resultante
+
+        // ZONA BOTON
+        let btnConsulta = document.querySelector("#btnConsulta")
+        btnConsulta.addEventListener("click", insertarFila);
+
+        let idTBody = document.querySelector("#idTBody")
+        // ¡NUEVO! Capturamos las cajas de texto donde escribe el usuario
+        let inputNombre = document.querySelector("#inputNombre");
+        let inputApellidos = document.querySelector("#inputApellidos");
+        let inputEdad = document.querySelector("#inputEdad");
+        let inputCiudad = document.querySelector("#inputCiudad");
+
+        let tablaEdades = []
+
+
+
+
+
+        function serializar(obj) {
+            return JSON.stringify(obj)
+        }
+        function deserializar(objJson) {
+            return JSON.parse(objJson)
+        }
+
+        function insertarFila() {
+            document.querySelector("#celdaNombre").textContent = obj_recuperado.nombre;
+            document.querySelector("#celdaApellidos").textContent = obj_recuperado.apellidos;
+            document.querySelector("#celdaEdad").textContent = obj_recuperado.edad;
+            document.querySelector("#celdaCiudad").textContent = obj_recuperado.ciudad;
+
+            if (inputNombre.value === "") {
+                return;
+            }
+
+            let marcoFila = document.createElement("tr")
+
+            let textoNombre = document.createElement("td")
+            textoNombre.textContent = inputNombre.value
+            marcoFila.appendChild(textoNombre);
+
+            let textoApellido = document.createElement("td")
+            textoApellido.textContent = inputApellidos.value
+            marcoFila.appendChild(textoApellido);
+
+            let textoEdad = document.createElement("td")
+            textoEdad.textContent = inputEdad.value
+            insertarDatoEdad(textoEdad)
+            marcoFila.appendChild(textoEdad);
+
+            let textoCiudad = document.createElement("td")
+            textoCiudad.textContent = inputCiudad.value
+            marcoFila.appendChild(textoCiudad);
+
+            idTBody.appendChild(marcoFila);
+
+
+        }
+
+        function insertarDatoEdad(edad) {
+            tablaEdades.push;
+        }
+        function calcularSumaEdades() {
+            let textoSuma = document.createElement("p")
+            tablaEdades.forEach(edadConcreta, i => {
+                textoSuma += edadConcreta;
+            });
+            console.log(textoSuma);
+        }
+
+
+
+    </script>
+</body>
+
+</html>
