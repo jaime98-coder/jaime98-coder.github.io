@@ -61,13 +61,8 @@
 
     <script>
         let persona = { nombre: "Alberto", apellidos: "García", edad: 26, ciudad: "Granada", hobbies: ["deporte", "lectura", "cine"] };
-        
-        // // Simulación de envío y recepción de datos por red (JSON)
-        // json_serializado = serializar(persona);	// Se empaqueta en formato JSON para enviar
-        // console.log(json_serializado);		// Se muestra lo que enviaría por red
-        // // Paquete envíado y recibido	
-        // obj_recuperado = deserializar(json_serializado);	// Se recupera y desempaqueta
-        // console.log(obj_recuperado);		// Muestra del objeto resultante
+        let listaUsuarios = [];
+        listaUsuarios.push(persona);
 
         // ZONA BOTON
         let btnConsulta = document.querySelector("#btnConsulta")
@@ -116,19 +111,6 @@
         });
 
 
-        let tablaEdades = []; // Aquí guardaremos las edades para luego hacer cálculos estadísticos 
-
-
-
-
-
-
-        // function serializar(obj) {
-        //     return JSON.stringify(obj)
-        // }
-        // function deserializar(objJson) {
-        //     return JSON.parse(objJson)
-        // }
 
         function insertarFila() {
             // 1. RELLENAR LA FILA DE ALBERTO (La estática que ya tienes en el HTML)
@@ -174,8 +156,15 @@
             marcoFila.appendChild(textoHobbies);
 
             // 5. GUARDAR DATOS EN MEMORIA (El Array de Edades)
-            tablaEdades.push(parseInt(textoEdad.textContent));
-
+            let nuevoUsuario={
+                nombre: inputNombre.value,
+                apellidos: inputApellidos.value,
+                edad: inputEdad.value,
+                ciudad: inputCiudad.value,
+                hobbies: listaHobbies
+            }
+            // Lo metemos en nuestra lista principal
+    listaUsuarios.push(nuevoUsuario);
             // 6. ACTIVAR EL BORRADO DE FILA (Evento click)
             marcoFila.addEventListener("click", borrarFila);
 
