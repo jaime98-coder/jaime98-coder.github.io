@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>INFILTRACIÓN EN EL SERVIDOR DE LA SOCIEDAD SECRETA</h1>
+        <h2>Jaime</h2>
+
+        <button id="btnInstrucciones">Instrucciones</button>
+        <ol id="instrucciones"></ol>
+
+        <h2 id="msjSuccess"></h2>
+        <form id="formularioCompleto">
+            <input id="nomAlum" type="hidden" value="Jaime" />
+            <input id="numEjer" type="hidden" value="1" />
+            <label for="nombre" name="datos">Nombre </label>
+            <input id="nombre" type="text" />
+            <label for="apellidos" name="datos">Apellidos </label>
+            <input id="apellidos" type="text" />
+            <label for="password" name="datos">Password </label>
+            <input id="password" type="password" value="1q2w3e" />
+            <input id="llave" type="hidden" />
+            <button type="submit">Enviar</button>
+        </form>
+
+        <script>
+            // =========================================================================
+            // 🚨 SIMULADOR DE API PARA PROBAR EN CASA (Bórralo el día del examen) 🚨
+            // =========================================================================
+            const fetchOriginal = window.fetch;
+            window.fetch = async function (url, opciones) {
+                // Simulamos que internet tarda medio segundo en responder
+                await new Promise((resolve) => setTimeout(resolve, 500));
+
+                // 1. Simular petición GET (Instrucciones)
+                if (
+                    url === "http://192.168.100.150/api/secret" &&
+                    (!opciones || opciones.method === "GET")
+                ) {
+                    console.warn(
+                        "🌐 [API SIMULADA] Has pedido las instrucciones (GET)",
+                    );
+                    return {
+                        json: async () => ({
+                            instrucciones: [
+                                "Paso 1: Rellena el formulario con tus datos.",
+                                "Paso 2: Envía un POST a /api/get_key para obtener la llave.",
+                                "Paso 3: Con la llave en tu poder, envía un POST a /api/secret.",
+                            ],
+                        }),
+                    };
+                }
+
+                // 2. Simular petición POST (Pedir la llave)
+                if (
+                    url === "http://192.168.100.150/api/get_key" &&
+                    opciones &&
+                    opciones.method === "POST"
+                ) {
+                    console.warn(
+                        "🌐 [API SIMULADA] Has pedido la llave (POST)",
+                    );
+                    return {
+                        json: async () => ({
+                            token: "llave_secreta_ninja_777", // Esta es la llave que te devuelve
+                        }),
+                    };
+                }
+
+                // 3. Simular petición POST (Envío final con la llave)
+                if (
+                    url === "http://192.168.100.150/api/secret" &&
+                    opciones &&
+                    opciones.method === "POST"
+                ) {
+                    console.warn(
+                        "🌐 [API SIMULADA] Has enviado los datos finales (POST)",
+                    );
+                    let cuerpoRecibido = JSON.parse(opciones.body);
+
+                    // Comprobamos si tu código ha metido bien la llave en el objeto
+                    if (cuerpoRecibido.llave === "llave_secreta_ninja_777") {
+                        return {
+                            json: async () => ({
+                                message:
+                                    "¡Acceso Concedido, agente " +
+                                    cuerpoRecibido.nombre +
+                                    "!",
+                                status: "200 OK",
+                            }),
+                        };
+                    } else {
+                        return {
+                            json: async () => ({
+                                message:
+                                    "Acceso Denegado. Falta la llave o es incorrecta.",
+                                status: "403 Forbidden",
+                            }),
+                        };
+                    }
+                }
+
+                // Si llamas a otra URL, usa el fetch de verdad
+                return fetchOriginal(url, opciones);
+            };
+            // =========================================================================
+            // FIN DEL SIMULADOR. A PARTIR DE AQUÍ VA TU CÓDIGO NORMAL:
+            // const formulario = document.querySelector("#formularioCompleto");
+            // ...
+
+            const formulario = document.querySelector("#formularioCompleto");
+            const nomAlum = document.querySelector("#nomAlum");
+            const numEjer = document.querySelector("#numEjer");
+            const nombreInput = document.querySelector("#nombre");
+            const apellidosInput = document.querySelector("#apellidos");
+            const passwordInput = document.querySelector("#password");
+            const listaInstrucciones = document.querySelector("#instrucciones");
+            const btnInstrucciones =
+                document.querySelector("#btnInstrucciones");
+            const msjSuccess = document.querySelector("#msjSuccess");
+
+            btnInstrucciones.addEventListener("click", function () {
+                listaInstrucciones.innerHTML = "";
+                pedirInstrucciones();
+            });
+
+            async function pedirInstrucciones() {
+                const respuestaInstr = await fetch(
+                    "http://192.168.100.150/api/secret",
+                );
+
+                const respuestaTraducida = await respuestaInstr.json();
+
+                console.log(respuestaTraducida);
+
+                let arrayInstrucciones = respuestaTraducida.instrucciones;
+
+                arrayInstrucciones.forEach((textoInstruccion) => {
+                    let li = document.createElement("li");
+                    li.textContent = textoInstruccion; // Le metemos el texto al punto
+                    listaInstrucciones.appendChild(li); // Lo pegamos en la lista HTML
+                });
+            }
+
+            formulario.addEventListener("submit", async function (evento) {
+                evento.preventDefault();
+
+                let misDatos = {
+                    nom_alum: nomAlum.value,
+                    num_ejer: numEjer.value,
+                    nombre: nombreInput.value,
+                    apellidos: apellidosInput.value,
+                    password: passwordInput.value,
+                    llave: "",
+                };
+                try {
+                    let peticionLlave = await fetch(
+                        "http://192.168.100.150/api/get_key",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(misDatos),
+                        },
+                    );
+
+                    let respuestaLlave = await peticionLlave.json();
+                    // Guardamos la llave que nos ha dado el servidor en nuestro objeto
+                    misDatos.llave = respuestaLlave.token;
+
+                    let peticionFinal = await fetch(
+                        "http://192.168.100.150/api/secret",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(misDatos),
+                        },
+                    );
+                    let respuestaFinal = await peticionFinal.json();
+
+                    msjSuccess.textContent = respuestaFinal.message;
+                    msjSuccess.style.color = "green";
+                } catch (error) {
+                    console.error("Error en la infiltración: ", error);
+                    msjSuccess.textContent = "Error de conexión";
+                    msjSuccess.style.color = "red";
+                }
+            });
+        </script>
+    </body>
+</html>

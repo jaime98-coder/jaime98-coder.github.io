@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>INFILTRACIÓN EN EL SERVIDOR DE LA SOCIEDAD SECRETA</h1>
+        <h2>Jaime</h2>
+
+        <button id="btnInstrucciones">Instrucciones</button>
+        <ol id="instrucciones"></ol>
+
+        <h2 id="msjSuccess"></h2>
+        <form id="formularioCompleto">
+            <input id="nomAlum" type="hidden" value="Jaime" />
+            <input id="numEjer" type="hidden" value="1" />
+            <label for="nombre" name="datos">Nombre </label>
+            <input id="nombre" type="text" />
+            <label for="apellidos" name="datos">Apellidos </label>
+            <input id="apellidos" type="text" />
+            <label for="password" name="datos">Password </label>
+            <input id="password" type="password" value="1q2w3e" />
+            <input id="llave" type="hidden" />
+            <button type="submit">Enviar</button>
+        </form>
+
+        <script>
+            const formulario = document.querySelector("#formularioCompleto");
+            const nomAlum = document.querySelector("#nomAlum");
+            const numEjer = document.querySelector("#numEjer");
+            const nombreInput = document.querySelector("#nombre");
+            const apellidosInput = document.querySelector("#apellidos");
+            const passwordInput = document.querySelector("#password");
+            const listaInstrucciones = document.querySelector("#instrucciones");
+            const btnInstrucciones =
+                document.querySelector("#btnInstrucciones");
+            const msjSuccess = document.querySelector("#msjSuccess");
+
+            btnInstrucciones.addEventListener("click", function () {
+                listaInstrucciones.innerHTML = "";
+                pedirInstrucciones();
+            });
+
+            async function pedirInstrucciones() {
+                const respuestaInstr = await fetch(
+                    "http://192.168.100.150/api/secret",
+                );
+
+                const respuestaTraducida = await respuestaInstr.json();
+
+                console.log(respuestaTraducida);
+
+                let arrayInstrucciones = respuestaTraducida.instrucciones;
+
+                arrayInstrucciones.forEach((textoInstruccion) => {
+                    let li = document.createElement("li");
+                    li.textContent = textoInstruccion; // Le metemos el texto al punto
+                    listaInstrucciones.appendChild(li); // Lo pegamos en la lista HTML
+                });
+            }
+
+            formulario.addEventListener("submit", async function (evento) {
+                evento.preventDefault();
+
+                let misDatos = {
+                    nom_alum: nomAlum.value,
+                    num_ejer: numEjer.value,
+                    nombre: nombreInput.value,
+                    apellidos: apellidosInput.value,
+                    password: passwordInput.value,
+                    llave: "",
+                };
+                try {
+                    let peticionLlave = await fetch(
+                        "http://192.168.100.150/api/get_key",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(misDatos),
+                        },
+                    );
+
+                    let respuestaLlave = await peticionLlave.json();
+                    // Guardamos la llave que nos ha dado el servidor en nuestro objeto
+                    misDatos.llave = respuestaLlave.token;
+
+                    let peticionFinal = await fetch(
+                        "http://192.168.100.150/api/secret",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(misDatos),
+                        },
+                    );
+                    let respuestaFinal = await peticionFinal.json();
+
+                    msjSuccess.textContent = respuestaFinal.message;
+                    msjSuccess.style.color = "green";
+                } catch (error) {
+                    console.error("Error en la infiltración: ", error);
+                    msjSuccess.textContent = "Error de conexión";
+                    msjSuccess.style.color = "red";
+                }
+            });
+        </script>
+    </body>
+</html>
