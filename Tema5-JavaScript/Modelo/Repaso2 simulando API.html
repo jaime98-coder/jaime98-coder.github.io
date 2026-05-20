@@ -22,6 +22,31 @@
     <ol id="listaRanking"></ol>
     
     <script>
+        // =========================================================================
+        // 🚨 SIMULADOR DE API PARA PROBAR EN CASA (Bórralo el día del examen) 🚨
+        // =========================================================================
+        const fetchOriginal = window.fetch;
+        window.fetch = async function(url, opciones) {
+            await new Promise(r => setTimeout(r, 400)); 
+            
+            if (url.includes("/api/vasos")) {
+                return { ok: true, json: async () => ({ vasos: 3, mensaje: "Login correcto" }) };
+            }
+            if (url.includes("/api/jugar")) {
+                let cuerpo = JSON.parse(opciones.body);
+                // Si eliges el vaso 2, ganas.
+                if (cuerpo.eleccion === 2) {
+                    return { ok: true, json: async () => ({ mensaje: "¡Enhorabuena, has encontrado la bolita!", ranking: [cuerpo.usuario, "Maria", "Pedro"] }) };
+                } else {
+                    return { ok: true, json: async () => ({ mensaje: "¡Oh no! El vaso estaba vacío.", ranking: ["Maria", "Pedro"] }) };
+                }
+            }
+            return fetchOriginal(url, opciones);
+        };
+        // =========================================================================
+        // FIN DEL SIMULADOR. A PARTIR DE AQUÍ VA TU CÓDIGO PERFECTO:
+        // =========================================================================
+
         const formulario = document.querySelector("#formulario");
         const inputNom_alum = document.querySelector("#nom_alum");
         const inputNum_ejer = document.querySelector("#num_ejer");
@@ -33,7 +58,7 @@
 
         formulario.addEventListener("submit", function (evento) {
             evento.preventDefault();
-            // Comprobación por si hay campos vacíos
+            
             if (inputUsuario.value === "" || inputPassword.value === "") {
                 alert("Alerta hay campos vacíos");
                 return;
@@ -49,7 +74,6 @@
                 password: inputPassword.value
             };
 
-            // === AQUÍ AÑADIMOS TU PARACAÍDAS ===
             try {
                 let respuesta = await fetch("http://192.168.100.150/api/vasos", {
                     method: "POST",
@@ -60,13 +84,11 @@
                 let respuestaServidor = await respuesta.json();
                 console.log(respuestaServidor);
                 
-                // Compruebo si la respuesta del fetch fue recibida
                 if (respuesta.ok) {
                     listaRanking.innerHTML = "";
                     inputUsuario.disabled = true;
                     inputPassword.disabled = true;
                     
-                    // Limpieza de reinicio
                     let zonaAntigua = document.querySelector("#zonaJuego");
                     if (zonaAntigua != null) {
                         zonaAntigua.remove();
@@ -86,11 +108,12 @@
                         });
                         zonaJuego.appendChild(botonVaso);
                     }
+                    mensajeSistema.textContent = "¡A jugar! Elige un vaso.";
+                    mensajeSistema.style.color = "black";
                 } else {
                     mensajeSistema.textContent = "Error al logar. Revisa los datos";
                 }
             } catch (error) {
-                // Si el servidor del profesor se cae, avisamos elegantemente
                 console.error("Fallo de conexión en el login", error);
                 mensajeSistema.textContent = "Error de conexión con el servidor.";
                 mensajeSistema.style.color = "red";
