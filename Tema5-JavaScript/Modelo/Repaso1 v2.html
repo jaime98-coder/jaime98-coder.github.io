@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1: Infiltración en el Servidor de la Sociedad Secreta</title>
+</head>
+
+<body>
+    <h1>Ejercicio 1: Infiltración en el Servidor de la Sociedad Secreta</h1>
+    <h2>Jaime M.</h2>
+
+    <button id="btnInstrucciones">Instrucciones</button>
+    <h2 id="mensajeSistema"></h2>
+
+    <form id="formulario">
+        <input type="hidden" id="nom_alum" value="Jaime">
+        <input type="hidden" id="num_ejer" value="1">
+        <label for="nombre">Nombre de usuario</label>
+        <input type="text" id="nombre" placeholder="Introduce nombre">
+        <label for="apellidos">Apellidos de usuario</label>
+        <input type="text" id="apellidos" placeholder="Introduce apellidos">
+        <label for="password">Password de usuario</label>
+        <input type="password" id="password" placeholder="Introduce password" value="1q2w3e">
+        <input type="hidden" id="llave">
+        <button type="submit">Enviar formulario</button>
+    </form>
+
+    <ol id="instrucciones"></ol>
+
+    <script>
+        // ==========================================
+        // 1. CAPTURAS DEL DOM (HTML a JavaScript)
+        // ==========================================
+        const btnInstrucciones = document.querySelector("#btnInstrucciones");
+        const mensajeSistema = document.querySelector("#mensajeSistema");
+        const formulario = document.querySelector("#formulario");
+        const nom_alum = document.querySelector("#nom_alum");
+        const num_ejer = document.querySelector("#num_ejer");
+        const nombre = document.querySelector("#nombre");
+        const apellidos = document.querySelector("#apellidos");
+        const password = document.querySelector("#password");
+        const llave = document.querySelector("#llave");
+        const instrucciones = document.querySelector("#instrucciones");
+
+        // ==========================================
+        // 2. EVENTOS ("Las orejas")
+        // ==========================================
+
+        // Oreja para clic simple (NO necesita preventDefault porque es un botón suelto)
+        btnInstrucciones.addEventListener("click", async function () {
+            cargarInstrucciones();
+        })
+
+        // Oreja para enviar formulario (SÍ necesita preventDefault, le pasamos 'evento')
+        formulario.addEventListener("submit", async function (evento) {
+            enviarDatosFormulario(evento)
+        })
+
+        // ==========================================
+        // 3. FASE 1: GET (Pedir y pintar una lista)
+        // ==========================================
+        async function cargarInstrucciones() {
+            try { // PARACAÍDAS ON
+
+                // Pedimos los datos al servidor (GET por defecto)
+                let respuesta = await fetch("http://192.168.100.150/api/secret");
+
+                // Traducimos el JSON a un objeto JavaScript
+                let datosServidor = await respuesta.json();
+                console.log(datosServidor);
+
+                // Limpiamos la pantalla por si había textos de antes
+                instrucciones.innerHTML = "";
+
+                // Extraemos el array que viene guardado dentro del objeto
+                let listaDeTextos = datosServidor.instrucciones;
+
+                // BUCLE: Creamos las etiquetas <li> una a una
+                for (let i = 0; i < listaDeTextos.length; i++) {
+                    let instruccion = document.createElement("li");
+                    instruccion.textContent = listaDeTextos[i]; // Le metemos el texto
+                    instrucciones.appendChild(instruccion);     // Lo pegamos en la pantalla
+                }
+
+            } catch (error) {
+                console.error("ERROR: No se ha podido conectar al servidor", error)
+            }
+        }
+
+        // ==========================================
+        // 4. FASE 2: POST CON DOBLE VIAJE (El Jefe Final)
+        // ==========================================
+        async function enviarDatosFormulario(evento) {
+
+            // Frena la recarga automática de la página
+            evento.preventDefault();
+
+            try { // PARACAÍDAS ON
+
+                // ------------------------------------------
+                // VIAJE 1: PEDIR LA LLAVE
+                // ------------------------------------------
+                // Empaquetamos los values de los inputs en un objeto
+                let misDatos = {
+                    nom_alum: nom_alum.value,
+                    num_ejer: num_ejer.value,
+                    nombre: nombre.value,
+                    apellidos: apellidos.value,
+                    password: password.value
+                };
+
+                // Enviamos el paquete por POST
+                let respuesta = await fetch("http://192.168.100.150/api/get_key", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(misDatos)
+                });
+
+                let datosDevueltos = await respuesta.json();
+                console.log("Respuesta primer viaje: " + datosDevueltos);
+
+                // Si el servidor nos dice que OK y nos da la llave, seguimos
+                if (respuesta.ok) {
+
+                    // Extraemos la llave mágica de la respuesta
+                    let token = datosDevueltos.token;
+
+                    // ------------------------------------------
+                    // VIAJE 2: ENTRAR CON LA LLAVE
+                    // ------------------------------------------
+                    // Hacemos el paquete definitivo EXACTAMENTE IGUAL pero añadiendo la llave
+                    let misDatosConToken = {
+                        nom_alum: nom_alum.value,
+                        num_ejer: num_ejer.value,
+                        nombre: nombre.value,
+                        apellidos: apellidos.value,
+                        password: password.value,
+                        llave: token // <--- El pase VIP
+                    };
+
+                    // Enviamos el paquete definitivo por POST a la ruta final
+                    let respuesta2 = await fetch("http://192.168.100.150/api/secret", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(misDatosConToken)
+                    });
+
+                    let datosDevueltos2 = await respuesta2.json();
+                    console.log("Respuesta segundo viaje: " + datosDevueltos2);
+
+                    // ------------------------------------------
+                    // RESULTADO FINAL: Pintar en pantalla
+                    // ------------------------------------------
+                    if (respuesta2.ok) {
+                        mensajeSistema.textContent = "Infiltración completada con éxito"
+                        mensajeSistema.style.color = "green"
+                    } else {
+                        mensajeSistema.textContent = "Acceso denegado. Infiltración errónea..."
+                        mensajeSistema.style.color = "red"
+                    }
+                }
+            } catch (error) {
+                // Si CUALQUIER cosa falla en los dos viajes, caemos aquí
+                console.error("Fallo crítico de conexión:", error);
+                mensajeSistema.textContent = "El servidor de la Sociedad Secreta está caído.";
+                mensajeSistema.style.color = "red";
+            }
+        }
+    </script>
+</body>
+
+</html>

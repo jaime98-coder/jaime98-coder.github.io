@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Práctico: Panel de Recepción de Demos</title>
+    <style>
+        /* Un poco de CSS rápido para que se vea como un panel real */
+        #bandejaDemos div {
+            border: 1px solid #402e54;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #191919;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button { cursor: pointer; padding: 5px 10px; }
+    </style>
+</head>
+
+<body>
+    <h1>Universo P4R - Recepción</h1>
+    <button id="btnCargar">Cargar demos</button>
+    <h3 id="mensajeSistema"></h3>
+    <div id="bandejaDemos"></div>
+    
+    <script>
+        // =========================================================================
+        // 🚨 SIMULADOR DE API PARA PROBAR EN CASA (Bórralo el día del examen) 🚨
+        // =========================================================================
+        const fetchOriginal = window.fetch;
+        window.fetch = async function(url, opciones) {
+            await new Promise(r => setTimeout(r, 300)); 
+            
+            // Simular Fase 1: GET Demos
+            if (url.includes("/api/demos")) {
+                return { 
+                    json: async () => ([
+                        { id_pista: 101, artista: "Neuro", estilo: "Drum & Bass" },
+                        { id_pista: 102, artista: "Zeta", estilo: "Breakbeat" },
+                        { id_pista: 103, artista: "Kryp", estilo: "Electro" }
+                    ]) 
+                };
+            }
+            // Simular Fase 2: POST Aprobar
+            if (url.includes("/api/aprobar")) {
+                let cuerpo = JSON.parse(opciones.body);
+                // Si el manager es correcto y envía un ID, lo aprobamos
+                if (cuerpo.manager === "VERTX" && cuerpo.id_track) {
+                    return { ok: true, json: async () => ({ mensaje: "Pista registrada en BD" }) };
+                } else {
+                    return { ok: false, json: async () => ({ mensaje: "Error de validación" }) };
+                }
+            }
+            return fetchOriginal(url, opciones);
+        };
+        // =========================================================================
+        // FIN DEL SIMULADOR. A PARTIR DE AQUÍ VA TU CÓDIGO PERFECTO:
+        // =========================================================================
+
+        const btnCargar = document.querySelector("#btnCargar");
+        const bandejaDemos = document.querySelector("#bandejaDemos");
+        const mensajeSistema = document.querySelector("#mensajeSistema");
+        
+        btnCargar.addEventListener("click", function () {
+            cargarDatos();
+        });
+
+        async function cargarDatos() {
+            try {
+                let respuesta = await fetch("http://p4r.local/api/demos");
+                let datos = await respuesta.json();
+                console.log(datos);
+                
+                bandejaDemos.innerHTML = "";
+                
+                for (let i = 0; i < datos.length; i++) {
+                    let cajaDemo = document.createElement("div");
+                    let textoDemo = document.createElement("p");
+                    textoDemo.textContent = "Nombre Artista: " + datos[i].artista + " | Estilo: " + datos[i].estilo;
+                    
+                    let btnAprobar = document.createElement("button");
+                    btnAprobar.textContent = "Aprobar";
+                    
+                    let idDeEstaPista = datos[i].id_pista;
+                    
+                    btnAprobar.addEventListener("click", function () {
+                        aprobarLanzamiento(idDeEstaPista, cajaDemo);
+                    });
+
+                    cajaDemo.appendChild(textoDemo);
+                    cajaDemo.appendChild(btnAprobar);
+                    bandejaDemos.appendChild(cajaDemo);
+                }
+
+            } catch (error) {
+                console.error("Error al conectar la API", error);
+            }
+        }
+
+        async function aprobarLanzamiento(idPistaQueHeTocado, cajaParaBorrar) {
+            let datosLanzamiento = {
+                manager: "VERTX",
+                id_track: idPistaQueHeTocado
+            };
+            
+            try {
+                let respuesta = await fetch("http://p4r.local/api/aprobar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosLanzamiento)
+                });
+                
+                let datosDevueltos = await respuesta.json();
+                console.log(datosDevueltos);
+
+                if (respuesta.ok) {
+                    cajaParaBorrar.remove();
+                    mensajeSistema.textContent = "¡Pista aprobada para el sello!";
+                    mensajeSistema.style.color = "#b7d883";
+                } else {
+                    mensajeSistema.style.color = "red";
+                    mensajeSistema.textContent = "ERROR: Pista no aprobada";
+                }
+            } catch (error) {
+                console.error("Fallo al aprobar:", error);
+                mensajeSistema.textContent = "Fallo de conexión al servidor";
+                mensajeSistema.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
