@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ejercicio 3: RETO</title>
+        <style>
+            body {
+                padding: 1px;
+            }
+            #cajaHobbies {
+                border: 1px, solid, black;
+                margin: 2px;
+                padding: 20px;
+                width: 800px;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="formulario">
+            <label for="nombre">Nombre:</label>
+            <input type="text" placeholder="Nombre" id="inputNombre" />
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" placeholder="Apellidos" id="inputApellidos" />
+            <label for="edad">Edad:</label>
+            <input type="text" placeholder="Edad" id="inputEdad" />
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" placeholder="Ciudad" id="inputCiudad" />
+            <br /><br />
+            <div id="cajaHobbies">
+                <div>Hobbies:</div>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbDeporte"
+                    value="deporte"
+                />
+                <label for="hobbies">Deporte</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbLectura"
+                    value="lectura"
+                />
+                <label for="hobbies">Lectura</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbMusica"
+                    value="musica"
+                />
+                <label for="hobbies">Musica</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbJuegos"
+                    value="juegos"
+                />
+                <label for="hobbies">Juegos</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbCine"
+                    value="cine"
+                />
+                <label for="hobbies">Cine</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbTeatro"
+                    value="teatro"
+                />
+                <label for="hobbies">Teatro</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbColeccionismo"
+                    value="coleccionismo"
+                />
+                <label for="hobbies">Coleccionismo</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbBricolaje"
+                    value="bricolaje"
+                />
+                <label for="hobbies">Bricolaje</label>
+                <input
+                    type="checkbox"
+                    class="checkBody"
+                    id="cbCosplay"
+                    value="cosplay"
+                />
+                <label for="hobbies">Cosplay</label>
+            </div>
+            <br />
+            <button type="submit" id="btnInsertar">Pulsa para insertar</button>
+            <br />
+            <br />
+            <table border="3px">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Edad</th>
+                        <th>Ciudad</th>
+                        <th>Hobbies</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyTabla"></tbody>
+            </table>
+        </form>
+
+        <script>
+            const inputNombre = document.querySelector("#inputNombre");
+            const inputApellidos = document.querySelector("#inputApellidos");
+            const inputEdad = document.querySelector("#inputEdad");
+            const inputCiudad = document.querySelector("#inputCiudad");
+            const cajaHobbies = document.querySelector("#cajaHobbies");
+            const btnInsertar = document.querySelector("#btnInsertar");
+            const bodyTabla = document.querySelector("#bodyTabla");
+
+            const todosLosHobbies = document.querySelectorAll(".checkBody");
+
+            todosLosHobbies.forEach(function (checkBox) {
+                checkBox.addEventListener("change", function () {
+                    const checkBoxMarcados =
+                        document.querySelectorAll(".checkBody:checked");
+                    if (checkBoxMarcados.length >= 3) {
+                        todosLosHobbies.forEach(function (caja) {
+                            if (!caja.checked) {
+                                caja.disabled = true;
+                            }
+                        });
+                    } else {
+                        todosLosHobbies.forEach(function (caja) {
+                            if (!caja.checked) {
+                                caja.disabled = false;
+                            }
+                        });
+                    }
+                });
+            });
+
+            formulario.addEventListener("submit", function (evento) {
+                evento.preventDefault();
+                procesarDatos(evento);
+                // Para borrar textos y desmarcar checkboxes
+                formulario.reset();
+                // 3. Como reset() no quita los bloqueos, se los quitamos nosotros
+                todosLosHobbies.forEach(function (caja) {
+                    caja.disabled = false;
+                });
+            });
+
+            function procesarDatos() {
+                let nombre = inputNombre.value;
+                let apellido = inputApellidos.value;
+                let edad = inputEdad.value;
+                let ciudad = inputCiudad.value;
+                let listaHobbies = [];
+                let tr = document.createElement("tr");
+
+                let tdNombre = document.createElement("td");
+                tdNombre.textContent = nombre;
+                tr.appendChild(tdNombre);
+                let tdApellidos = document.createElement("td");
+                tr.appendChild(tdApellidos);
+                tdApellidos.textContent = apellido;
+                let tdEdad = document.createElement("td");
+                tr.appendChild(tdEdad);
+                tdEdad.textContent = edad;
+                let tdCiudad = document.createElement("td");
+                tr.appendChild(tdCiudad);
+                tdCiudad.textContent = ciudad;
+                let tdHobbies = document.createElement("td");
+                const marcados =
+                    document.querySelectorAll(".checkBody:checked");
+                marcados.forEach(function (caja) {
+                    listaHobbies.push(caja.value);
+                });
+
+                tdHobbies.innerHTML = listaHobbies.join("<br>");
+                tr.appendChild(tdHobbies);
+
+                bodyTabla.appendChild(tr);
+            }
+        </script>
+    </body>
+</html>
