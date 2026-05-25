@@ -1,102 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Ejercicio 3: RETO</title>
+        <title>Ejercicio 3: RETO (Versión CRUD con Splice)</title>
         <style>
             body {
-                padding: 1px;
+                padding: 20px;
+                font-family: sans-serif;
             }
             #cajaHobbies {
-                border: 1px, solid, black;
-                margin: 2px;
+                border: 1px solid black;
+                margin: 10px 0;
                 padding: 20px;
                 width: 800px;
+            }
+            table {
+                border-collapse: collapse;
+                width: 800px;
+                margin-top: 20px;
+            }
+            th,
+            td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+                vertical-align: top;
+            }
+            tbody tr {
+                cursor: pointer;
+            }
+            tbody tr:hover {
+                background-color: #ffe6e6;
             }
         </style>
     </head>
     <body>
         <form id="formulario">
             <label for="nombre">Nombre:</label>
-            <input type="text" placeholder="Nombre" id="inputNombre" />
+            <input type="text" placeholder="Nombre" id="inputNombre" required />
             <label for="apellidos">Apellidos:</label>
-            <input type="text" placeholder="Apellidos" id="inputApellidos" />
+            <input
+                type="text"
+                placeholder="Apellidos"
+                id="inputApellidos"
+                required
+            />
             <label for="edad">Edad:</label>
-            <input type="text" placeholder="Edad" id="inputEdad" />
+            <input type="number" placeholder="Edad" id="inputEdad" required />
             <label for="ciudad">Ciudad:</label>
-            <input type="text" placeholder="Ciudad" id="inputCiudad" />
+            <input type="text" placeholder="Ciudad" id="inputCiudad" required />
             <br /><br />
+
             <div id="cajaHobbies">
-                <div>Hobbies:</div>
+                <div>Hobbies (Máx 3):</div>
+                <input type="checkbox" class="checkBody" value="Deporte" />
+                <label>Deporte</label>
+                <input type="checkbox" class="checkBody" value="Lectura" />
+                <label>Lectura</label>
+                <input type="checkbox" class="checkBody" value="Música" />
+                <label>Música</label>
+                <input type="checkbox" class="checkBody" value="Juegos" />
+                <label>Juegos</label>
+                <input type="checkbox" class="checkBody" value="Cine" />
+                <label>Cine</label>
+                <input type="checkbox" class="checkBody" value="Teatro" />
+                <label>Teatro</label>
                 <input
                     type="checkbox"
                     class="checkBody"
-                    id="cbDeporte"
-                    value="deporte"
+                    value="Coleccionismo"
                 />
-                <label for="hobbies">Deporte</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbLectura"
-                    value="lectura"
-                />
-                <label for="hobbies">Lectura</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbMusica"
-                    value="musica"
-                />
-                <label for="hobbies">Musica</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbJuegos"
-                    value="juegos"
-                />
-                <label for="hobbies">Juegos</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbCine"
-                    value="cine"
-                />
-                <label for="hobbies">Cine</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbTeatro"
-                    value="teatro"
-                />
-                <label for="hobbies">Teatro</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbColeccionismo"
-                    value="coleccionismo"
-                />
-                <label for="hobbies">Coleccionismo</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbBricolaje"
-                    value="bricolaje"
-                />
-                <label for="hobbies">Bricolaje</label>
-                <input
-                    type="checkbox"
-                    class="checkBody"
-                    id="cbCosplay"
-                    value="cosplay"
-                />
-                <label for="hobbies">Cosplay</label>
+                <label>Coleccionismo</label>
+                <input type="checkbox" class="checkBody" value="Bricolaje" />
+                <label>Bricolaje</label>
+                <input type="checkbox" class="checkBody" value="Cosplay" />
+                <label>Cosplay</label>
             </div>
             <br />
             <button type="submit" id="btnInsertar">Pulsa para insertar</button>
-            <br />
-            <br />
+            <br /><br />
+
             <table border="3px">
                 <thead>
                     <tr>
@@ -112,78 +96,112 @@
         </form>
 
         <script>
+            // 1. CAPTURAS DEL DOM
             const inputNombre = document.querySelector("#inputNombre");
             const inputApellidos = document.querySelector("#inputApellidos");
             const inputEdad = document.querySelector("#inputEdad");
             const inputCiudad = document.querySelector("#inputCiudad");
-            const cajaHobbies = document.querySelector("#cajaHobbies");
-            const btnInsertar = document.querySelector("#btnInsertar");
             const bodyTabla = document.querySelector("#bodyTabla");
-
+            const formulario = document.querySelector("#formulario");
             const todosLosHobbies = document.querySelectorAll(".checkBody");
 
+            // 2. NUESTRA "BASE DE DATOS"
+            let listaUsuarios = [];
+
+            // 3. LÓGICA DEL RETO (Límite 3 Hobbies)
             todosLosHobbies.forEach(function (checkBox) {
                 checkBox.addEventListener("change", function () {
                     const checkBoxMarcados =
                         document.querySelectorAll(".checkBody:checked");
                     if (checkBoxMarcados.length >= 3) {
                         todosLosHobbies.forEach(function (caja) {
-                            if (!caja.checked) {
-                                caja.disabled = true;
-                            }
+                            if (!caja.checked) caja.disabled = true;
                         });
                     } else {
                         todosLosHobbies.forEach(function (caja) {
-                            if (!caja.checked) {
-                                caja.disabled = false;
-                            }
+                            caja.disabled = false;
                         });
                     }
                 });
             });
 
+            // 4. EL ENVÍO DEL FORMULARIO
             formulario.addEventListener("submit", function (evento) {
                 evento.preventDefault();
-                procesarDatos(evento);
-                // Para borrar textos y desmarcar checkboxes
+                procesarDatos();
                 formulario.reset();
-                // 3. Como reset() no quita los bloqueos, se los quitamos nosotros
                 todosLosHobbies.forEach(function (caja) {
                     caja.disabled = false;
                 });
             });
 
+            // 5. GUARDAR DATOS EN EL ARRAY
             function procesarDatos() {
-                let nombre = inputNombre.value;
-                let apellido = inputApellidos.value;
-                let edad = inputEdad.value;
-                let ciudad = inputCiudad.value;
                 let listaHobbies = [];
-                let tr = document.createElement("tr");
-
-                let tdNombre = document.createElement("td");
-                tdNombre.textContent = nombre;
-                tr.appendChild(tdNombre);
-                let tdApellidos = document.createElement("td");
-                tr.appendChild(tdApellidos);
-                tdApellidos.textContent = apellido;
-                let tdEdad = document.createElement("td");
-                tr.appendChild(tdEdad);
-                tdEdad.textContent = edad;
-                let tdCiudad = document.createElement("td");
-                tr.appendChild(tdCiudad);
-                tdCiudad.textContent = ciudad;
-                let tdHobbies = document.createElement("td");
                 const marcados =
                     document.querySelectorAll(".checkBody:checked");
+
                 marcados.forEach(function (caja) {
                     listaHobbies.push(caja.value);
                 });
 
-                tdHobbies.innerHTML = listaHobbies.join("<br>");
-                tr.appendChild(tdHobbies);
+                // Objeto limpio, tal y como te lo piden en clase
+                let nuevoUsuario = {
+                    nombre: inputNombre.value,
+                    apellido: inputApellidos.value,
+                    edad: inputEdad.value,
+                    ciudad: inputCiudad.value,
+                    hobbies: listaHobbies,
+                };
 
-                bodyTabla.appendChild(tr);
+                listaUsuarios.push(nuevoUsuario);
+                pintarTabla();
+            }
+
+            // 6. FABRICAR LA TABLA
+            function pintarTabla() {
+                bodyTabla.innerHTML = "";
+
+                // ALERTA: Le pasamos 'indice' al bucle para saber la posición 0, 1, 2...
+                listaUsuarios.forEach(function (usuario, indice) {
+                    let tr = document.createElement("tr");
+
+                    let tdNombre = document.createElement("td");
+                    tdNombre.textContent = usuario.nombre;
+                    tr.appendChild(tdNombre);
+
+                    let tdApellidos = document.createElement("td");
+                    tdApellidos.textContent = usuario.apellido;
+                    tr.appendChild(tdApellidos);
+
+                    let tdEdad = document.createElement("td");
+                    tdEdad.textContent = usuario.edad;
+                    tr.appendChild(tdEdad);
+
+                    let tdCiudad = document.createElement("td");
+                    tdCiudad.textContent = usuario.ciudad;
+                    tr.appendChild(tdCiudad);
+
+                    let tdHobbies = document.createElement("td");
+                    tdHobbies.innerHTML = usuario.hobbies.join("<br>");
+                    tr.appendChild(tdHobbies);
+
+                    // Al hacer doble clic, llamamos a borrar pasándole el 'indice' (su posición)
+                    tr.addEventListener("dblclick", function () {
+                        borrarUsuario(indice);
+                    });
+
+                    bodyTabla.appendChild(tr);
+                });
+            }
+
+            // 7. BORRAR DEL ARRAY Y REPINTAR
+            function borrarUsuario(indiceParaBorrar) {
+                // El método .splice se sitúa en la posición indicada y borra 1 elemento
+                listaUsuarios.splice(indiceParaBorrar, 1);
+
+                // Repintamos la tabla (ahora tendrá una fila menos)
+                pintarTabla();
             }
         </script>
     </body>

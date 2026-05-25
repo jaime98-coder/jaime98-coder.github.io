@@ -1,262 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <body>
+        <h1>Consulta de usuarios</h1>
+        <input type="text" id="inputNombre" />;
+        <input type="text" id="inputApellidos" />;
+        <input type="text" id="inputEdad" />;
+        <input type="text" id="inputCiudad" />;
+        <button id="btnConsulta">Pulse y observa la consulta</button>
+        <br />
+        <div id="zonaHobbies">
+            <label for="hobbyDeporte">Deporte</label>
+            <input
+                type="checkbox"
+                id="hobbyDeporte"
+                name="hobbies[]"
+                value="deporte"
+            />
+            <label for="hobbyLectura">Lectura</label>
+            <input
+                type="checkbox"
+                id="hobbyLectura"
+                name="hobbies[]"
+                value="lectura"
+            />
+            <label for="hobbyMusica">Música</label>
+            <input
+                type="checkbox"
+                id="hobbyMusica"
+                name="hobbies[]"
+                value="musica"
+            />
+            <label for="hobbyJuegos">Juegos</label>
+            <input
+                type="checkbox"
+                id="hobbyJuegos"
+                name="hobbies[]"
+                value="juegos"
+            />
+            <label for="hobbyCine">Cine</label>
+            <input
+                type="checkbox"
+                id="hobbyCine"
+                name="hobbies[]"
+                value="cine"
+            />
+            <label for="hobbyTeatro">Teatro</label>
+            <input
+                type="checkbox"
+                id="hobbyTeatro"
+                name="hobbies[]"
+                value="teatro"
+            />
+            <label for="hobbyColeccionismo">Coleccionismo</label>
+            <input
+                type="checkbox"
+                id="hobbyColeccionismo"
+                name="hobbies[]"
+                value="coleccionismo"
+            />
+            <label for="hobbyBricolaje">Bricolaje</label>
+            <input
+                type="checkbox"
+                id="hobbyBricolaje"
+                name="hobbies[]"
+                value="bricolaje"
+            />
+            <label for="hobbyCosplay">Cosplay</label>
+            <input
+                type="checkbox"
+                id="hobbyCosplay"
+                name="hobbies[]"
+                value="cosplay"
+            />
+        </div>
+        <br />
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Apellidos</td>
+                    <td>Edad</td>
+                    <td>Ciudad</td>
+                    <td>Hobbies</td>
+                </tr>
+            </thead>
+            <tbody id="idTBody">
+                <tr>
+                    <td id="celdaNombre"></td>
+                    <td id="celdaApellidos"></td>
+                    <td id="celdaEdad"></td>
+                    <td id="celdaCiudad"></td>
+                    <td id="celdaHobbies"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="zonaEstadisticas"></div>
 
-<body>
-    <h1>Consulta de usuarios</h1>
-    <input type="text" id="inputNombre">;
-    <input type="text" id="inputApellidos">;
-    <input type="text" id="inputEdad">;
-    <input type="text" id="inputCiudad">;
-    <button id="btnConsulta">Pulse y observa la consulta</button>
-    <br>
-    <div id="zonaHobbies">
-        <label for="hobbyDeporte">Deporte</label>
-        <input type="checkbox" id="hobbyDeporte" name="hobbies[]" value="deporte">
-        <label for="hobbyLectura">Lectura</label>
-        <input type="checkbox" id="hobbyLectura" name="hobbies[]" value="lectura">
-        <label for="hobbyMusica">Música</label>
-        <input type="checkbox" id="hobbyMusica" name="hobbies[]" value="musica">
-        <label for="hobbyJuegos">Juegos</label>
-        <input type="checkbox" id="hobbyJuegos" name="hobbies[]" value="juegos">
-        <label for="hobbyCine">Cine</label>
-        <input type="checkbox" id="hobbyCine" name="hobbies[]" value="cine">
-        <label for="hobbyTeatro">Teatro</label>
-        <input type="checkbox" id="hobbyTeatro" name="hobbies[]" value="teatro">
-        <label for="hobbyColeccionismo">Coleccionismo</label>
-        <input type="checkbox" id="hobbyColeccionismo" name="hobbies[]" value="coleccionismo">
-        <label for="hobbyBricolaje">Bricolaje</label>
-        <input type="checkbox" id="hobbyBricolaje" name="hobbies[]" value="bricolaje">
-        <label for="hobbyCosplay">Cosplay</label>
-        <input type="checkbox" id="hobbyCosplay" name="hobbies[]" value="cosplay">
-    </div>
-    <br>
-    <table border="1">
-        <thead>
-            <tr>
-                <td>Nombre</td>
-                <td>Apellidos</td>
-                <td>Edad</td>
-                <td>Ciudad</td>
-                <td>Hobbies</td>
-            </tr>
-        </thead>
-        <tbody id="idTBody">
-            <tr>
-                <td id="celdaNombre"></td>
-                <td id="celdaApellidos"></td>
-                <td id="celdaEdad"></td>
-                <td id="celdaCiudad"></td>
-                <td id="celdaHobbies"></td>
-            </tr>
-        </tbody>
-    </table>
-    <div id="zonaEstadisticas"></div>
+        <script>
+            let persona = {
+                nombre: "Alberto",
+                apellidos: "García",
+                edad: 26,
+                ciudad: "Granada",
+                hobbies: ["deporte", "lectura", "cine"],
+            };
 
+            // // Simulación de envío y recepción de datos por red (JSON)
+            // json_serializado = serializar(persona);	// Se empaqueta en formato JSON para enviar
+            // console.log(json_serializado);		// Se muestra lo que enviaría por red
+            // // Paquete envíado y recibido
+            // obj_recuperado = deserializar(json_serializado);	// Se recupera y desempaqueta
+            // console.log(obj_recuperado);		// Muestra del objeto resultante
 
-    <script>
-        let persona = { nombre: "Alberto", apellidos: "García", edad: 26, ciudad: "Granada", hobbies: ["deporte", "lectura", "cine"] };
-        
-        // // Simulación de envío y recepción de datos por red (JSON)
-        // json_serializado = serializar(persona);	// Se empaqueta en formato JSON para enviar
-        // console.log(json_serializado);		// Se muestra lo que enviaría por red
-        // // Paquete envíado y recibido	
-        // obj_recuperado = deserializar(json_serializado);	// Se recupera y desempaqueta
-        // console.log(obj_recuperado);		// Muestra del objeto resultante
+            // ZONA BOTON
+            let btnConsulta = document.querySelector("#btnConsulta");
+            btnConsulta.addEventListener("click", function () {
+                // Comprobamos que el usuario ha rellenado todos los campos
+                if (
+                    inputNombre.value === "" ||
+                    inputApellidos.value === "" ||
+                    inputEdad.value === "" ||
+                    inputCiudad.value === ""
+                ) {
+                    alert("Rellene todos los campos");
+                    return;
+                }
+                insertarFila();
+                console.log(tablaEdades);
+                calcularDatosEdades();
+            });
+            let idTBody = document.querySelector("#idTBody");
+            // ¡NUEVO! Capturamos las cajas de texto donde escribe el usuario
+            let inputNombre = document.querySelector("#inputNombre");
+            let inputApellidos = document.querySelector("#inputApellidos");
+            let inputEdad = document.querySelector("#inputEdad");
+            let inputCiudad = document.querySelector("#inputCiudad");
 
-        // ZONA BOTON
-        let btnConsulta = document.querySelector("#btnConsulta")
-        btnConsulta.addEventListener("click", function () {
-            // Comprobamos que el usuario ha rellenado todos los campos
-            if (inputNombre.value === "" || inputApellidos.value === "" || inputEdad.value === "" || inputCiudad.value === "") {
-                alert("Rellene todos los campos");
-                return;
+            // Capturamos TODOS los checkboxes (marcados o no)
+            let todosLosCheckboxes = document.querySelectorAll(
+                "input[name='hobbies[]']",
+            );
+
+            // Le ponemos una "oreja" a cada caja para vigilar cuando cambian
+            todosLosCheckboxes.forEach(function (checkbox) {
+                checkbox.addEventListener("change", function () {
+                    // 1. Contamos cuántos hay marcados en este preciso instante
+                    let cantidadMarcados = document.querySelectorAll(
+                        "input[name='hobbies[]']:checked",
+                    ).length;
+
+                    // 2. Si llegamos a 3, bloqueamos los demás
+                    if (cantidadMarcados >= 3) {
+                        todosLosCheckboxes.forEach(function (caja) {
+                            if (!caja.checked) {
+                                caja.disabled = true; // Bloquea la cajita
+                            }
+                        });
+                    }
+                    // 3. Si hay menos de 3, nos aseguramos de que todos estén desbloqueados
+                    else {
+                        todosLosCheckboxes.forEach(function (caja) {
+                            caja.disabled = false; // Desbloquea la cajita
+                        });
+                    }
+                });
+            });
+
+            let tablaEdades = []; // Aquí guardaremos las edades para luego hacer cálculos estadísticos
+
+            // function serializar(obj) {
+            //     return JSON.stringify(obj)
+            // }
+            // function deserializar(objJson) {
+            //     return JSON.parse(objJson)
+            // }
+
+            function insertarFila() {
+                // 1. RELLENAR LA FILA DE ALBERTO (La estática que ya tienes en el HTML)
+                document.querySelector("#celdaNombre").textContent =
+                    obj_recuperado.nombre;
+                document.querySelector("#celdaApellidos").textContent =
+                    obj_recuperado.apellidos;
+                document.querySelector("#celdaEdad").textContent =
+                    obj_recuperado.edad;
+                document.querySelector("#celdaCiudad").textContent =
+                    obj_recuperado.ciudad;
+                // Ojo: Acuérdate de que le añadimos 'hobbies: ["Música", "Cine"]' al objeto de Alberto arriba
+                document.querySelector("#celdaHobbies").textContent =
+                    obj_recuperado.hobbies;
+
+                // 2. CREAR LA NUEVA FILA (<tr>)
+                let marcoFila = document.createElement("tr");
+
+                // 3. CREAR Y RELLENAR LAS CELDAS NORMALES DE TEXTO (<td>)
+                let textoNombre = document.createElement("td");
+                textoNombre.textContent = inputNombre.value;
+                marcoFila.appendChild(textoNombre);
+
+                let textoApellido = document.createElement("td");
+                textoApellido.textContent = inputApellidos.value;
+                marcoFila.appendChild(textoApellido);
+
+                let textoEdad = document.createElement("td");
+                textoEdad.textContent = inputEdad.value;
+                marcoFila.appendChild(textoEdad);
+
+                let textoCiudad = document.createElement("td");
+                textoCiudad.textContent = inputCiudad.value;
+                marcoFila.appendChild(textoCiudad);
+
+                // 4. LÓGICA DE LOS HOBBIES (Checkboxes)
+                let textoHobbies = document.createElement("td");
+                let checkboxesMarcados = document.querySelectorAll(
+                    "input[name='hobbies[]']:checked",
+                );
+                let listaHobbies = [];
+
+                // Metemos los textos de los seleccionados en el array temporal
+                checkboxesMarcados.forEach(function (caja) {
+                    listaHobbies.push(caja.value);
+                });
+
+                // Los juntamos con comas y los metemos en la celda
+                textoHobbies.textContent = listaHobbies.join(", ");
+                marcoFila.appendChild(textoHobbies);
+
+                // 5. GUARDAR DATOS EN MEMORIA (El Array de Edades)
+                tablaEdades.push(parseInt(textoEdad.textContent));
+
+                // 6. ACTIVAR EL BORRADO DE FILA (Evento click)
+                marcoFila.addEventListener("click", borrarFila);
+
+                // 7. PEGAR LA FILA COMPLETA EN LA PANTALLA
+                idTBody.appendChild(marcoFila);
+
+                // =========================================================
+                // 8. LIMPIEZA FINAL (Dejar todo en blanco para el siguiente)
+                // =========================================================
+                inputNombre.value = "";
+                inputApellidos.value = "";
+                inputEdad.value = "";
+                inputCiudad.value = "";
+
+                let todosLosCheckboxes = document.querySelectorAll(
+                    "input[name='hobbies[]']",
+                );
+                todosLosCheckboxes.forEach(function (caja) {
+                    caja.checked = false; // Desmarcar
+                    caja.disabled = false; // Desbloquear
+                });
             }
-            insertarFila();
-            console.log(tablaEdades);
-            calcularDatosEdades();
-        });
-        let idTBody = document.querySelector("#idTBody")
-        // ¡NUEVO! Capturamos las cajas de texto donde escribe el usuario
-        let inputNombre = document.querySelector("#inputNombre");
-        let inputApellidos = document.querySelector("#inputApellidos");
-        let inputEdad = document.querySelector("#inputEdad");
-        let inputCiudad = document.querySelector("#inputCiudad");
 
-        // Capturamos TODOS los checkboxes (marcados o no)
-        let todosLosCheckboxes = document.querySelectorAll("input[name='hobbies[]']");
+            function calcularDatosEdades() {
+                let zonaEstadisticas =
+                    document.querySelector("#zonaEstadisticas");
+                zonaEstadisticas.innerHTML = "";
+                let textoSuma = document.createElement("p");
+                let suma = 0;
+                tablaEdades.forEach((edadConcreta, i) => {
+                    suma += edadConcreta;
+                });
+                textoSuma.textContent = "Suma: " + suma;
+                console.log(textoSuma);
+                let textoMedia = document.createElement("p");
+                textoMedia.textContent = "Media: " + suma / tablaEdades.length;
+                console.log(textoMedia);
 
-        // Le ponemos una "oreja" a cada caja para vigilar cuando cambian
-        todosLosCheckboxes.forEach(function (checkbox) {
-            checkbox.addEventListener("change", function () {
+                let textoMax = document.createElement("p");
+                textoMax.textContent = "Máximo: " + Math.max(...tablaEdades);
+                console.log(textoMax);
 
-                // 1. Contamos cuántos hay marcados en este preciso instante
-                let cantidadMarcados = document.querySelectorAll("input[name='hobbies[]']:checked").length;
+                let textoMin = document.createElement("p");
+                textoMin.textContent = "Mínimo: " + Math.min(...tablaEdades);
+                console.log(textoMin);
 
-                // 2. Si llegamos a 3, bloqueamos los demás
-                if (cantidadMarcados >= 3) {
-                    todosLosCheckboxes.forEach(function (caja) {
-                        if (!caja.checked) {
-                            caja.disabled = true; // Bloquea la cajita
-                        }
-                    });
-                }
-                // 3. Si hay menos de 3, nos aseguramos de que todos estén desbloqueados
-                else {
-                    todosLosCheckboxes.forEach(function (caja) {
-                        caja.disabled = false; // Desbloquea la cajita
-                    });
-                }
-            });
-        });
+                zonaEstadisticas.appendChild(textoSuma);
+                zonaEstadisticas.appendChild(textoMedia);
+                zonaEstadisticas.appendChild(textoMax);
+                zonaEstadisticas.appendChild(textoMin);
+            }
 
+            function borrarFila(evento) {
+                let filaClicada = evento.currentTarget;
 
-        let tablaEdades = []; // Aquí guardaremos las edades para luego hacer cálculos estadísticos 
+                // 1. Averiguamos qué posición ocupa la fila clicada dentro del <tbody>
+                // Convertimos los hijos del tbody en un Array y buscamos nuestra fila
+                let todasLasFilas = Array.from(idTBody.children);
+                let indiceFilaHTML = todasLasFilas.indexOf(filaClicada);
 
+                // IMPORTANTE: Como tu primera fila (Alberto) es estática en el HTML
+                // y nunca se metió en 'tablaEdades', tenemos que restar 1.
+                // Así, la fila visual 1, corresponderá a la posición 0 del array.
+                let indiceArray = indiceFilaHTML - 1;
 
+                // 2. Borramos la edad del array usando splice
+                // splice(posición_de_inicio, número_de_elementos_a_borrar)
+                tablaEdades.splice(indiceArray, 1);
 
+                // 3. Borramos la fila del HTML
+                filaClicada.remove();
 
+                // 4. ¡VITAL! Llamamos de nuevo a la función de estadísticas
+                // para que se recalculen los datos y cambien los textos al instante.
+                calcularDatosEdades();
+            }
 
-
-        // function serializar(obj) {
-        //     return JSON.stringify(obj)
-        // }
-        // function deserializar(objJson) {
-        //     return JSON.parse(objJson)
-        // }
-
-        function insertarFila() {
-            // 1. RELLENAR LA FILA DE ALBERTO (La estática que ya tienes en el HTML)
-            document.querySelector("#celdaNombre").textContent = obj_recuperado.nombre;
-            document.querySelector("#celdaApellidos").textContent = obj_recuperado.apellidos;
-            document.querySelector("#celdaEdad").textContent = obj_recuperado.edad;
-            document.querySelector("#celdaCiudad").textContent = obj_recuperado.ciudad;
-            // Ojo: Acuérdate de que le añadimos 'hobbies: ["Música", "Cine"]' al objeto de Alberto arriba
-            document.querySelector("#celdaHobbies").textContent = obj_recuperado.hobbies;
-
-            // 2. CREAR LA NUEVA FILA (<tr>)
-            let marcoFila = document.createElement("tr");
-
-            // 3. CREAR Y RELLENAR LAS CELDAS NORMALES DE TEXTO (<td>)
-            let textoNombre = document.createElement("td");
-            textoNombre.textContent = inputNombre.value;
-            marcoFila.appendChild(textoNombre);
-
-            let textoApellido = document.createElement("td");
-            textoApellido.textContent = inputApellidos.value;
-            marcoFila.appendChild(textoApellido);
-
-            let textoEdad = document.createElement("td");
-            textoEdad.textContent = inputEdad.value;
-            marcoFila.appendChild(textoEdad);
-
-            let textoCiudad = document.createElement("td");
-            textoCiudad.textContent = inputCiudad.value;
-            marcoFila.appendChild(textoCiudad);
-
-            // 4. LÓGICA DE LOS HOBBIES (Checkboxes)
-            let textoHobbies = document.createElement("td");
-            let checkboxesMarcados = document.querySelectorAll("input[name='hobbies[]']:checked");
-            let listaHobbies = [];
-
-            // Metemos los textos de los seleccionados en el array temporal
-            checkboxesMarcados.forEach(function (caja) {
-                listaHobbies.push(caja.value);
-            });
-
-            // Los juntamos con comas y los metemos en la celda
-            textoHobbies.textContent = listaHobbies.join(", ");
-            marcoFila.appendChild(textoHobbies);
-
-            // 5. GUARDAR DATOS EN MEMORIA (El Array de Edades)
-            tablaEdades.push(parseInt(textoEdad.textContent));
-
-            // 6. ACTIVAR EL BORRADO DE FILA (Evento click)
-            marcoFila.addEventListener("click", borrarFila);
-
-            // 7. PEGAR LA FILA COMPLETA EN LA PANTALLA
-            idTBody.appendChild(marcoFila);
-
-            // =========================================================
-            // 8. LIMPIEZA FINAL (Dejar todo en blanco para el siguiente)
-            // =========================================================
-            inputNombre.value = "";
-            inputApellidos.value = "";
-            inputEdad.value = "";
-            inputCiudad.value = "";
-
-            let todosLosCheckboxes = document.querySelectorAll("input[name='hobbies[]']");
-            todosLosCheckboxes.forEach(function (caja) {
-                caja.checked = false; // Desmarcar
-                caja.disabled = false; // Desbloquear
-            });
-        }
-
-        function calcularDatosEdades() {
-            let zonaEstadisticas = document.querySelector("#zonaEstadisticas");
-            zonaEstadisticas.innerHTML = "";
-            let textoSuma = document.createElement("p")
-            let suma = 0;
-            tablaEdades.forEach((edadConcreta, i) => {
-                suma += edadConcreta;
-            });
-            textoSuma.textContent = "Suma: " + suma;
-            console.log(textoSuma);
-            let textoMedia = document.createElement("p")
-            textoMedia.textContent = "Media: " + (suma / tablaEdades.length);
-            console.log(textoMedia);
-
-            let textoMax = document.createElement("p")
-            textoMax.textContent = "Máximo: " + Math.max(...tablaEdades);
-            console.log(textoMax);
-
-            let textoMin = document.createElement("p")
-            textoMin.textContent = "Mínimo: " + Math.min(...tablaEdades);
-            console.log(textoMin);
-
-            zonaEstadisticas.appendChild(textoSuma);
-            zonaEstadisticas.appendChild(textoMedia);
-            zonaEstadisticas.appendChild(textoMax);
-            zonaEstadisticas.appendChild(textoMin);
-        }
-
-
-
-        function borrarFila(evento) {
-            let filaClicada = evento.currentTarget;
-
-            // 1. Averiguamos qué posición ocupa la fila clicada dentro del <tbody>
-            // Convertimos los hijos del tbody en un Array y buscamos nuestra fila
-            let todasLasFilas = Array.from(idTBody.children);
-            let indiceFilaHTML = todasLasFilas.indexOf(filaClicada);
-
-            // IMPORTANTE: Como tu primera fila (Alberto) es estática en el HTML 
-            // y nunca se metió en 'tablaEdades', tenemos que restar 1. 
-            // Así, la fila visual 1, corresponderá a la posición 0 del array.
-            let indiceArray = indiceFilaHTML - 1;
-
-            // 2. Borramos la edad del array usando splice
-            // splice(posición_de_inicio, número_de_elementos_a_borrar)
-            tablaEdades.splice(indiceArray, 1);
-
-            // 3. Borramos la fila del HTML
-            filaClicada.remove();
-
-            // 4. ¡VITAL! Llamamos de nuevo a la función de estadísticas 
-            // para que se recalculen los datos y cambien los textos al instante.
-            calcularDatosEdades();
-        }
-
-
-
-        // Repasar Ejercicio 3. ListasAgregar checkbox a la lista, los checkbox tienen que tene rel mismo name
-        // Ejercicio 3: Reto (diapositiva 33)
-    </script>
-</body>
-
+            // Repasar Ejercicio 3. ListasAgregar checkbox a la lista, los checkbox tienen que tene rel mismo name
+            // Ejercicio 3: Reto (diapositiva 33)
+        </script>
+    </body>
 </html>
