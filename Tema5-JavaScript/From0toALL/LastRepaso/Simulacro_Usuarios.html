@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>📝 SIMULACRO DE EXAMEN: Panel de Administración</title>
+    </head>
+    <body>
+        <table id="tabla">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Ciudad</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla"></tbody>
+        </table>
+
+        <button id="btnCargar">Cargar Usuarios</button>
+
+        <input type="text" id="inputBuscar" />
+        <button id="btnBuscar">Buscar</button>
+    </body>
+    <script>
+        let usuariosGlobales = [];
+        let tabla = document.querySelector("#tabla");
+        let bodyTabla = document.querySelector("#bodyTabla");
+        let btnCargar = document.querySelector("#btnCargar");
+        let inputBuscar = document.querySelector("#inputBuscar");
+        let btnBuscar = document.querySelector("#btnBuscar");
+
+        btnCargar.addEventListener("click", async function () {
+            iniciarCarga();
+        });
+
+        btnBuscar.addEventListener("click", function () {
+            let usuarioBuscado = inputBuscar.value;
+            buscarUsuario(usuarioBuscado);
+        });
+
+        async function iniciarCarga() {
+            try {
+                let respuesta = await fetch(
+                    "https://jsonplaceholder.typicode.com/users",
+                );
+                let datos = await respuesta.json();
+                console.log(datos);
+                usuariosGlobales = datos;
+
+                pintarTablaUsuarios(usuariosGlobales);
+            } catch (error) {
+                console.error("ERROR al conectar con la API al iniciar carga ");
+            }
+        }
+
+        function pintarTablaUsuarios(listaUsuarios) {
+            bodyTabla.innerHTML = "";
+            for (let i = 0; i < listaUsuarios.length; i++) {
+                let filaUsuario = document.createElement("tr");
+
+                let idUsuario = document.createElement("td");
+                idUsuario.textContent = listaUsuarios[i].id;
+
+                let idNombre = document.createElement("td");
+                idNombre.textContent = listaUsuarios[i].name;
+
+                let idEmail = document.createElement("td");
+                idEmail.textContent = listaUsuarios[i].email;
+
+                let idCiudad = document.createElement("td");
+                idCiudad.textContent = listaUsuarios[i].address.city;
+
+                filaUsuario.appendChild(idUsuario);
+                filaUsuario.appendChild(idNombre);
+                filaUsuario.appendChild(idEmail);
+                filaUsuario.appendChild(idCiudad);
+                filaUsuario.addEventListener("dblclick", function () {
+                    borrarFila(filaUsuario);
+                });
+                bodyTabla.appendChild(filaUsuario);
+            }
+        }
+
+        function borrarFila(filaABorrar) {
+            filaABorrar.remove();
+        }
+
+        function buscarUsuario(usuarioABuscar) {
+            let arrayResultados = [];
+
+            // Pasamos a minúscula lo que el usuario ha escrito
+            let textoBuscado = usuarioABuscar.toLowerCase();
+
+            for (let i = 0; i < usuariosGlobales.length; i++) {
+                let nombreUsuario = usuariosGlobales[i].name.toLowerCase();
+
+                if (nombreUsuario.includes(textoBuscado)) {
+                    arrayResultados.push(usuariosGlobales[i]);
+                }
+            }
+
+            pintarTablaUsuarios(arrayResultados);
+        }
+    </script>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rick y Morty - Entrenamiento</title>
+        <style>
+            body {
+                font-family: Arial;
+                padding: 20px;
+                background-color: #f2f2f2;
+                color: rgb(0, 0, 0);
+            }
+            #contenedorPersonajes {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .tarjeta {
+                border: 2px solid #b7d883; /* Un guiño de color */
+                padding: 15px;
+                border-radius: 8px;
+                background-color: #1198ff;
+                color: rgb(255, 252, 100);
+                width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Buscador del Multiverso</h1>
+        <div>
+            <input type="text" id="buscador" placeholder="Ej: Rick" />
+            <button id="btnBuscar">Buscar personaje</button>
+        </div>
+        <br /><br />
+        <button id="btnVivos">Solo vivos</button>
+        <button id="btnMuertos">Solo muertos</button>
+        <button id="btnDesconocidos">Solo desconocidos</button>
+        <br /><br />
+        <button id="btnCargar">Traer Personajes</button>
+        <br />
+        <button id="btnAnterior">Anterior</button>
+        <button id="btnSiguiente">Siguiente</button>
+        <h3 id="mensajeSistema"></h3>
+
+        <div id="contenedorPersonajes"></div>
+
+        <script>
+            // 1. CAPTURAS DEL DOM
+            const btnCargar = document.querySelector("#btnCargar");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+            const contenedorPersonajes = document.querySelector(
+                "#contenedorPersonajes",
+            );
+            const buscador = document.querySelector("#buscador");
+            const btnBuscar = document.querySelector("#btnBuscar");
+
+            const btnVivos = document.querySelector("#btnVivos");
+            const btnMuertos = document.querySelector("#btnMuertos");
+            const btnDesconocidos = document.querySelector("#btnDesconocidos");
+
+            const btnAnterior = document.querySelector("#btnAnterior");
+            const btnSiguiente = document.querySelector("#btnSiguiente");
+
+            //
+            let urlAnterior = "";
+            let urlSiguiente = "";
+            // 2. ¡AQUÍ EMPIEZA TU CÓDIGO!
+            // Evento en funcion anonima (igualm que el siguiente)
+            btnCargar.addEventListener("click", async function () {
+                iniciarCarga();
+            });
+
+            // Evento del buscador
+            btnBuscar.addEventListener("click", async function () {
+                buscarPersonaje();
+            });
+
+            // Eventos de filtrado
+            btnVivos.addEventListener("click", function () {
+                filtrarPorEstado("alive");
+            });
+            btnMuertos.addEventListener("click", function () {
+                filtrarPorEstado("dead");
+            });
+            btnDesconocidos.addEventListener("click", function () {
+                filtrarPorEstado("unknown");
+            });
+
+            // Eventos de Anterior y Siguiente
+            btnAnterior.addEventListener("click", function () {
+                pasarPaginaAnterior();
+            });
+            btnSiguiente.addEventListener("click", function () {
+                pasarPaginaSiguiente();
+            });
+
+            async function iniciarCarga() {
+                try {
+                    let respuesta = await fetch(
+                        "https://rickandmortyapi.com/api/character",
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+                    let arrayPersonajes = datos.results;
+                    urlAnterior = datos.info.prev;
+                    urlSiguiente = datos.info.next;
+
+                    pintarPersonajes(arrayPersonajes);
+                } catch (error) {
+                    console.error("Error al comunicarse con la API");
+                }
+            }
+            // Esta no lleva ASYNC porque pintar personajes es inmediato, no hay 'await' aqui dentro
+            function pintarPersonajes(arrayPersonajes) {
+                // 1. Limpiamos la pantalla de personajes antiguos
+                contenedorPersonajes.innerHTML = "";
+                // 2. Limpiamos cualquier error rojo que hubiera de antes (¡NUEVO!)
+                mensajeSistema.textContent = "";
+                for (let i = 0; i < arrayPersonajes.length; i++) {
+                    // Contenedor del personaje
+                    let divPersonaje = document.createElement("div");
+                    divPersonaje.classList.add("tarjeta");
+                    // Nombre del personaje
+                    let nombrePersonaje = document.createElement("h3");
+                    nombrePersonaje.textContent = arrayPersonajes[i].name;
+
+                    // Especie del personaje
+                    let especiePersonaje = document.createElement("p");
+                    especiePersonaje.textContent =
+                        "Especie: " + arrayPersonajes[i].species;
+                    let fotoPersonaje = document.createElement("img");
+                    fotoPersonaje.src = arrayPersonajes[i].image;
+                    fotoPersonaje.style.width = "100%";
+
+                    let estadoPersonaje = document.createElement("p");
+                    estadoPersonaje.textContent =
+                        "" + arrayPersonajes[i].status;
+                    if (arrayPersonajes[i].status == "Alive") {
+                        estadoPersonaje.style.color = "green";
+                    } else if (arrayPersonajes[i].status == "Dead") {
+                        estadoPersonaje.style.color = "red";
+                    }
+
+                    let origenPersonaje = document.createElement("p");
+                    origenPersonaje.textContent =
+                        "Origen: " + arrayPersonajes[i].origin.name;
+
+                    divPersonaje.appendChild(nombrePersonaje);
+                    divPersonaje.appendChild(fotoPersonaje);
+                    divPersonaje.appendChild(especiePersonaje);
+                    divPersonaje.appendChild(estadoPersonaje);
+                    divPersonaje.appendChild(origenPersonaje);
+
+                    contenedorPersonajes.appendChild(divPersonaje);
+                }
+            }
+
+            async function buscarPersonaje() {
+                try {
+                    let palabraEscrita = buscador.value;
+                    let respuesta = await fetch(
+                        "https://rickandmortyapi.com/api/character/?name=" +
+                            palabraEscrita,
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+                    let arrayPersonajes = datos.results;
+                    urlAnterior = datos.info.prev;
+                    urlSiguiente = datos.info.next;
+
+                    pintarPersonajes(arrayPersonajes);
+                } catch (error) {
+                    console.error("Error con la API al buscar Personaje");
+                    contenedorPersonajes.innerHTML = "";
+                    mensajeSistema.textContent =
+                        "ERROR: El personaje introducido NO EXISTE";
+                    mensajeSistema.style.color = "red";
+                }
+            }
+
+            async function filtrarPorEstado(estado) {
+                try {
+                    let respuesta = await fetch(
+                        "https://rickandmortyapi.com/api/character/?status=" +
+                            estado,
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+                    let arrayPersonajes = datos.results;
+                    urlAnterior = datos.info.prev;
+                    urlSiguiente = datos.info.next;
+
+                    pintarPersonajes(arrayPersonajes);
+                } catch (error) {
+                    console.error("Error con la API al filtrar");
+                }
+            }
+            async function pasarPaginaAnterior() {
+                try {
+                    if (urlAnterior !== null) {
+                        let respuesta = await fetch(urlAnterior);
+                        let datos = await respuesta.json();
+                        urlAnterior = datos.info.prev;
+                        urlSiguiente = datos.info.next;
+
+                        let arrayPersonajes = datos.results;
+                        pintarPersonajes(arrayPersonajes);
+                    } else {
+                        alert("¡Ya estás e la primera página!");
+                    }
+                } catch (error) {
+                    console.error(
+                        "Error con la API al avanzar a la página anterior",
+                    );
+                }
+            }
+
+            async function pasarPaginaSiguiente() {
+                try {
+                    if (urlSiguiente !== null) {
+                        let respuesta = await fetch(urlSiguiente);
+                        let datos = await respuesta.json();
+                        urlAnterior = datos.info.prev;
+                        urlSiguiente = datos.info.next;
+
+                        let arrayPersonajes = datos.results;
+
+                        pintarPersonajes(arrayPersonajes);
+                    } else {
+                        alert("¡Ya estás en la última página!");
+                    }
+                } catch (error) {
+                    console.error(
+                        "Error con la API al avanzar a la siguiente página",
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>
