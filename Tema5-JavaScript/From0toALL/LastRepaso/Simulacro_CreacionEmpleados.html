@@ -7,5 +7,88 @@
     </head>
     <body>
         <h1>Creación de Empleados</h1>
+        <form id="formularioUsuario">
+            <input type="text" id="inputNombre" placeholder="Nombre" />
+            <input type="text" id="inputEmail" placeholder="Email" />
+            <input type="text" id="inputCiudad" placeholder="Ciudad" />
+            <button type="submit" id="btnFormulario">Registrar Empleado</button>
+        </form>
+        <h3 id="mensajeSistema"></h3>
     </body>
+    <script>
+        // Capturando del DOM
+        const formularioUsuario = document.querySelector("#formularioUsuario");
+        const inputNombre = document.querySelector("#inputNombre");
+        const inputEmail = document.querySelector("#inputEmail");
+        const inputCiudad = document.querySelector("#inputCiudad");
+        const btnFormulario = document.querySelector("#btnFormulario");
+        const mensajeSistema = document.querySelector("#mensajeSistema");
+
+        // Añado el evento al formulario completo (de tipo submit)
+        formularioUsuario.addEventListener("submit", function (evento) {
+            gestionarEnvioFormulario(evento);
+        });
+
+        // Función para gestionar el envío del formulario con preventDefault para así evitar que se recargue la página tras enviarlo
+        function gestionarEnvioFormulario(evento) {
+            evento.preventDefault();
+            // Creo un objeto con el mismo formato que tiene la API, enviándolelos valores del input
+            let nuevoUsuario = {
+                name: inputNombre.value,
+                email: inputEmail.value,
+                // Al contener un objeto en la API hay que ponerlo con llaves ya que address.city no vale en este caso
+                address: {
+                    city: inputCiudad.value,
+                },
+            };
+            // Uso la función enviarUsuario(objetoUsuario)
+            enviarUsuario(nuevoUsuario);
+            // Reseteo formulario para que se restablezca y pueda realizar otra inserción
+            formularioUsuario.reset();
+        }
+
+        // Función para enviar el usuario a la API con el method POST, con el parametro de entrada objetoUsuario para
+        // utilizarlo en  la función del envio del formulario (ya que es donde se crea el objetoUsuario)
+        async function enviarUsuario(objetoUsuario) {
+            // Lo envuelvo en un try catch por si hay problema al conectar con la API no salte error
+            try {
+                // Se le coloca await para esperar a que la API me pase los datos (fetch)
+                let respuesta = await fetch(
+                    "https://jsonplaceholder.typicode.com/users",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(objetoUsuario),
+                    },
+                );
+                // En este caso se coloca await para que de tiempo a desempaquetar la caja de la API
+                // (traducir u archivo de texto grande a un objeto manipulable)
+                let datosServidor = await respuesta.json();
+                console.log(datosServidor);
+                // Le paso el objeto completo para que pueda recoger los datos del usuario creado
+                mostrarMensajeExito(datosServidor);
+            } catch (error) {
+                console.error("ERROR AL COMUNICARSE CON LA API");
+            }
+        }
+
+        // Función para mostrar el mensaje de exito en el h3 que estaba vacio en el HTML base
+        function mostrarMensajeExito(datosServidor) {
+            // Compruebo que el objeto NO sea null para así imprimir el mensaje de éxito con el formato correcto, o bien en rojo si SI es null
+            if (datosServidor != null) {
+                mensajeSistema.style.color = "green";
+                mensajeSistema.textContent =
+                    "¡Éxito! El usuario con Nombre: " +
+                    datosServidor.name +
+                    " ha sido creado con el ID: " +
+                    datosServidor.id;
+            } else {
+                mensajeSistema.style.color = "red";
+                mensajeSistema.textContent =
+                    "Error, no se pudo crear el usuario";
+            }
+        }
+    </script>
 </html>

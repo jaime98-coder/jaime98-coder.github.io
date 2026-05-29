@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sello Discográfico - Panel de Control</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                padding: 20px;
+                background-color: #191919;
+                color: white;
+            }
+            .contenedor {
+                display: flex;
+                gap: 40px;
+            }
+            .panel-formulario {
+                background-color: #2c2c2c;
+                padding: 20px;
+                border-radius: 8px;
+                width: 300px;
+                border: 2px solid #634a81;
+                height: fit-content;
+            }
+            .panel-tabla {
+                flex-grow: 1;
+            }
+            input {
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 8px;
+                box-sizing: border-box;
+                background-color: #402e54;
+                color: white;
+                border: 1px solid #b7d883;
+            }
+            button {
+                background-color: #b7d883;
+                color: black;
+                padding: 10px;
+                width: 100%;
+                border: none;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #a3c473;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+                background-color: #2c2c2c;
+            }
+            th,
+            td {
+                border: 1px solid #634a81;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #402e54;
+            }
+            tbody tr:hover {
+                background-color: #634a81;
+                cursor: pointer;
+            }
+            #mensajeExito {
+                color: #b7d883;
+                margin-top: 15px;
+                font-weight: bold;
+                min-height: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Gestión de Artistas - Roster</h1>
+
+        <div class="contenedor">
+            <div class="panel-formulario">
+                <h3>Fichar Artista</h3>
+                <form id="formNuevoArtista">
+                    <label>Nombre Artístico:</label>
+                    <input type="text" id="inputNombre" required />
+
+                    <label>Email de Contacto:</label>
+                    <input type="email" id="inputEmail" required />
+
+                    <label>Sitio Web:</label>
+                    <input type="text" id="inputWeb" required />
+
+                    <button type="submit">Registrar</button>
+                </form>
+                <div id="mensajeExito"></div>
+            </div>
+
+            <div class="panel-tabla">
+                <button id="btnCargar">Cargar Roster Actual</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Website</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabla"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            // 1. CAPTURAS DEL DOM
+            const formNuevoArtista =
+                document.querySelector("#formNuevoArtista");
+            const inputNombre = document.querySelector("#inputNombre");
+            const inputEmail = document.querySelector("#inputEmail");
+            const inputWeb = document.querySelector("#inputWeb");
+
+            const mensajeExito = document.querySelector("#mensajeExito");
+
+            const btnCargar = document.querySelector("#btnCargar");
+            const bodyTabla = document.querySelector("#bodyTabla");
+            // 2. VARIABLES GLOBALES
+            let artistasGlobales = [];
+
+            btnCargar.addEventListener("click", function () {
+                cargarRoster();
+            });
+
+            formNuevoArtista.addEventListener("submit", function (evento) {
+                registrarArtista(evento);
+                formNuevoArtista.reset();
+            });
+
+            // 3. ¡TU CÓDIGO AQUÍ!
+            // Recuerda separar en funciones:
+            // - Cargar datos (GET)
+            async function cargarRoster() {
+                try {
+                    let respuesta = await fetch(
+                        "https://jsonplaceholder.typicode.com/users",
+                    );
+                    let datosServidor = await respuesta.json();
+                    console.log(datosServidor);
+                    // Guardo los datos en un array global
+                    artistasGlobales = datosServidor;
+                    pintarTabla(artistasGlobales);
+                } catch (error) {
+                    console.error("ERROR al conectarse con la API");
+                }
+            }
+
+            // - Enviar formulario (POST)
+            async function registrarArtista(evento) {
+                evento.preventDefault();
+                let datosArtista = {
+                    //id:
+                    name: inputNombre.value,
+                    email: inputEmail.value,
+                    website: inputWeb.value,
+                };
+                try {
+                    let respuesta = await fetch(
+                        "https://jsonplaceholder.typicode.com/users",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosArtista),
+                        },
+                    );
+                    let respuestaServidor = await respuesta.json();
+                    console.log(respuestaServidor);
+
+                    if (respuesta.ok) {
+                        artistasGlobales.push(respuestaServidor);
+                        pintarTabla(artistasGlobales);
+                        mensajeExito.textContent =
+                            "Éxito al registrar el artista";
+                        mensajeExito.style.color = "green";
+                    } else {
+                        mensajeExito.textContent =
+                            "Error al registrar el artista";
+                        mensajeExito.style.color = "red";
+                    }
+                } catch (error) {
+                    console.error("Error de comunicación con la API");
+                }
+            }
+
+            // - Pintar tabla (DOM)
+            function pintarTabla(arrayArtistas) {
+                bodyTabla.innerHTML = "";
+                for (let i = 0; i < arrayArtistas.length; i++) {
+                    let filaArtista = document.createElement("tr");
+
+                    let idArtista = document.createElement("td");
+                    idArtista.textContent = arrayArtistas[i].id;
+
+                    let nombreArtista = document.createElement("td");
+                    nombreArtista.textContent = arrayArtistas[i].name;
+
+                    let emailArtista = document.createElement("td");
+                    emailArtista.textContent = arrayArtistas[i].email;
+
+                    let webArtista = document.createElement("td");
+                    webArtista.textContent = arrayArtistas[i].website;
+
+                    filaArtista.appendChild(idArtista);
+                    filaArtista.appendChild(nombreArtista);
+                    filaArtista.appendChild(emailArtista);
+                    filaArtista.appendChild(webArtista);
+
+                    bodyTabla.appendChild(filaArtista);
+
+                    filaArtista.addEventListener("dblclick", function () {
+                        borrarFila(filaArtista);
+                    });
+                }
+            }
+            // - Borrar fila (DOM)
+            function borrarFila(filaABorrar) {
+                filaABorrar.remove();
+            }
+        </script>
+    </body>
+</html>

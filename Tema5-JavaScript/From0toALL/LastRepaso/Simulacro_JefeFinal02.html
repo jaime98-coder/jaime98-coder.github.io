@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Distribuidora - Panel Protegido</title>
+        <style>
+            body {
+                font-family: Arial;
+                padding: 20px;
+                background-color: #1a1a1a;
+                color: #fff;
+            }
+            .panel-auth {
+                background-color: #333;
+                padding: 15px;
+                border-radius: 8px;
+                border-left: 5px solid #ff4757;
+                margin-bottom: 20px;
+            }
+            .panel-upload {
+                background-color: #333;
+                padding: 20px;
+                border-radius: 8px;
+                width: 300px;
+                border-left: 5px solid #2ed573;
+            }
+            input {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+            button {
+                background-color: #2ed573;
+                border: none;
+                padding: 10px;
+                width: 100%;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            #btnToken {
+                background-color: #ff4757;
+                color: white;
+                width: auto;
+            }
+            .mensaje {
+                font-weight: bold;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Subida de Tracks a Plataformas</h1>
+
+        <div class="panel-auth">
+            <h3>Paso 1: Autorización</h3>
+            <button id="btnToken">Generar Token de Acceso</button>
+            <div id="infoToken" class="mensaje">Estado: Esperando token...</div>
+        </div>
+
+        <div class="panel-upload">
+            <h3>Paso 2: Subir Track</h3>
+            <form id="formTrack">
+                <label>Título del Track:</label>
+                <input type="text" id="inputTitulo" required />
+
+                <label>Género (Ej: Drum & Bass):</label>
+                <input type="text" id="inputGenero" required />
+
+                <button type="submit">Subir a Spotify/Apple</button>
+            </form>
+            <div id="mensajeSistema" class="mensaje"></div>
+        </div>
+
+        <script>
+            // 1. CAPTURAS
+            const btnToken = document.querySelector("#btnToken");
+            const infoToken = document.querySelector("#infoToken");
+
+            const formTrack = document.querySelector("#formTrack");
+            const inputTitulo = document.querySelector("#inputTitulo");
+            const inputGenero = document.querySelector("#inputGenero");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            // 2. VARIABLE GLOBAL
+            let tokenActivo = "";
+
+            // 3. ¡TU TURNO!
+        </script>
+    </body>
+</html>
