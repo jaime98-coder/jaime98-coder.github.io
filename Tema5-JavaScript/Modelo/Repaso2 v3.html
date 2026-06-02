@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Los cubiletes</title>
+        <style>
+            body {
+                font-family:
+                    "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+                padding: 20px;
+                background-color: #1a1a1a;
+                color: #fff;
+            }
+            input {
+                display: block;
+                width: 30%;
+                margin: 10px 0;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+            button {
+                background-color: #2ed573;
+                border: none;
+                padding: 10px;
+                width: 30%;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Los Cubiletes</h1>
+
+        <h2>Jaime Martin</h2>
+
+        <form id="formulario">
+            <input type="hidden" value="Jaime" id="nom_alum" />
+            <input type="hidden" value="2" id="num_ejer" />
+            <input type="text" id="usuario" placeholder="Usuario..." />
+            <input type="password" placeholder="Password..." />
+            <button type="submit">Enviar Formulario</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <ol id="rankingGanadores"></ol>
+    </body>
+</html>
