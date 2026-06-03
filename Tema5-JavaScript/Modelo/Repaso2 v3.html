@@ -1,49 +1,183 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Los cubiletes</title>
-        <style>
-            body {
-                font-family:
-                    "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-                padding: 20px;
-                background-color: #1a1a1a;
-                color: #fff;
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los cubiletes</title>
+    <style>
+        body {
+            font-family:
+                "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        input {
+            display: block;
+            width: 30%;
+            margin: 10px 0;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #2ed573;
+            border: none;
+            padding: 10px;
+            width: 30%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Los Cubiletes</h1>
+
+    <h2>Jaime Martin</h2>
+
+    <form id="formulario">
+        <input type="hidden" value="Jaime" id="nom_alum" />
+        <input type="hidden" value="2" id="num_ejer" />
+        <input type="text" id="usuario" placeholder="Usuario... " required />
+        <input type="password" id="password" placeholder="Password... " required />
+        <button type="submit">Enviar Formulario</button>
+    </form>
+
+    <div id="espacioVasos"></div>
+
+    <h3 id="mensajeSistema"></h3>
+
+    <ol id="rankingGanadores"></ol>
+
+    <script>
+        const nom_alum = document.querySelector("#nom_alum");
+        const num_ejer = document.querySelector("#num_ejer");
+        const usuario = document.querySelector("#usuario");
+        const password = document.querySelector("#password");
+        const formulario = document.querySelector("#formulario");
+
+        let hayGanador = false;
+
+        const espacioVasos = document.querySelector("#espacioVasos")
+
+        const mensajeSistema = document.querySelector("#mensajeSistema");
+        const rankingGanadores = document.querySelector("#rankingGanadores");
+
+        formulario.addEventListener("submit", function (evento) {
+            enviarLogin(evento);
+        })
+
+        // Función para enviar el login del formulario a la API (POST)
+        async function enviarLogin(evento) {
+            evento.preventDefault();
+            let datosLogin = {
+                nom_alum: nom_alum.value,
+                num_ejer: num_ejer.value,
+                usuario: usuario.value,
+                password: password.value
             }
-            input {
-                display: block;
-                width: 30%;
-                margin: 10px 0;
-                padding: 8px;
-                box-sizing: border-box;
+
+            // Uso un try catch para capturar errores de conexión con la API
+            try {
+                let respuesta = await fetch("http://192.168.100.150/api/vasos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosLogin)
+                }
+                );
+
+                let datos = await respuesta.json();
+                console.log(datos);
+                if (respuesta.ok) {
+                    // Limpio el ranking para que no se acumulen
+                    rankingGanadores.innerHTML = "";
+
+                    // Desactivo los input usuario y password
+                    usuario.disabled = "true";
+                    password.disabled = "true";
+
+                    // Imprimo mensaje de éxito para el usuario
+                    mensajeSistema.textContent = "El usuario ha sido creado correctamente";
+                    mensajeSistema.style.color = "green";
+
+                    let infoNumVasos = datos.vasos;
+
+
+                    // Llamo a la función para pintar los botones en pantalla
+                    pintarBotones(infoNumVasos);
+
+                }
+            } catch (error) {
+                console.error("Error al procesar los datos del formulario")
             }
-            button {
-                background-color: #2ed573;
-                border: none;
-                padding: 10px;
-                width: 30%;
-                font-weight: bold;
-                cursor: pointer;
+
+        }
+
+
+        // Función para enviar la elección de los vasos
+        async function enviarEleccionVaso(vasoElegido) {
+            // Creo el objeto con los datos del vaso
+            let datosVaso = {
+                usuario: usuario.value,
+                eleccion: vasoElegido
+            };
+
+            try {
+                let respuesta = await fetch("http://192.168.100.150/api/jugar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosVaso)
+                });
+
+                let datos = await respuesta.json();
+                console.log(datos);
+
+
+                if (respuesta.ok) {
+                    // Este vaciado del espacioVasos es lo que hace que se vacie el contenedor de
+                    // los botones tras acertar, para que no permita seguir clickando
+                    espacioVasos.innerHTML = "";
+                    mensajeSistema.textContent = datos.mensaje;
+                    if (datos.status ==="error"){
+                        mensajeSistema.style.color="red"
+                    } else {
+                        mensajeSistema.style.color="green";
+                    }
+
+                    let arrayRanking = datos.ranking;
+                    for (let i = 0; i < arrayRanking.length; i++) {
+                        let unGanador = document.createElement("li");
+                        unGanador.textContent = arrayRanking[i];
+                        rankingGanadores.appendChild(unGanador);
+                    }
+                }
+
+            } catch (error) {
+                console.error("Error al enviar la elección del vaso")
             }
-        </style>
-    </head>
-    <body>
-        <h1>Los Cubiletes</h1>
 
-        <h2>Jaime Martin</h2>
+        }
 
-        <form id="formulario">
-            <input type="hidden" value="Jaime" id="nom_alum" />
-            <input type="hidden" value="2" id="num_ejer" />
-            <input type="text" id="usuario" placeholder="Usuario..." />
-            <input type="password" placeholder="Password..." />
-            <button type="submit">Enviar Formulario</button>
-        </form>
+        // Función para pintar los botones en pantalla
+        function pintarBotones(infoNumVasos) {
+            espacioVasos.innerHTML = "";
 
-        <h3 id="mensajeSistema"></h3>
+            for (let i = 0; i < infoNumVasos; i++) {
+                let btnVaso = document.createElement("button");
+                btnVaso.textContent = "Vaso " + (i + 1);
 
-        <ol id="rankingGanadores"></ol>
-    </body>
+                btnVaso.addEventListener("click", function () {
+                    enviarEleccionVaso(i + 1);
+                })
+                espacioVasos.appendChild(btnVaso);
+            }
+        }
+
+
+    </script>
+</body>
+
 </html>
