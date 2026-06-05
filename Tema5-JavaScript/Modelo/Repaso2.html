@@ -1,137 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Los Cubiletes</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Los Cubiletes</title>
-</head>
+    <body>
+        <h1>Los Cubiletes</h1>
+        <h2>Jaime Martin</h2>
+        <form id="formulario">
+            <input type="hidden" value="Jaime" id="nom_alum" />
+            <input type="hidden" value="2" id="num_ejer" />
+            <input
+                type="text"
+                id="usuario"
+                placeholder="Introduce nombre usuario"
+            />
+            <input
+                type="password"
+                id="password"
+                placeholder="Introduce contraseña"
+            />
+            <button type="submit" id="btnEnviar">Enviar</button>
+        </form>
 
-<body>
-    <h1>Los Cubiletes</h1>
-    <h2>Jaime Martin</h2>
-    <form id="formulario">
-        <input type="hidden" value="Jaime" id="nom_alum">
-        <input type="hidden" value="2" id="num_ejer">
-        <input type="text" id="usuario" placeholder="Introduce nombre usuario">
-        <input type="password" id="password" placeholder="Introduce contraseña">
-        <button type="submit" id="btnEnviar">Enviar</button>
-    </form>
-    
-    <h3 id="mensajeSistema"></h3>
-    <ol id="listaRanking"></ol>
-    
-    <script>
-        const formulario = document.querySelector("#formulario");
-        const inputNom_alum = document.querySelector("#nom_alum");
-        const inputNum_ejer = document.querySelector("#num_ejer");
-        const inputUsuario = document.querySelector("#usuario");
-        const inputPassword = document.querySelector("#password");
-        const btnEnviar = document.querySelector("#btnEnviar");
-        const mensajeSistema = document.querySelector("#mensajeSistema");
-        const listaRanking = document.querySelector("#listaRanking");
+        <h3 id="mensajeSistema"></h3>
+        <ol id="listaRanking"></ol>
 
-        formulario.addEventListener("submit", function (evento) {
-            evento.preventDefault();
-            // Comprobación por si hay campos vacíos
-            if (inputUsuario.value === "" || inputPassword.value === "") {
-                alert("Alerta hay campos vacíos");
-                return;
-            }
-            gestionarEnvio();
-        });
+        <script>
+            const formulario = document.querySelector("#formulario");
+            const inputNom_alum = document.querySelector("#nom_alum");
+            const inputNum_ejer = document.querySelector("#num_ejer");
+            const inputUsuario = document.querySelector("#usuario");
+            const inputPassword = document.querySelector("#password");
+            const btnEnviar = document.querySelector("#btnEnviar");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+            const listaRanking = document.querySelector("#listaRanking");
 
-        async function gestionarEnvio() {
-            let datosUsuario = {
-                nom_alum: inputNom_alum.value,
-                num_ejer: inputNum_ejer.value,
-                usuario: inputUsuario.value,
-                password: inputPassword.value
-            };
+            formulario.addEventListener("submit", function (evento) {
+                evento.preventDefault();
+                // Comprobación por si hay campos vacíos
+                if (inputUsuario.value === "" || inputPassword.value === "") {
+                    alert("Alerta hay campos vacíos");
+                    return;
+                }
+                gestionarEnvio();
+            });
 
-            // === AQUÍ AÑADIMOS TU PARACAÍDAS ===
-            try {
-                let respuesta = await fetch("http://192.168.100.150/api/vasos", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(datosUsuario)
-                });
+            async function gestionarEnvio() {
+                let datosUsuario = {
+                    nom_alum: inputNom_alum.value,
+                    num_ejer: inputNum_ejer.value,
+                    usuario: inputUsuario.value,
+                    password: inputPassword.value,
+                };
 
-                let respuestaServidor = await respuesta.json();
-                console.log(respuestaServidor);
-                
-                // Compruebo si la respuesta del fetch fue recibida
-                if (respuesta.ok) {
-                    listaRanking.innerHTML = "";
-                    inputUsuario.disabled = true;
-                    inputPassword.disabled = true;
-                    
-                    // Limpieza de reinicio
-                    let zonaAntigua = document.querySelector("#zonaJuego");
-                    if (zonaAntigua != null) {
-                        zonaAntigua.remove();
+                // === AQUÍ AÑADIMOS TU PARACAÍDAS ===
+                try {
+                    let respuesta = await fetch(
+                        "http://192.168.100.150/api/vasos",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosUsuario),
+                        },
+                    );
+
+                    let respuestaServidor = await respuesta.json();
+                    console.log(respuestaServidor);
+
+                    // Compruebo si la respuesta del fetch fue recibida
+                    if (respuesta.ok) {
+                        listaRanking.innerHTML = "";
+                        inputUsuario.disabled = true;
+                        inputPassword.disabled = true;
+
+                        // Limpieza de reinicio
+                        let zonaAntigua = document.querySelector("#zonaJuego");
+                        if (zonaAntigua != null) {
+                            zonaAntigua.remove();
+                        }
+
+                        let numeroVasos = respuestaServidor.vasos;
+                        let zonaJuego = document.createElement("div");
+                        zonaJuego.id = "zonaJuego";
+                        document.body.appendChild(zonaJuego);
+
+                        for (let i = 0; i < numeroVasos.length; i++) {
+                            let botonVaso = document.createElement("button");
+                            botonVaso.textContent = "Vaso " + (i + 1);
+
+                            botonVaso.addEventListener("click", function () {
+                                enviarJugada(i + 1);
+                            });
+                            zonaJuego.appendChild(botonVaso);
+                        }
+                    } else {
+                        mensajeSistema.textContent =
+                            "Error al logar. Revisa los datos";
                     }
-                    
-                    let numeroVasos = respuestaServidor.vasos;
-                    let zonaJuego = document.createElement("div");
-                    zonaJuego.id = "zonaJuego";
-                    document.body.appendChild(zonaJuego);
+                } catch (error) {
+                    // Si el servidor del profesor se cae, avisamos elegantemente
+                    console.error("Fallo de conexión en el login", error);
+                    mensajeSistema.textContent =
+                        "Error de conexión con el servidor.";
+                    mensajeSistema.style.color = "red";
+                }
+            }
 
-                    for (let i = 0; i < numeroVasos.length; i++) {
-                        let botonVaso = document.createElement("button");
-                        botonVaso.textContent = "Vaso " + (i + 1);
+            async function enviarJugada(vasoElegido) {
+                let datosJugada = {
+                    usuario: inputUsuario.value,
+                    eleccion: vasoElegido,
+                };
 
-                        botonVaso.addEventListener("click", function () {
-                            enviarJugada(i + 1);
+                try {
+                    let respuesta = await fetch(
+                        "http://192.168.100.150/api/jugar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosJugada),
+                        },
+                    );
+
+                    let respuestaServidor = await respuesta.json();
+
+                    if (respuesta.ok) {
+                        let zonaJuego = document.querySelector("#zonaJuego");
+                        zonaJuego.innerHTML = "";
+
+                        mensajeSistema.textContent = respuestaServidor.mensaje;
+                        mensajeSistema.style.color = "blue";
+
+                        listaRanking.innerHTML = "";
+                        let arrayRanking = respuestaServidor.ranking;
+                        arrayRanking.forEach((ganador) => {
+                            let li = document.createElement("li");
+                            li.textContent = ganador;
+                            listaRanking.appendChild(li);
                         });
-                        zonaJuego.appendChild(botonVaso);
                     }
-                } else {
-                    mensajeSistema.textContent = "Error al logar. Revisa los datos";
+                } catch (error) {
+                    console.error("¡¡Error!!");
                 }
-            } catch (error) {
-                // Si el servidor del profesor se cae, avisamos elegantemente
-                console.error("Fallo de conexión en el login", error);
-                mensajeSistema.textContent = "Error de conexión con el servidor.";
-                mensajeSistema.style.color = "red";
             }
-        }
-
-        async function enviarJugada(vasoElegido) {
-            let datosJugada = {
-                usuario: inputUsuario.value,
-                eleccion: vasoElegido
-            };
-            
-            try {
-                let respuesta = await fetch("http://192.168.100.150/api/jugar", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(datosJugada)
-                });
-                
-                let respuestaServidor = await respuesta.json();
-                
-                if (respuesta.ok) {
-                    let zonaJuego = document.querySelector("#zonaJuego");
-                    zonaJuego.innerHTML = "";
-
-                    mensajeSistema.textContent = respuestaServidor.mensaje;
-                    mensajeSistema.style.color = "blue";
-
-                    listaRanking.innerHTML = "";
-                    let arrayRanking = respuestaServidor.ranking;
-                    arrayRanking.forEach(ganador => {
-                        let li = document.createElement("li");
-                        li.textContent = ganador;
-                        listaRanking.appendChild(li);
-                    });
-                }
-            } catch (error) {
-                console.error("¡¡Error!!");
-            }
-        }
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>

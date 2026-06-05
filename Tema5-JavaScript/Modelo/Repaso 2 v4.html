@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ejercicio Los Cubiletes</title>
+        <style>
+            /* Unos estilos básicos para que los vasos y el ranking queden ordenados */
+            .vaso-btn {
+                padding: 15px 25px;
+                margin: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: #634a81;
+                color: white;
+                border: none;
+                border-radius: 4px;
+            }
+            .vaso-btn:hover {
+                background-color: #402e54;
+            }
+            #rankingGanadores li {
+                font-weight: bold;
+                color: #333;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Ejercicio Los Cubiletes</h1>
+        <h2>Jaime Martin</h2>
+
+        <form id="formulario">
+            <input type="hidden" value="Jaime" id="nom_alum" />
+            <input type="hidden" value="2" id="num_ejer" />
+            <input type="text" placeholder="Usuario..." id="usuario" required />
+            <input
+                type="password"
+                placeholder="Password..."
+                id="password"
+                required
+            />
+            <button type="submit">Enviar datos</button>
+        </form>
+
+        <div id="zonaJuego" style="margin-top: 20px"></div>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <h3>Ranking de Ganadores:</h3>
+        <ol id="rankingGanadores"></ol>
+
+        <script>
+            const formulario = document.querySelector("#formulario");
+            const nom_alum = document.querySelector("#nom_alum");
+            const num_ejer = document.querySelector("#num_ejer");
+            const usuario = document.querySelector("#usuario");
+            const password = document.querySelector("#password");
+
+            const zonaJuego = document.querySelector("#zonaJuego");
+
+            let mensajeSistema = document.querySelector("#mensajeSistema");
+            let rankingGanadores = document.querySelector("#rankingGanadores");
+
+            formulario.addEventListener("submit", function (evento) {
+                procesarLogin(evento);
+            });
+
+            // Función para enviar los datos del login
+            async function procesarLogin(evento) {
+                evento.preventDefault();
+
+                let datosFormulario = {
+                    nom_alum: nom_alum.value,
+                    num_ejer: num_ejer.value,
+                    usuario: usuario.value,
+                    password: password.value,
+                };
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/vasos",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+
+                    if (respuesta.ok) {
+                        usuario.disabled = true;
+                        password.disabled = true;
+                        formulario.querySelector("button").disabled = true;
+
+                        let numeroVasos = datos.vasos;
+                        console.log(numeroVasos);
+
+                        mensajeSistema.textContent =
+                            "El usuario ha sido creado correctamente. ¡Elige un vaso!";
+                        mensajeSistema.style.color = "green";
+                        pintarVasos(numeroVasos);
+                    }
+                } catch (error) {
+                    console.error("Error al conectar con la API");
+                    mensajeSistema.textContent =
+                        "Error al conectar con el servidor local.";
+                    mensajeSistema.style.color = "red";
+                }
+            }
+
+            // Función para pintar los vasos en pantalla
+            function pintarVasos(numeroVasosAPI) {
+                zonaJuego.innerHTML = "";
+                for (let i = 0; i < numeroVasosAPI; i++) {
+                    let vaso = document.createElement("button");
+                    vaso.textContent = "Vaso " + (i + 1);
+
+                    vaso.addEventListener("click", function () {
+                        enviarSeleccionVaso(i + 1);
+                    });
+
+                    vaso.classList.add("vaso-btn");
+                    zonaJuego.appendChild(vaso);
+                }
+            }
+
+            async function enviarSeleccionVaso(vasoElegido) {
+                let datosVasoElegido = {
+                    eleccion: vasoElegido,
+                    usuario: usuario.value,
+                };
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/jugar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosVasoElegido),
+                        },
+                    );
+                    let datos = await respuesta.json();
+
+                    if (datos.status === "success") {
+                        zonaJuego.innerHTML = "";
+                        mensajeSistema.style.color = "green";
+                    } else if (datos.status === "error") {
+                        mensajeSistema.style.color = "red";
+                    }
+                    // Lo pongo fuera de los condicionales ya que el codigo es igual ya sea para un status u otro
+                    mensajeSistema.textContent = datos.mensaje;
+                    rankingGanadores.innerHTML = "";
+                    for (let i = 0; i < datos.ranking.length; i++) {
+                        let usuarioGanador = document.createElement("li");
+                        usuarioGanador.textContent = datos.ranking[i];
+                        rankingGanadores.appendChild(usuarioGanador);
+                    }
+                } catch (error) {
+                    console.error("Error al conectar con la API /api/jugar");
+                }
+            }
+        </script>
+    </body>
+</html>

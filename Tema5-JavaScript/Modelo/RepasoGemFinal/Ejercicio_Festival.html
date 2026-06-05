@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Gst-Festival" (Line-Up Manager)</title>
+        <style>
+            body {
+                background-color: #f1f7e3;
+            }
+
+            button {
+                background-color: rgb(28, 0, 119);
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Line-Up Oficial del Festival</h1>
+
+        <form id="formularioArtista">
+            <input type="text" id="nombre" placeholder="Nombre de artista..." />
+            <input type="text" id="genero" placeholder="Género musical..." />
+            <input type="password" id="clave" placeholder="Contraseña..." />
+            <button type="submit">Enviar</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+        <h3>Lista artistas confirmados:</h3>
+        <ol id="listaArtistas"></ol>
+
+        <script>
+            const formularioArtista =
+                document.querySelector("#formularioArtista");
+            const nombre = document.querySelector("#nombre");
+            const genero = document.querySelector("#genero");
+            const clave = document.querySelector("#clave");
+
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            const listaArtistas = document.querySelector("#listaArtistas");
+
+            cargarDatos();
+
+            formularioArtista.addEventListener("submit", function (evento) {
+                enviarDatosFormulario(evento);
+            });
+
+            async function cargarDatos() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/cartel",
+                    );
+
+                    let datos = await respuesta.json();
+                    //console.log(datos);
+
+                    pintarLineUp(datos);
+                } catch (error) {
+                    console.error("ERROR AL CONECTAR CON LA API");
+                }
+            }
+
+            async function enviarDatosFormulario(evento) {
+                evento.preventDefault();
+                let datosArtista = {
+                    nombre: nombre.value,
+                    genero: genero.value,
+                    clave: clave.value,
+                };
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/cartel/nuevo",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosArtista),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+
+                    console.log(datos);
+
+                    if (datos.status === "success") {
+                        mensajeSistema.style.color = "green";
+                        pintarLineUp(datos.cartelActualizado);
+                        formularioArtista.reset();
+                    } else if (datos.status === "error") {
+                        mensajeSistema.style.color = "red";
+                    }
+                    mensajeSistema.textContent = datos.mensaje;
+                } catch (error) {
+                    console.error(
+                        "ERROR CON LA API AL ENVIAR LOS DATOS DEL FORMULARIO",
+                    );
+                }
+            }
+
+            function pintarLineUp(lineUp) {
+                listaArtistas.innerHTML = "";
+                for (let i = 0; i < lineUp.length; i++) {
+                    let artista = document.createElement("li");
+                    artista.textContent =
+                        lineUp[i].nombre + " - " + lineUp[i].genero;
+
+                    listaArtistas.appendChild(artista);
+                }
+            }
+        </script>
+    </body>
+</html>
