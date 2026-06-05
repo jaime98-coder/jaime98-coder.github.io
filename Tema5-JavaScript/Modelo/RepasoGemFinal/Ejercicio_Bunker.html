@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Búnker-Control" (Inventory & Defense System)</title>
+    </head>
+    <body>
+        <h1>Panel de Control - Búnker Alfa</h1>
+        <h2>Jaime Martín</h2>
+
+        <form id="formularioBunker">
+            <input
+                type="text"
+                id="inputRecurso"
+                placeholder="Recurso..."
+                required
+            />
+            <input
+                type="number"
+                id="inputCantidad"
+                placeholder="Cantidad..."
+                required
+            />
+            <input
+                type="password"
+                id="inputCodigo"
+                placeholder="Código Militar..."
+                required
+            />
+            <button type="submit">Registrar entrada</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <ul id="listaSuministros"></ul>
+
+        <script>
+            const formularioBunker =
+                document.querySelector("#formularioBunker");
+            const inputRecurso = document.querySelector("#inputRecurso");
+            const inputCantidad = document.querySelector("#inputCantidad");
+            const inputCodigo = document.querySelector("#inputCodigo");
+
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            const listaSuministros =
+                document.querySelector("#listaSuministros");
+
+            let codigoMilitar = "";
+
+            cargarSuministros();
+
+            async function cargarSuministros() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/bunker/recursos",
+                    );
+
+                    let datos = await respuesta.json();
+
+                    console.log(datos);
+
+                    pintarSuministros(datos);
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API de Suministros",
+                    );
+                }
+            }
+
+            function pintarSuministros(arrayRecursos) {
+                for (let i = 0; i < arrayRecursos.length; i++) {
+                    let recurso = document.createElement("li");
+                    recurso.textContent =
+                        arrayRecursos[i].recurso +
+                        " x" +
+                        arrayRecursos[i].cantidad;
+
+                    listaSuministros.appendChild(recurso);
+                }
+            }
+
+            async function procesarInsercionrecursos(evento) {
+                evento.preventDefault();
+            }
+        </script>
+    </body>
+</html>
