@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Drone-Catcher" (Exploración y Log de Operaciones)</title>
+    </head>
+    <body>
+        <h1>"Drone-Catcher" (Exploración y Log de Operaciones)</h1>
+        <h2>Jaime Martin</h2>
+
+        <button id="btnConfig" type="button">
+            Cargar Configuración de Misión
+        </button>
+        <ul id="listaRestricciones"></ul>
+
+        <form id="formularioDrones">
+            <input type="hidden" id="nom_alum" value="Jaime" />
+            <input type="text" id="inputModelo" placeholder="Modelo..." />
+            <input type="text" id="inputCuadrante" placeholder="Cuadrante..." />
+            <input type="hidden" id="inputToken" />
+            <button type="submit">Enviar formulario</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <ol id="historialLocal"></ol>
+
+        <script>
+            // Captura de elementos DOM
+            const btnConfig = document.querySelector("#btnConfig");
+            const listaRestricciones = document.querySelector(
+                "#listaRestricciones",
+            );
+
+            const formularioDrones =
+                document.querySelector("#formularioDrones");
+            const nom_alum = document.querySelector("#nom_alum");
+            const inputModelo = document.querySelector("#inputModelo");
+            const inputCuadrante = document.querySelector("#inputCuadrante");
+            const inputToken = document.querySelector("#inputToken");
+
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            const historialLocal = document.querySelector("#historialLocal");
+
+            let historialDronesDesplegables = [];
+
+            // -----------Código-----------
+            // Evento cargar configuración de mision
+            btnConfig.addEventListener("click", function () {
+                cargarConfiguracionMision();
+            });
+
+            // Evento procesar formulario
+            formularioDrones.addEventListener("submit", function (evento) {
+                procesarFormulario(evento);
+            });
+
+            // ------ Funciones ------
+            async function cargarConfiguracionMision() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/drones/config",
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    inputToken.value = datos.código_seguridad;
+
+                    // Pintando restricciones
+                    pintarRestricciones(datos.restricciones);
+                } catch (error) {
+                    console.error("ERROR al conectar con la API");
+                }
+            }
+
+            // Función para pintar restricciones
+            function pintarRestricciones(arrayRestricciones) {
+                for (let i = 0; i < arrayRestricciones.length; i++) {
+                    let unaRestriccion = document.createElement("li");
+                    unaRestriccion.textContent = arrayRestricciones[i];
+
+                    listaRestricciones.appendChild(unaRestriccion);
+                }
+            }
+
+            async function procesarFormulario(evento) {
+                evento.preventDefault();
+                let datosFormulario = {
+                    nom_alum: nom_alum.value,
+                    modelo: inputModelo.value,
+                    cuadrante: inputCuadrante.value,
+                    token_cifrado: inputToken.value,
+                };
+
+                try {
+                    nom_alum.disabled = true;
+                    inputModelo.disabled = true;
+                    inputCuadrante.disabled = true;
+
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/drones/desplegar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "red";
+
+                        nom_alum.disabled = false;
+                        inputModelo.disabled = false;
+                        inputCuadrante.disabled = false;
+                    } else if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "green";
+
+                        // Añado el registro tipo String al array historialDronesDesplegables
+                        historialDronesDesplegables.push(
+                            "Dron " +
+                                inputModelo.value +
+                                " lanzado en Cuadrante " +
+                                inputCuadrante.value,
+                        );
+                        // Pinto estado actual del historial local llamando a la función
+                        pintarHistorialLocal();
+
+                        formularioDrones.reset();
+
+                        // 🌟 REINYECCIÓN CLAVE: El reset borró el token, lo restauramos para el siguiente envío
+                        inputToken.value = datosFormulario.token_cifrado;
+
+                        nom_alum.disabled = false;
+                        inputModelo.disabled = false;
+                        inputCuadrante.disabled = false;
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API para procesar formulario",
+                    );
+                    nom_alum.disabled = false;
+                    inputModelo.disabled = false;
+                    inputCuadrante.disabled = false;
+                }
+            }
+
+            function pintarHistorialLocal() {
+                historialLocal.innerHTML = "";
+                for (let i = 0; i < historialDronesDesplegables.length; i++) {
+                    let unRegistroHistorial = document.createElement("li");
+                    unRegistroHistorial.textContent =
+                        historialDronesDesplegables[i];
+
+                    historialLocal.appendChild(unRegistroHistorial);
+                }
+            }
+        </script>
+    </body>
+</html>
