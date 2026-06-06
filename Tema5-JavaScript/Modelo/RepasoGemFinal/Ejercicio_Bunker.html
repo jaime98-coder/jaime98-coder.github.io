@@ -28,7 +28,7 @@
                 placeholder="Código Militar..."
                 required
             />
-            <button type="submit">Registrar entrada</button>
+            <button type="submit" id="btnSubmit">Registrar entrada</button>
         </form>
 
         <h3 id="mensajeSistema"></h3>
@@ -46,10 +46,10 @@
 
             const listaSuministros =
                 document.querySelector("#listaSuministros");
-
-            let codigoMilitar = "";
-
             cargarSuministros();
+            formularioBunker.addEventListener("submit", function (evento) {
+                actualizarAlmacen(evento);
+            });
 
             async function cargarSuministros() {
                 try {
@@ -70,19 +70,65 @@
             }
 
             function pintarSuministros(arrayRecursos) {
+                listaSuministros.innerHTML = "";
                 for (let i = 0; i < arrayRecursos.length; i++) {
                     let recurso = document.createElement("li");
                     recurso.textContent =
                         arrayRecursos[i].recurso +
                         " x" +
                         arrayRecursos[i].cantidad;
+                    if (arrayRecursos[i].cantidad < 50) {
+                        recurso.style.color = "orange";
+                        recurso.style.fontWeight = "bold";
+                    }
 
                     listaSuministros.appendChild(recurso);
                 }
             }
 
-            async function procesarInsercionrecursos(evento) {
+            async function actualizarAlmacen(evento) {
                 evento.preventDefault();
+
+                let datosAlmacen = {
+                    recurso: inputRecurso.value,
+                    cantidad: inputCantidad.value,
+                    codigo: inputCodigo.value,
+                };
+
+                try {
+                    // 🔒 BLOQUEO TOTAL: Desactivamos todos los inputs y el botón antes del fetch
+                    inputRecurso.disabled = true;
+                    inputCantidad.disabled = true;
+                    inputCodigo.disabled = true;
+                    btnSubmit.disabled = true;
+                    btnSubmit.textContent =
+                        "Registrando en la base de datos...";
+
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/bunker/registrar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosAlmacen),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+                    if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "red";
+                    } else {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "green";
+                        pintarSuministros(datos.inventarioActualizado);
+                        formularioBunker.reset();
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API para actualizar el almacén",
+                    );
+                }
             }
         </script>
     </body>
