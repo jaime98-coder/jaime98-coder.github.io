@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infiltración en el Servidor de la Sociedad Secreta</title>
+</head>
+
+<body>
+    <h1>Infiltración en el Servidor de la Sociedad Secreta</h1>
+    <h2>Jaime Martín</h2>
+    <button id="btnInstrucciones" type="button">Instrucciones</button>
+    <ol id="instrucciones"></ol>
+    <h2 id="mensajeSistema"></h2>
+    <form id="formularioInfiltracion">
+        <input type="hidden" id="nom_alum" value="Jaime">
+        <input type="hidden" id="num_ejer" value="1">
+        <input type="text" id="inputNombre" placeholder="Nombre Usuario">
+        <input type="text" id="inputApellidos" placeholder="Apellidos Usuario">
+        <input type="password" id="inputPassword" value="1q2w3e">
+        <input type="hidden" id="llave">
+        <button>Enviar formulario</button>
+    </form>
+
+    <script>
+
+        const btnInstrucciones=document.querySelector("#btnInstrucciones")
+        const instrucciones=document.querySelector("#instrucciones");
+        const mensajeSistema=document.querySelector("#mensajeSistema");
+
+        const formularioInfiltracion=document.querySelector("#formularioInfiltracion");
+        const nom_alum=document.querySelector("#nom_alum");
+        const num_ejer=document.querySelector("#num_ejer");
+        const inputNombre=document.querySelector("#inputNombre");
+        const inputApellidos=document.querySelector("#inputApellidos");
+        const inputPassword=document.querySelector("#inputPassword");
+        const llave=document.querySelector("#llave");
+
+        btnInstrucciones.addEventListener("click", function(){
+            pedirInstrucciones();
+        })
+        
+        formularioInfiltracion.addEventListener("submit", function(evento){
+            procesarFormulario(evento);
+        })
+
+        // Pedir INSTRUCCIONES (GET)
+        async function pedirInstrucciones() {
+            try {
+                let respuesta=await fetch("http://localhost:3000/api/secret");
+                let datos = await respuesta.json();
+
+                console.log(datos);
+
+                // Creo una variable con la info de las instrucciones, ya que la API me devuelve 2 objetos, y yo guardo el de instrucciones
+                let instruccionesServer = datos.instrucciones;
+
+                
+                //Relleno mi llave oculta con la llave conseguida en la API
+                llave.value=datos.llave_servidor;
+
+
+                instrucciones.innerHTML="";
+
+                for (let i=0; i<instruccionesServer.length;i++){
+                    let instruccion = document.createElement("li");
+                    instruccion.textContent=instruccionesServer[i];
+                    instrucciones.appendChild(instruccion);
+
+                }
+
+            } catch (error) {
+                console.error("ERROR al conectar con la API para pedir las instrucciones")
+            }
+        }
+
+        async function procesarFormulario(evento) {
+            evento.preventDefault();
+
+            let datosFormulario ={
+                nom_alum: nom_alum.value,
+                num_ejer: num_ejer.value,
+                nombre: inputNombre.value,
+                apellidos: inputApellidos.value,
+                password: inputPassword.value,
+                llave: llave.value
+            }
+
+            try {
+                let respuesta = await fetch("http://localhost:3000/api/secret",{
+                    method:"POST",
+                    headers:{"Content-Type":"application/json"},
+                    body: JSON.stringify(datosFormulario)
+                });
+
+                let datos = await respuesta.json();
+                console.log(datos);
+
+                if (datos.status==="error"){
+                    mensajeSistema.textContent=datos.message;
+                    mensajeSistema.style.color="red";
+                }else if (datos.status==="success"){
+                    mensajeSistema.textContent=datos.message;
+                    mensajeSistema.style.color="green";
+                }
+                    
+                
+            } catch (error) {
+                console.error("ERROR al conectar con la API para procesar formulario")
+            }
+        }
+
+    </script>
+</body>
+
+</html>
