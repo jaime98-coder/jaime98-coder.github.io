@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Mini-Market" (Pasarela de Compra)</title>
+    </head>
+    <body>
+        <h1>"Mini-Market" (Pasarela de Compra)</h1>
+        <h2>Jaime Martin</h2>
+
+        <button type="button" id="btnCargarProductos">Cargar Products</button>
+        <br /><br />
+        <form id="formularioProductos">
+            <input type="hidden" id="nom_alum" value="Jaime Martin" />
+            <div id="zonaCheckboxes"></div>
+            <button type="submit">Finalizar Compra</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <script>
+            // === 1. CAPTURA DE ELEMENTOS DEL DOM ===
+            const btnCargarProductos = document.querySelector(
+                "#btnCargarProductos",
+            );
+            const formularioProductos = document.querySelector(
+                "#formularioProductos",
+            );
+            const nom_alum = document.querySelector("#nom_alum");
+            const zonaCheckboxes = document.querySelector("#zonaCheckboxes");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            // === 2. MANEJADORES DE EVENTOS (LISTENERS) ===
+            btnCargarProductos.addEventListener("click", function () {
+                cargarProductos();
+            });
+
+            // Obligatorio pasar el parámetro 'evento' para controlar el envío
+            formularioProductos.addEventListener("submit", function (evento) {
+                procesarCarrito(evento);
+            });
+
+            // === 3. FUNCIÓN GET: CREACIÓN DINÁMICA DE CHECKBOXES ===
+            async function cargarProductos() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/productos",
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // CLAVE 1: Limpiar el contenedor para evitar duplicados si se pulsa dos veces
+                    zonaCheckboxes.innerHTML = "";
+
+                    // Recorremos el array de objetos que devuelve la API
+                    for (let i = 0; i < datos.length; i++) {
+                        // CLAVE 2: Crear el input y transformarlo en un checkbox
+                        let checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+
+                        // CLAVE 3: El 'name' debe ser IGUAL para todos para agruparlos en el DOM.
+                        // El 'value' guarda el ID técnico que el servidor necesita recibir.
+                        checkbox.name = "productos";
+                        checkbox.value = datos[i].id;
+
+                        // Creamos la etiqueta de texto que ve el usuario en pantalla
+                        let label = document.createElement("label");
+                        label.textContent =
+                            datos[i].nombre + " - " + datos[i].precio;
+
+                        // Creamos un salto de línea para que salgan en vertical
+                        let saltoFila = document.createElement("br");
+
+                        // CLAVE 4: Inyectar en orden los tres elementos dentro del div contenedor
+                        zonaCheckboxes.appendChild(checkbox);
+                        zonaCheckboxes.appendChild(label);
+                        zonaCheckboxes.appendChild(saltoFila);
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API para cargar los productos",
+                    );
+                }
+            }
+
+            // === 4. FUNCIÓN POST: RECOLECCIÓN DE CHECKBOXES SELECCIONADOS ===
+            async function procesarCarrito(evento) {
+                // Evita que la página se recargue y borre las variables de JavaScript
+                evento.preventDefault();
+
+                // CLAVE 5: El selector maestro de examen.
+                // Busca dentro del formulario TODOS los inputs que tengan name='productos' Y que estén marcados (:checked)
+                let casillasMarcadas = formularioProductos.querySelectorAll(
+                    "input[name='productos']:checked",
+                );
+
+                // CLAVE 6: Recorrer la captura de casillas para extraer sus valores
+                let arrayIds = [];
+                for (let i = 0; i < casillasMarcadas.length; i++) {
+                    // Guardamos en nuestro array el .value (la ID del producto) de cada elemento marcado
+                    arrayIds.push(casillasMarcadas[i].value);
+                }
+
+                // Construimos el JSON de envío emparejando las propiedades exactas que pide el backend
+                let datosFormulario = {
+                    nombre_alumno: nom_alum.value,
+                    productos_ids: arrayIds, // Pasamos el array con los strings recolectados
+                };
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/carrito",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // Control de respuestas según el estatus de la API
+                    if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.msg;
+                        mensajeSistema.style.color = "green";
+
+                        // Borra los textos de la pantalla y desmarca todos los checkboxes automáticamente
+                        formularioProductos.reset();
+                    } else if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.msg;
+                        mensajeSistema.style.color = "red";
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR de conexión al procesar el formulario",
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>
