@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"DeepSpace-Cargo"</title>
+    </head>
+    <body>
+        <h1>"DeepSpace-Cargo"</h1>
+        <h2>Jaime Martin</h2>
+
+        <button id="btnCargar">Cargar Manifiesto de Carga</button>
+        <br /><br />
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID Nave</th>
+                    <th>Destino</th>
+                    <th>Peso (Toneladas)</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla"></tbody>
+        </table>
+        <br /><br />
+        <form id="formularioDesplegue">
+            <input type="hidden" id="nom_alum" value="Jaime" />
+            <input type="text" id="inputID" placeholder="ID de la nave..." />
+            <input
+                type="password"
+                id="inputCodigo"
+                placeholder="Codigo militar..."
+            />
+            <button type="submit">Procesar Formulario</button>
+        </form>
+        <br /><br />
+        <h3 id="mensajeSistema"></h3>
+
+        <script>
+            // -------- Captura de elementos DOM --------
+            const btnCargar = document.querySelector("#btnCargar");
+            const bodyTabla = document.querySelector("#bodyTabla");
+
+            const formularioDesplegue = document.querySelector(
+                "#formularioDesplegue",
+            );
+
+            const nom_alum = document.querySelector("#nom_alum");
+            const inputID = document.querySelector("#inputID");
+            const inputCodigo = document.querySelector("#inputCodigo");
+
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            //-------- Codigo suelto --------
+            btnCargar.addEventListener("click", function () {
+                cargarManifiesto();
+            });
+
+            formularioDesplegue.addEventListener("submit", function (evento) {
+                procesarFormulario(evento);
+            });
+
+            // --------Funciones---------
+
+            async function cargarManifiesto() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/puerto/naves",
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    pintarTabla(datos);
+                } catch (error) {
+                    console.error("ERROR al conectar con la API");
+                }
+            }
+
+            function pintarTabla(arrayNaves) {
+                bodyTabla.innerHTML = "";
+                for (let i = 0; i < arrayNaves.length; i++) {
+                    let filaTabla = document.createElement("tr");
+                    let idNave = document.createElement("td");
+                    let destinoNave = document.createElement("td");
+                    let pesoNave = document.createElement("td");
+                    let estadoNave = document.createElement("td");
+                    idNave.textContent = arrayNaves[i].id;
+                    destinoNave.textContent = arrayNaves[i].destino;
+                    pesoNave.textContent = arrayNaves[i].peso;
+                    estadoNave.textContent = arrayNaves[i].estado;
+
+                    filaTabla.appendChild(idNave);
+                    filaTabla.appendChild(destinoNave);
+                    filaTabla.appendChild(pesoNave);
+                    filaTabla.appendChild(estadoNave);
+                    bodyTabla.appendChild(filaTabla);
+                }
+            }
+
+            async function procesarFormulario(evento) {
+                evento.preventDefault();
+                let datosFormulario = {
+                    nom_alum: nom_alum.value,
+                    id_nave: inputID.value,
+                    codigo_militar: inputCodigo.value,
+                };
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/puerto/autorizar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "green";
+                        cargarManifiesto();
+                        formularioDesplegue.reset();
+                    } else {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "red";
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API para procesar formulario",
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>
