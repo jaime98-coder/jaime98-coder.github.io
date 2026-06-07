@@ -120,6 +120,7 @@
                     if (datos.status === "success") {
                         mensajeSistema.textContent = datos.mensaje;
                         mensajeSistema.style.color = "green";
+
                         cargarManifiesto();
                         formularioDesplegue.reset();
                     } else {

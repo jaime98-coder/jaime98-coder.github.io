@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"DevStack-Provision"</title>
+    </head>
+    <body>
+        <h1>"DevStack-Provision" (Configuración de Entornos)</h1>
+        <h2>Jaime Martín</h2>
+
+        <button id="btnCargar" type="button">
+            Cargar Licencias Corporativas
+        </button>
+        <br /><br />
+
+        <form id="formularioDevStack">
+            <input type="hidden" id="nom_alum" value="Jaime Martín" />
+            <input type="hidden" id="contratoOculto" />
+
+            <fieldset id="contenedorCheckboxes">
+                <legend>Stack Tecnológico</legend>
+                <p id="textoEspera" style="color: gray">
+                    Pulsa "Cargar Licencias" para activar las opciones...
+                </p>
+            </fieldset>
+
+            <br />
+            <button id="btnEnviar" type="submit">Aprobar Configuración</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+        <h4 id="resumenCoste" style="color: blue"></h4>
+
+        <script>
+            // -------- Captura de Elementos DOM --------
+            const btnCargar = document.querySelector("#btnCargar");
+            const formularioDevStack = document.querySelector(
+                "#formularioDevStack",
+            );
+            const nom_alum = document.querySelector("#nom_alum");
+            const contratoOculto = document.querySelector("#contratoOculto");
+            const contenedorCheckboxes = document.querySelector(
+                "#contenedorCheckboxes",
+            );
+            const textoEspera = document.querySelector("#textoEspera");
+            const btnEnviar = document.querySelector("#btnEnviar");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+            const resumenCoste = document.querySelector("#resumenCoste");
+
+            // -------- Asignación de Listeners --------
+            btnCargar.addEventListener("click", function () {
+                cargarLicencias();
+            });
+
+            formularioDevStack.addEventListener("submit", function (evento) {
+                procesarFormulario(evento);
+            });
+
+            // -------- FUNCIÓN 1: Petición GET y Creación Dinámica --------
+            async function cargarLicencias() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/devstack/licencias",
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // 1. Persistencia oculta del token del contrato
+                    contratoOculto.value = datos.id_contrato;
+
+                    // 2. Limpieza del contenedor eliminando textos antiguos o duplicados
+                    contenedorCheckboxes.innerHTML =
+                        "<legend>Stack Tecnológico</legend>";
+
+                    // 3. Bucle para fabricar los Checkboxes dinámicamente
+                    let listaHerramientas = datos.herramientasDisponibles;
+                    for (let i = 0; i < listaHerramientas.length; i++) {
+                        // Creamos el input tipo checkbox
+                        let checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.name = "softwareSeleccionado"; // Mismo name para agruparlos lógicamente
+                        checkbox.value = listaHerramientas[i].id; // El ID que espera el servidor plano
+
+                        // Creamos la etiqueta de texto que acompaña a la casilla
+                        let label = document.createElement("label");
+                        label.textContent = ` ${listaHerramientas[i].nombre} (${listaHerramientas[i].precio}€)`;
+
+                        // Creamos un salto de línea para espaciarlos en vertical
+                        let saltoFila = document.createElement("br");
+
+                        // Los inyectamos en orden dentro del contenedor
+                        contenedorCheckboxes.appendChild(checkbox);
+                        contenedorCheckboxes.appendChild(label);
+                        contenedorCheckboxes.appendChild(saltoFila);
+                    }
+                } catch (error) {
+                    console.error("ERROR al conectar con la API de licencias.");
+                    mensajeSistema.textContent =
+                        "Error de conexión con el servidor de licencias.";
+                    mensajeSistema.style.color = "orange";
+                }
+            }
+
+            // -------- FUNCIÓN 2: Recolección Selectiva y Petición POST --------
+            async function procesarFormulario(evento) {
+                evento.preventDefault();
+
+                // 🌟 RECOLECCIÓN EXCLUSIVA DE CHECKBOXES SELECCIONADOS
+                // Buscamos todas las casillas del formulario que tengan el name y estén marcadas (:checked)
+                let casillasMarcadas = formularioDevStack.querySelectorAll(
+                    "input[name='softwareSeleccionado']:checked",
+                );
+
+                // Creamos nuestro array propio y lo rellenamos recorriendo los elementos capturados
+                let arrayHerramientasPost = [];
+                for (let i = 0; i < casillasMarcadas.length; i++) {
+                    arrayHerramientasPost.push(casillasMarcadas[i].value);
+                }
+
+                // Preparamos el paquete JSON final leyendo las variables necesarias
+                let datosFormulario = {
+                    nom_alum: nom_alum.value,
+                    herramientas_solicitadas: arrayHerramientasPost, // Enviamos el array que acabamos de fabricar
+                    contrato_verificacion: contratoOculto.value,
+                };
+
+                try {
+                    // 🔒 Bloqueo preventivo de seguridad de la interfaz
+                    btnEnviar.disabled = true;
+                    btnEnviar.textContent = "Procesando Infraestructura...";
+
+                    // Deshabilitamos los checkboxes dinámicos para evitar alteraciones en el envío
+                    let todasLasCasillas = formularioDevStack.querySelectorAll(
+                        "input[name='softwareSeleccionado']",
+                    );
+                    for (let i = 0; i < todasLasCasillas.length; i++) {
+                        todasLasCasillas[i].disabled = true;
+                    }
+
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/devstack/aprobar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // Evaluación de estados según la respuesta limpia de la API
+                    if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "red";
+                        resumenCoste.textContent = ""; // Limpiamos el coste secundario por si acaso
+
+                        // 🔓 Reactivación en caso de fallo para corregir la selección
+                        btnEnviar.disabled = false;
+                        btnEnviar.textContent = "Aprobar Configuración";
+                        for (let i = 0; i < todasLasCasillas.length; i++) {
+                            todasLasCasillas[i].disabled = false;
+                        }
+                    } else if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "green";
+
+                        // Mostramos el resumen financiero devuelto por el backend
+                        resumenCoste.textContent = datos.resumenCoste;
+
+                        // Reseteamos el formulario (desmarcar casillas manuales)
+                        formularioDevStack.reset();
+
+                        // 🌟 Reinyección defensiva para no perder la persistencia del contrato oculto
+                        contratoOculto.value =
+                            datosFormulario.contrato_verificacion;
+
+                        // 🔓 Reactivamos los checkboxes limpios para un nuevo uso
+                        btnEnviar.disabled = false;
+                        btnEnviar.textContent = "Aprobar Configuración";
+                        for (let i = 0; i < todasLasCasillas.length; i++) {
+                            todasLasCasillas[i].disabled = false;
+                        }
+                    }
+                } catch (error) {
+                    console.error("ERROR de conexión en el envío del Stack.");
+                    mensajeSistema.textContent =
+                        "Error de red con la central corporativa.";
+                    mensajeSistema.style.color = "orange";
+
+                    // Reactivación por seguridad ante caída del backend
+                    btnEnviar.disabled = false;
+                    btnEnviar.textContent = "Aprobar Configuración";
+                }
+            }
+        </script>
+    </body>
+</html>

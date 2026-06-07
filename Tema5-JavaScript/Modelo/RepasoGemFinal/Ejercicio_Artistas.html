@@ -1,67 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>EJERCICIO PRÁCTICO: Alta de Artistas (POST)</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EJERCICIO PRÁCTICO: Alta de Artistas (POST)</title>
-</head>
+    <body>
+        <form id="formulario">
+            <input type="text" placeholder="Escribe el alias" id="alias" />
+            <input type="text" placeholder="Escribe el estilo" id="estilo" />
+            <button type="submit" id="btnEnviar">Enviar</button>
+        </form>
+        <h3 id="mensajeSistema"></h3>
 
-<body>
-    <form id="formulario">
-        <input type="text" placeholder="Escribe el alias" id="alias">
-        <input type="text" placeholder="Escribe el estilo" id="estilo">
-        <button type="submit" id="btnEnviar">Enviar</button>
-    </form>
-    <h3 id="mensajeSistema"></h3>
+        <script>
+            const aliasInput = document.querySelector("#alias");
+            const estiloInput = document.querySelector("#estilo");
+            const btnEnviar = document.querySelector("#btnEnviar");
+            const formulario = document.querySelector("#formulario");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
 
-    <script>
-        const aliasInput = document.querySelector("#alias");
-        const estiloInput = document.querySelector("#estilo");
-        const btnEnviar = document.querySelector("#btnEnviar");
-        const formulario =document.querySelector("#formulario");
-        const mensajeSistema=document.querySelector("#mensajeSistema");
-        
-        formulario.addEventListener("submit", async function (evento) {
-            evento.preventDefault();
-            registrarNuevoArtista();
-        })
+            formulario.addEventListener("submit", async function (evento) {
+                evento.preventDefault();
+                registrarNuevoArtista();
+            });
 
-        async function registrarNuevoArtista() {
-            let datosArtista = {
-                alias: aliasInput.value,
-                estilo: estiloInput.value
-            };
+            async function registrarNuevoArtista() {
+                let datosArtista = {
+                    alias: aliasInput.value,
+                    estilo: estiloInput.value,
+                };
 
-            try {
-                let respuesta = await fetch("http://festival.local/api/registro",
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(datosArtista)
+                try {
+                    let respuesta = await fetch(
+                        "http://festival.local/api/registro",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosArtista),
+                        },
+                    );
+                    let respuestaServidor = await respuesta.json();
+                    console.log(respuestaServidor);
+
+                    // Capturando respuesta del sercidor y mostrandola en pantalla como h3
+                    aliasInput.value = "";
+                    estiloInput.value = "";
+                    if (respuesta.ok) {
+                        mensajeSistema.textContent = respuestaServidor.texto;
+                        mensajeSistema.style.color = "green";
+                    } else {
+                        mensajeSistema.textContent =
+                            "Error: " + respuestaServidor.texto;
+                        mensajeSistema.style.color = "red";
                     }
-                );
-                let respuestaServidor = await respuesta.json();
-                console.log(respuestaServidor);
-
-                // Capturando respuesta del sercidor y mostrandola en pantalla como h3
-                aliasInput.value = "";
-                estiloInput.value = "";
-                if (respuesta.ok) {
-                    mensajeSistema.textContent = respuestaServidor.texto;
-                    mensajeSistema.style.color = "green";
-                } else {
-                    mensajeSistema.textContent = "Error: " + respuestaServidor.texto;
+                } catch (error) {
+                    console.error("Error crítico:", error);
+                    mensajeSistema.textContent = "Servidor desconectado.";
                     mensajeSistema.style.color = "red";
-
                 }
-            } catch (error) {
-                console.error("Error crítico:", error);
-                mensajeSistema.textContent = "Servidor desconectado.";
-                mensajeSistema.style.color = "red";
             }
-        }
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>

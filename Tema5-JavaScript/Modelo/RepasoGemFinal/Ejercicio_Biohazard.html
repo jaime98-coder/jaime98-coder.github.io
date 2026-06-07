@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Bio-Hazard Control"</title>
+
+        <style>
+            /* --- Configuración General y Fuentes --- */
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f7f9;
+                color: #333;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 30px;
+                line-height: 1.6;
+            }
+
+            h1 {
+                color: #1a5276;
+                border-bottom: 3px solid #5fa8d3;
+                padding-bottom: 10px;
+                margin-bottom: 5px;
+            }
+
+            h2 {
+                color: #546e7a;
+                font-size: 1.1rem;
+                margin-top: 0;
+                margin-bottom: 30px;
+                font-weight: 400;
+            }
+
+            /* --- Estilizado de Botones Generales --- */
+            button {
+                background-color: #0288d1;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 0.95rem;
+                font-weight: 600;
+                border-radius: 4px;
+                cursor: pointer;
+                transition:
+                    background-color 0.2s ease,
+                    transform 0.1s ease;
+            }
+
+            button:hover {
+                background-color: #01579b;
+            }
+
+            button:active {
+                transform: scale(0.98);
+            }
+
+            button:disabled {
+                background-color: #b0bec5;
+                cursor: not-allowed;
+            }
+
+            /* --- Estilizado de Formularios e Inputs --- */
+            form {
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                margin: 25px 0;
+                border-left: 5px solid #0288d1;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="password"],
+            select {
+                padding: 8px 12px;
+                margin: 8px 5px 8px 0;
+                border: 1px solid #cfd8dc;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                transition: border-color 0.2s;
+            }
+
+            input:focus {
+                border-color: #0288d1;
+                outline: none;
+                box-shadow: 0 0 4px rgba(2, 136, 209, 0.3);
+            }
+
+            input:disabled {
+                background-color: #eceff1;
+                color: #90a4ae;
+            }
+
+            fieldset {
+                border: 1px solid #cfd8dc;
+                border-radius: 6px;
+                padding: 15px 20px;
+                margin-bottom: 10px;
+            }
+
+            legend {
+                font-weight: 600;
+                color: #1a5276;
+                padding: 0 5px;
+            }
+
+            /* --- Estilizado de Tablas --- */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                margin: 20px 0;
+            }
+
+            table,
+            th,
+            td {
+                border: none; /* Quitamos el borde feo por defecto */
+            }
+
+            th {
+                background-color: #1a5276;
+                color: white;
+                text-align: left;
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+
+            td {
+                padding: 10px 15px;
+                border-bottom: 1px solid #f1f1f1;
+                font-size: 0.9rem;
+            }
+
+            tr:last-child td {
+                border-bottom: none;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f8fafd;
+            }
+
+            /* --- Estilizado de Listas (Protocolos/Restricciones) --- */
+            ul,
+            ol {
+                background-color: #e1f5fe;
+                border-left: 4px solid #29b6f6;
+                padding: 15px 15px 15px 35px;
+                border-radius: 0 6px 6px 0;
+                margin: 20px 0;
+            }
+
+            li {
+                margin-bottom: 8px;
+                color: #0277bd;
+                font-size: 0.9rem;
+            }
+
+            li:last-child {
+                margin-bottom: 0;
+            }
+
+            /* --- Estados Dinámicos de JavaScript (Mensajes de Sistema) --- */
+            /* Al buscar por herencia, respetará los estilos de color que inyectes por JS */
+            h3,
+            h4 {
+                margin: 15px 0;
+                padding: 10px;
+                border-radius: 4px;
+                font-size: 1.05rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>"Bio-Hazard Control"</h1>
+        <h2>Jaime Martin</h2>
+
+        <button id="btnDirectrices">Cargar Directrices</button>
+
+        <ul id="listaProtocolos"></ul>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nombre Muestra</th>
+                    <th>Volumen (ml)</th>
+                    <th>Nivel de Peligro</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla"></tbody>
+        </table>
+        <br /><br />
+
+        <form id="formularioInsercion">
+            <input type="hidden" id="nom_alum" value="Jaime Martín" />
+            <input
+                type="text"
+                id="inputNombreCepa"
+                placeholder="Nombre de la cepa..."
+                required
+            />
+            <input
+                type="number"
+                id="inputVolumen"
+                placeholder="Volumen en ml..."
+                required
+            />
+            <input type="hidden" id="claveSesion" />
+            <button type="submit">Enviar formulario</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <script>
+            // ------Captura de Elementos DOM------
+            const btnDirectrices = document.querySelector("#btnDirectrices");
+            const listaProtocolos = document.querySelector("#listaProtocolos");
+
+            const bodyTabla = document.querySelector("#bodyTabla");
+
+            const formularioInsercion = document.querySelector(
+                "#formularioInsercion",
+            );
+            const inputNombreCepa = document.querySelector("#inputNombreCepa");
+            const inputVolumen = document.querySelector("#inputVolumen");
+            let claveSesion = document.querySelector("#claveSesion");
+
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            // ------Código suelto------
+            btnDirectrices.addEventListener("click", function () {
+                cargarProtocolos();
+            });
+
+            formularioInsercion.addEventListener("submit", function (evento) {
+                procesarFormulario(evento);
+            });
+            // ------Funciones------
+
+            async function cargarProtocolos() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/laboratorio/estado",
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // Le doy el valor al input claveSesion con la info conseguida en el GET
+                    claveSesion.value = datos.clave_sesion;
+
+                    let protocoloRecibido = datos.protocolos;
+                    pintarProtocolos(protocoloRecibido);
+                } catch (error) {
+                    console.error("ERROR al conectar con la API");
+                }
+            }
+
+            // Función para pintar los procolos teniendo como entrada el array con toda la info que extraemos de la API
+            function pintarProtocolos(arrayAPI) {
+                listaProtocolos.innerHTML = "";
+                for (let i = 0; i < arrayAPI.length; i++) {
+                    let li = document.createElement("li");
+                    li.textContent = arrayAPI[i];
+
+                    listaProtocolos.appendChild(li);
+                }
+            }
+
+            // Función para procesar el formulario
+            async function procesarFormulario(evento) {
+                evento.preventDefault();
+
+                let datosFormulario = {
+                    nom_alum: nom_alum.value,
+                    cepa: inputNombreCepa.value,
+                    ml: inputVolumen.value,
+                    token_seguridad: claveSesion.value,
+                };
+
+                inputNombreCepa.disabled = true;
+                inputVolumen.disabled = true;
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/laboratorio/registrar",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "red";
+                        inputNombreCepa.disabled = false;
+                        inputVolumen.disabled = false;
+                    } else if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.mensaje;
+                        mensajeSistema.style.color = "green";
+
+                        pintarTabla(datos.inventarioActualizado);
+
+                        // Vacio inputs manuales de usuario
+                        inputNombreCepa.value = "";
+                        inputVolumen.value = "";
+
+                        // Reactivo campos
+                        inputNombreCepa.disabled = false;
+                        inputVolumen.disabled = false;
+                    }
+                } catch (error) {
+                    console.error(
+                        "ERROR al conectar con la API para procesar el formulario",
+                    );
+                }
+            }
+
+            // Función para pintar la tabla con el inventario actualizado (proviene de la API)
+            function pintarTabla(arrayMuestrasInventario) {
+                bodyTabla.innerHTML = "";
+                for (let i = 0; i < arrayMuestrasInventario.length; i++) {
+                    let filaTabla = document.createElement("tr");
+
+                    let casillaNombreMuestra = document.createElement("td");
+                    casillaNombreMuestra.textContent =
+                        arrayMuestrasInventario[i].muestra;
+
+                    let casillaVolumen = document.createElement("td");
+                    casillaVolumen.textContent =
+                        arrayMuestrasInventario[i].volumen;
+
+                    let casillaNivelPeligro = document.createElement("td");
+                    casillaNivelPeligro.textContent =
+                        arrayMuestrasInventario[i].nivel;
+
+                    filaTabla.appendChild(casillaNombreMuestra);
+                    filaTabla.appendChild(casillaVolumen);
+                    filaTabla.appendChild(casillaNivelPeligro);
+
+                    bodyTabla.appendChild(filaTabla);
+                }
+            }
+        </script>
+    </body>
+</html>
