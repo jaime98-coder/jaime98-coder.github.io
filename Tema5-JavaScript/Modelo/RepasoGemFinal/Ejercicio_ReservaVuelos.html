@@ -29,6 +29,19 @@
         </form>
 
         <h3 id="mensajeSistema"></h3>
+        <br />
+
+        <h3>Historial de Billetes Confirmados</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Piloto / Pasajero</th>
+                    <th>Código de Destino</th>
+                    <th>Estado del Vuelo</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla"></tbody>
+        </table>
 
         <script>
             // === 1. CAPTURA DE ELEMENTOS ===
@@ -39,6 +52,10 @@
             const nom_alum = document.querySelector("#nom_alum");
             const selectDestinos = document.querySelector("#selectDestinos");
             const mensajeSistema = document.querySelector("#mensajeSistema");
+            const bodyTabla = document.querySelector("#bodyTabla"); // <-- Captura de la tabla
+
+            // Array global local para ir acumulando las reservas que tengan éxito
+            let historialReservas = [];
 
             // === 2. EVENTOS (LISTENERS) ===
             btnCargarDestinos.addEventListener("click", function () {
@@ -49,30 +66,20 @@
                 procesarVuelo(evento);
             });
 
-            // === 3. FUNCIÓN GET: RELLENAR EL SELECT CON OPTIONS ===
+            // === 3. FUNCIÓN GET: RELLENAR EL SELECT ===
             async function cargarRutasEspaciales() {
                 try {
                     let respuesta = await fetch(
                         "http://localhost:3000/api/destinos",
                     );
                     let datos = await respuesta.json();
-                    console.log(datos);
 
-                    // REQUISITO: Vaciar el select antes de rellenar para no duplicar las opciones
                     selectDestinos.innerHTML = "";
 
-                    // Recorremos el array que nos manda la API
                     for (let i = 0; i < datos.length; i++) {
-                        // Creamos la etiqueta <option> por cada vuelta del bucle
                         let nuevaOpcion = document.createElement("option");
-
-                        // CLAVE SELECT 1: .value almacena el código oculto que quiere la máquina ("LUN-01")
-                        nuevaOpcion.value = datos[i].codigo;
-
-                        // CLAVE SELECT 2: .textContent almacena el texto que lee el usuario ("Estación Lunar Alfa")
-                        nuevaOpcion.textContent = datos[i].nombre;
-
-                        // Inyectamos la opción recién creada dentro de nuestro <select>
+                        nuevaOpcion.value = datos[i].codigo; // Lo que lee la máquina ("LUN-01")
+                        nuevaOpcion.textContent = datos[i].nombre; // Lo que lee el ojo humano ("Estación Lunar Alfa")
                         selectDestinos.appendChild(nuevaOpcion);
                     }
                 } catch (error) {
@@ -80,16 +87,14 @@
                 }
             }
 
-            // === 4. FUNCIÓN POST: LEER LA OPCIÓN SELECCIONADA ===
+            // === 4. FUNCIÓN POST: LEER SELECT Y ENVIAR ===
             async function procesarVuelo(evento) {
                 evento.preventDefault();
 
-                // CLAVE SELECT 3: Para saber qué ha elegido el usuario, no hace falta recorrer nada.
-                // Accedemos directamente a la propiedad .value del select capturado.
-                // JavaScript te dará automáticamente el 'value' de la opción que esté marcada en ese instante.
+                // Leemos el .value directo del select seleccionado por el usuario
                 let datosFormulario = {
                     piloto: nom_alum.value,
-                    destino_codigo: selectDestinos.value, // <-- Guarda directamente el código de la opción elegida
+                    destino_codigo: selectDestinos.value,
                 };
 
                 try {
@@ -103,23 +108,60 @@
                     );
 
                     let datos = await respuesta.json();
-                    console.log(datos);
 
                     if (datos.status === "success") {
                         mensajeSistema.textContent = datos.msg;
                         mensajeSistema.style.color = "green";
 
-                        // Resetea el formulario y el select vuelve a colocarse solo en la primera opción de la lista
+                        // 🌟 ACCIÓN VISUAL: Si el servidor da el OK, guardamos los datos locales en nuestro array
+                        let nuevaReserva = {
+                            piloto: datosFormulario.piloto,
+                            destino: datosFormulario.destino_codigo,
+                            estado: "Confirmado",
+                        };
+                        historialReservas.push(nuevaReserva);
+
+                        // Llamamos a la función encargada de pintar la tabla pasándole el historial actualizado
+                        pintarTablaReservas(historialReservas);
+
+                        // Reseteamos el formulario
                         formularioReserva.reset();
                     } else if (datos.status === "error") {
                         mensajeSistema.textContent = datos.msg;
                         mensajeSistema.style.color = "red";
                     }
                 } catch (error) {
-                    console.error("ERROR de conexión al reservar el billete.");
-                    mensajeSistema.textContent =
-                        "Error de red con la central de vuelos.";
-                    mensajeSistema.style.color = "orange";
+                    console.error("ERROR de conexión al reservar.");
+                }
+            }
+
+            // === 5. FUNCIÓN AUXILIAR: PINTAR LA TABLA DINÁMICA ===
+            function pintarTablaReservas(arrayDatos) {
+                // Obligatorio: Vaciar el cuerpo de la tabla para que no se dupliquen las filas viejas
+                bodyTabla.innerHTML = "";
+
+                // Recorremos el historial acumulado
+                for (let i = 0; i < arrayDatos.length; i++) {
+                    // 1. Creamos la fila (tr)
+                    let fila = document.createElement("tr");
+
+                    // 2. Creamos las tres celdas (td)
+                    let celdaPiloto = document.createElement("td");
+                    let celdaDestino = document.createElement("td");
+                    let celdaEstado = document.createElement("td");
+
+                    // 3. Le metemos el texto correspondiente a cada celda
+                    celdaPiloto.textContent = arrayDatos[i].piloto;
+                    celdaDestino.textContent = arrayDatos[i].destino;
+                    celdaEstado.textContent = arrayDatos[i].estado;
+
+                    // 4. Metemos las celdas dentro de la fila
+                    fila.appendChild(celdaPiloto);
+                    fila.appendChild(celdaDestino);
+                    fila.appendChild(celdaEstado);
+
+                    // 5. Metemos la fila terminada dentro del cuerpo de la tabla en el HTML
+                    bodyTabla.appendChild(fila);
                 }
             }
         </script>
