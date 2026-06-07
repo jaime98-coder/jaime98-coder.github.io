@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>"Space-Transit" (Reserva de Vuelos)</title>
+    </head>
+    <body>
+        <h1>"Space-Transit" (Panel de Embarque)</h1>
+        <h2>Jaime Martin</h2>
+
+        <button type="button" id="btnCargarDestinos">
+            Cargar Destinos Disponibles
+        </button>
+        <br /><br />
+
+        <form id="formularioReserva">
+            <input type="hidden" id="nom_alum" value="Jaime Martin" />
+
+            <label for="selectDestinos"
+                >Selecciona tu destino intergaláctico:</label
+            >
+            <select id="selectDestinos">
+                <option value="">-- Esperando carga de rutas... --</option>
+            </select>
+
+            <br /><br />
+            <button type="submit">Confirmar Reserva de Vuelo</button>
+        </form>
+
+        <h3 id="mensajeSistema"></h3>
+
+        <script>
+            // === 1. CAPTURA DE ELEMENTOS ===
+            const btnCargarDestinos =
+                document.querySelector("#btnCargarDestinos");
+            const formularioReserva =
+                document.querySelector("#formularioReserva");
+            const nom_alum = document.querySelector("#nom_alum");
+            const selectDestinos = document.querySelector("#selectDestinos");
+            const mensajeSistema = document.querySelector("#mensajeSistema");
+
+            // === 2. EVENTOS (LISTENERS) ===
+            btnCargarDestinos.addEventListener("click", function () {
+                cargarRutasEspaciales();
+            });
+
+            formularioReserva.addEventListener("submit", function (evento) {
+                procesarVuelo(evento);
+            });
+
+            // === 3. FUNCIÓN GET: RELLENAR EL SELECT CON OPTIONS ===
+            async function cargarRutasEspaciales() {
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/destinos",
+                    );
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    // REQUISITO: Vaciar el select antes de rellenar para no duplicar las opciones
+                    selectDestinos.innerHTML = "";
+
+                    // Recorremos el array que nos manda la API
+                    for (let i = 0; i < datos.length; i++) {
+                        // Creamos la etiqueta <option> por cada vuelta del bucle
+                        let nuevaOpcion = document.createElement("option");
+
+                        // CLAVE SELECT 1: .value almacena el código oculto que quiere la máquina ("LUN-01")
+                        nuevaOpcion.value = datos[i].codigo;
+
+                        // CLAVE SELECT 2: .textContent almacena el texto que lee el usuario ("Estación Lunar Alfa")
+                        nuevaOpcion.textContent = datos[i].nombre;
+
+                        // Inyectamos la opción recién creada dentro de nuestro <select>
+                        selectDestinos.appendChild(nuevaOpcion);
+                    }
+                } catch (error) {
+                    console.error("ERROR al conectar con la API de destinos");
+                }
+            }
+
+            // === 4. FUNCIÓN POST: LEER LA OPCIÓN SELECCIONADA ===
+            async function procesarVuelo(evento) {
+                evento.preventDefault();
+
+                // CLAVE SELECT 3: Para saber qué ha elegido el usuario, no hace falta recorrer nada.
+                // Accedemos directamente a la propiedad .value del select capturado.
+                // JavaScript te dará automáticamente el 'value' de la opción que esté marcada en ese instante.
+                let datosFormulario = {
+                    piloto: nom_alum.value,
+                    destino_codigo: selectDestinos.value, // <-- Guarda directamente el código de la opción elegida
+                };
+
+                try {
+                    let respuesta = await fetch(
+                        "http://localhost:3000/api/reserva",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosFormulario),
+                        },
+                    );
+
+                    let datos = await respuesta.json();
+                    console.log(datos);
+
+                    if (datos.status === "success") {
+                        mensajeSistema.textContent = datos.msg;
+                        mensajeSistema.style.color = "green";
+
+                        // Resetea el formulario y el select vuelve a colocarse solo en la primera opción de la lista
+                        formularioReserva.reset();
+                    } else if (datos.status === "error") {
+                        mensajeSistema.textContent = datos.msg;
+                        mensajeSistema.style.color = "red";
+                    }
+                } catch (error) {
+                    console.error("ERROR de conexión al reservar el billete.");
+                    mensajeSistema.textContent =
+                        "Error de red con la central de vuelos.";
+                    mensajeSistema.style.color = "orange";
+                }
+            }
+        </script>
+    </body>
+</html>
