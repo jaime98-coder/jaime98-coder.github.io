@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Jaime Martin Benítez - Dados de la Suerte</title>
+
+    <style>
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            background-color: #f4f7f9;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            line-height: 2;
+        }
+
+        h1 {
+            color: #1a5276;
+            border-bottom: 3px solid #5fa8d3;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: #546e7a;
+            font-size: 2;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: bolder;
+        }
+
+
+        button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition:
+                background-color 0.2s ease,
+                transform 0.1s ease;
+        }
+
+        button:hover {
+            background-color: #01579b;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin: 25px 0;
+            border-left: 5px solid #0288d1;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="password"],
+        select {
+            padding: 8px 12px;
+            margin: 8px 5px 8px 0;
+            border: 1px solid #cfd8dc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin: 20px 0;
+        }
+
+        table,
+        th,
+        td {
+            border: none;
+        }
+
+        th {
+            background-color: #1a5276;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f1f1;
+            font-size: 0.9rem;
+        }
+
+        h3 {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            font-weight: bolder;
+        }
+
+        #jugadorLogado {
+            font-size: 2;
+            font-style: italic;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dados de la Suerte</h1>
+    <h2>Jaime Martín Benítez</h2>
+
+    <!--Creo zona login para poder controlar la ocultación en fase de juego-->
+    <div id="zonaLogin">
+
+        <form id="formularioLogin">
+            <input type="text" id="inputNombre" placeholder="Nombre..." required>
+            <input type="text" id="inputApellidos" placeholder="Apellidos..." required>
+            <button type="submit">Entrar</button>
+        </form>
+
+    </div>
+
+    <br><br>
+
+    <div id="zonaJugar">
+
+        <form id="formularioJugar">
+            <input type="number" id="apuesta" placeholder="Apuesta...">
+            <input type="number" id="cantidadApostada" placeholder="Cantidad apostada...">
+
+            <!--Lo pongo como oculto para que no se pueda introducir el valor que el usuario quiera, y además
+            el valor lo inicio a 0 ya que hasta que el usuario no se logue, no se le asignan créditos-->
+            <input type="hidden" id="creditosDisponibles" value="0">
+
+            <button type="submit">Jugar</button>
+        </form>
+
+    </div>
+
+    <br><br>
+    <h3 id="jugadorLogado"></h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Apuesta</th>
+                <th>Dado 1</th>
+                <th>Dado 2</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody id="bodyTabla">
+        </tbody>
+
+    </table>
+
+    <h2 id="mensajeSistema"></h2>
+    <h3 id="mensajeCreditos"></h3>
+
+    <script>
+        // ------ CAPTURA DE ELEMENTOS DOM ------
+        const zonaLogin = document.querySelector("#zonaLogin");
+        const zonaJugar = document.querySelector("#zonaJugar");
+        const jugadorLogado = document.querySelector("#jugadorLogado");
+
+
+        const formularioLogin = document.querySelector("#formularioLogin");
+        const inputNombre = document.querySelector("#inputNombre");
+        const inputApellidos = document.querySelector("#inputApellidos");
+
+        const formularioJugar = document.querySelector("#formularioJugar");
+        const apuesta = document.querySelector("#apuesta");
+        const cantidadApostada = document.querySelector("#cantidadApostada");
+        const creditosDisponibles = document.querySelector("#creditosDisponibles");
+        const mensajeCreditos = document.querySelector("#mensajeCreditos");
+
+        const bodyTabla = document.querySelector("#bodyTabla");
+
+        const mensajeSistema = document.querySelector("#mensajeSistema");
+
+        // ------ ZONA ACCIÓN ------ 
+        // Evento en el formulario para que al clickar en el botón, se use la función procesarFormularioLogin con la entrada del evento (para el preventDefault)
+        formularioLogin.addEventListener("submit", function (evento) {
+            procesarFormularioLogin(evento);
+            // Borro el contenido de la tabla de apuestas para que cada vez que el usuario se loga se vacie para un nuevo jugador
+            bodyTabla.innerHTML = "";
+            // Tras logarse (obligatorio, debido a que los input tienen un REQUIRED) desaparece visualmente la pantalla de login
+            // Si quieres que vuelva a aparecer debes recargar la página
+            zonaLogin.innerHTML = "";
+        })
+
+        formularioJugar.addEventListener("submit", function (evento) {
+            enviarApuesta(evento);
+        })
+
+
+        // ------ FUNCIONES ------ 
+
+        // Función para logarse en el sistema y recibir los créditos que devuelva la API (procesado de Formulario Login)
+        async function procesarFormularioLogin(evento) {
+            // Pongo el preventDefault para así evitar que se recargue tras enviar formulario
+            evento.preventDefault();
+
+            // Almaceno en un objeto los valores de los input del formulario
+            let datosLogin = {
+                nombre: inputNombre.value,
+                apellidos: inputApellidos.value
+            };
+            // Creo un try catch para manejar los errores
+            try {
+                // Almaceno el fetch al servidor utilizando await para esperar a que me responda la API,
+                // de tipo post y uso stringify en el objeto datosLogin que contiene los datos del formulario
+                let respuesta = await fetch("http://192.168.100.150/api/dados/entrar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosLogin)
+                });
+
+                // Almaceno los datos que me devuelve el servidor utilizando await para esperar a que me responda
+                let datos = await respuesta.json();
+
+                console.log(datos);
+
+                // Le almaceno el contenido devuelto por la API en mensajeSistema para mostrarlo al usuario
+                mensajeSistema.textContent = datos.exito;
+                mensajeSistema.style.color = "blue";
+
+                //Asigno variable para clarificar
+                let creditos = datos.creditos;
+                creditosDisponibles.value = creditos;
+                mensajeCreditos.textContent = "¡Créditos repartidos (10)!";
+                jugadorLogado.textContent = "Usuario logado: " + inputNombre.value + " " + inputApellidos.value;
+
+            } catch (error) {
+                // Paso por consola el error y también hago que el mensaje del sistema se coloree de un color que resalte
+                console.error("ERROR al conectar con la API para procesar el Login");
+                mensajeSistema.style.color = "orange";
+            }
+
+        }
+
+        // Función para enviar la apuesta (procesado de Formulario Jugar)
+        async function enviarApuesta(evento) {
+            // Pongo el preventDefault para así evitar que se recargue tras enviar formulario
+            evento.preventDefault();
+
+            // Se crea un objeto con los datos de la apuesta
+            let datosApuesta = {
+                apuesta: apuesta.value,
+                cantidad: cantidadApostada.value,
+                creditos: creditosDisponibles.value
+            }
+            try {
+                // Almaceno el fetch de tipo al servidor utilizando await para esperar a que me responda la API,
+                // de tipo post y uso stringify en el objeto datosApuesta que contiene los datos del formulario de juego
+                let respuesta = await fetch("http://192.168.100.150/api/dados/jugar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosApuesta)
+                });
+
+                // Almaceno los datos que me devuelve la API, y uso await para esperar a que me responda 
+                let datos = await respuesta.json();
+
+                console.log(datos);
+
+                // Lógica de validación para manejar el contenido y color del mensajeSistema, teniendo en cuenta los valores
+                // que devuelve el servidor.
+                if (datos.error === "") {
+                    mensajeSistema.textContent = datos.exito;
+                    mensajeSistema.style.color = "green";
+                } else {
+                    mensajeSistema.textContent = datos.error;
+                    mensajeSistema.style.color = "red";
+                }
+
+                // Actualización de los créditos (devueltos por la API)
+                creditosDisponibles.value = datos.creditos;
+                mensajeCreditos.textContent = "Créditos restantes: " + datos.creditos;
+                mensajeCreditos.style.color = "blue";
+
+                // Uso de la función pintarTablaApuestas pasándole como parámetro de entrada los datos
+                pintarTablaApuestas(datos);
+
+
+                // Capturo el error
+            } catch (error) {
+                // Paso por consola el error y también hago que el mensaje del sistema se coloree de un color que resalte
+                console.error("ERROR al procesar la apuesta")
+                mensajeSistema.style.color = "orange";
+            }
+        }
+
+        // Función para pintar la tabla de apuestas
+        function pintarTablaApuestas(datosAPI) {
+
+            // Creamos la fila de la tabla donde irán los diferentes datos
+            let filaTabla = document.createElement("tr");
+
+            // Creamos las diferentes casillas
+            let casillaApuesta = document.createElement("td");
+            let casillaDado1 = document.createElement("td");
+            let casillaDado2 = document.createElement("td");
+            let casillaResultado = document.createElement("td");
+
+            // Le doy a la casilla el contenido que me devuelve la API
+            casillaApuesta.textContent = datosAPI.apuesta;
+
+            // Creo y almaceno en las variables para almacenar la devolución de los datos de los dados 1 y 2
+            let dado1 = datosAPI.dados.dado1;
+            let dado2 = datosAPI.dados.dado2;
+            casillaDado1.textContent = dado1;
+            casillaDado2.textContent = dado2;
+
+            // Almaceno el resultado de las variables
+            let resultado = dado1 + dado2;
+
+            // Utilizo == en lugar de === ya que no es el mismo tipo de dato
+            if (datosAPI.apuesta == resultado) {
+                casillaResultado.textContent = dado1 + " + " + dado2 + " = " + resultado + " (ganas)";
+            } else {
+                casillaResultado.textContent = dado1 + " + " + dado2 + " = " + resultado + " (pierdes)";
+            }
+
+            // Inserto cada casilla con su correspondiente fila
+            filaTabla.appendChild(casillaApuesta);
+            filaTabla.appendChild(casillaDado1);
+            filaTabla.appendChild(casillaDado2);
+            filaTabla.appendChild(casillaResultado);
+
+            // Inserto la fila en el cuerpo de la tabla
+            bodyTabla.appendChild(filaTabla);
+        }
+
+    </script>
+
+</body>
+
+</html>
